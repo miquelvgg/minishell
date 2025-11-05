@@ -1,0 +1,283 @@
+ANSI -c quoting no es necesario de hacer.
+
+Capitulo 1
+
+Shell es tanto un interpretador de comandos como un idioma de programacion.
+
+Otros shells:
+sh
+ksh
+csh
+bash
+
+2 modos:
+Interactivo: Acepta input escrito en el teclado.
+No interactivo: Ejecuta comandos de un string o archivo.
+
+Builtins: Comandos incorporados dentro del shell imposibles de hacer de otra forma porque modifican el shell en si, no es un ejecutable en otro sitio.
+-cd
+-break
+-continue
+-exec
+-history
+-getopts
+-kill
+-pwd
+
+Capitulo 2
+
+blank: ' ' o '\t'
+whitespace: Devuelve 1 de isspace()
+Control operator: '\n','||’, ‘&&’, ‘&’, ‘;’, ‘;;’, ‘;&’, ‘;;&’, ‘|’, ‘|&’, ‘(’, or ‘)’
+Exit status: valor que devuelve un comando al que lo llama va de 0 a 255
+Metacharacter: ' ', '\t', '\n', ‘|’, ‘&’, ‘;’, ‘(’, ‘)’, ‘<’, or ‘>’
+Filename: String que identifica un archivo.
+Palabra reservada: Palabra que tiene un significado especial para shell, como estructuras de control.
+Senyal: La forma en la que se notifica al kernel de un evento del sistema.
+
+Capitulo 3
+
+Shell builfing blocks: commands, control structures, shell functions, shell parameters, shell expansions, redirections.
+Shell ignora desde # hasta el siguiente \n.
+El resto lo divide en palabras y operadores.
+
+The shell then parses these tokens into commands and other constructs, removes the special meaning of certain words or characters, expands others, redirects input and output as needed, executes the specified command, waits for the command’s exit status, and makes that exit status available for further inspection or processing.
+
+1- Parsea los tokens
+2- elimina significado especial
+3- expande significado especial
+4- redirecciona input y output
+5- ejecuta comando
+6- espera exit status de comando
+7- hace el exit status disponible para inspeccion o proceso
+
+Operaciones de shell:
+Reads its input from a file (see Shell Scripts), from a string supplied as an argument to the -c invocation option (see Invoking Bash), or from the user’s terminal.
+Breaks the input into words and operators, obeying the quoting rules described in Quoting. These tokens are separated by metacharacters. This step performs alias expansion (see Aliases).
+Parses the tokens into simple and compound commands (see Shell Commands).
+Performs the various shell expansions (see Shell Expansions), breaking the expanded tokens into lists of filenames (see Filename Expansion) and commands and arguments.
+Performs any necessary redirections (see Redirections) and removes the redirection operators and their operands from the argument list.
+Executes the command (see Executing Commands).
+Optionally waits for the command to complete and collects its exit status (see Exit Status).
+
+3.1 Citaciones
+
+\:Guarda el valor literal del siguiente char, exceptuando \n
+':Guarda el valor literal de su interior, no puede usar ' dentro ni usando \
+":Guarda el valor literal de su interior, excepto $ ` \ y ! si hay expansion history y no es POSIX mode \ solo se considera asi si continua con \ " $ ` som  eliminados, los que preceden caracteres sin significado especial no son modificados, \" es ", * y @ tienen significado de expansion distinto.
+$:expande la variable de nombre lo que tiene detras.
+#: Ignora todo lo que le sigue hasta llegar a un \n
+
+3.2 Comandos
+
+Primero dice el comando despues argumentos separados por un espacio.
+comando argumento1 argumento2
+
+Palabras reservadas: Se consideran reservadas cuando sin citacion y primera palabra de un comando.
+if
+then
+elif
+else
+fi
+time
+for
+in: Solo si es la tercera palabra en un for o tercera palabra en case o select
+until
+while
+do: Solo si es el tercer palabra en un for
+done
+case
+esac
+coproc
+select
+function
+{
+}
+[[
+]]
+!
+
+Comandos simples: Secuencia de palabras separadas por blank terminada or un operador de control.
+devuelve un exit status, la primera suele ser un comando y el resto sus argumentos.
+
+Pipelines:Uno o mas comandos separados por la estructura de control | o |&
+El output de cada comando se redirecciona al input del siguiente comando, |& conecta ademas tambien el estandard error en caso de fallo, si pones la palabra reservada time antes imprime el tiempo de ejecucion.
+
+No confundir time palabra reservada con times, builtin program.
+TIMEFORMAT es la variable que especifica como funciona eso.
+El exit status de una pipeline es el exit estatus del ultimo comando ejecutado.
+PELIGRO, No entiendo esto: si ! precede una pipeline, el exit status se invierte.
+
+Lista de comandos:
+Secuencia de varias pipelines separadas por ';' '&' '&&' o '||' y opcionalmente terminadas por un unico ';' o '&' o '\n'
+Precedencia: '&&' y '||' despues van ';' y '&'
+
+La preferencia es del comando de la izquierda
+;: Espera a que acabe el primer comando para ejecutar el segundo.
+Terminado con &: Ejecuta el comando de forma asincrona en una subshell, el retorno siempre sera 0 se redirecciona a /dev/null si no es especificado
+&&: el siguiente se ejecuta solo si el anterior es exito (0)
+||: el siguiente se ejecuta solo si el anterior es fracaso (!0)
+
+Comandos compuestos:
+Empiezan por palabras reservadas o control operators y terminan por su correspondiente palabra reservada o operator.
+Cualquier redireccion se aplica a TODO el compuesto.
+
+Loops:
+
+until a; do b; done
+ejecuta )b( mientras )a( devuelva algo que no sea zero, devuelve el ultimo exit status de )b( o 0 si ningun )b( ha sido ejecutado
+while a; do b; done
+ejecuta b mientras a devuelva 0, devuelve el ultimo exit status de b o 0 si ninguno fue ejecutado.
+for name [ [in words ...] ; ] do c; done
+expande words y ejecuta comandos por cada name que este en words,  si no esta in lo hace una vez por argumento, como si in "$@" hubiera sido el dato.
+
+Condicionales:
+
+if
+case
+select
+(())
+[[]]
+
+Agrupaciones:
+
+Pueden redirijir todo el output o el input a la vez.
+()
+Fuerza una subshell, asi que los environments desaparecen una vez la subshell se resuelve.
+Son palabras reservadas, es necesario separar con blanks
+{}
+No crea una subshell, son operadores, funciona inclusio si no se separan por espacios
+
+Coprocesos:
+Establecen una pipe de doble sentido, como si el comando terminara en &
+coproc NOMBRE comando REDIRECCIONES
+crea un coproceso llamado NOMBRE en la variable de shell NOMBRE, si no existe usa COPROC
+
+Bash no puede hacer procesos paralelos, pero GNU Parallel si
+
+3.3 Funciones shell
+Se ejecutan como un comando simple, en el mismo proceso, ejecuta la lista de comandos asociados al nombre de la funcion.
+se declaran
+fname () cc [ redirecciones ]
+o
+function fname [()] cc [ redirecciones ]
+cc es el cuerpo de la funcion
+nombre de la funcion no puede tener $ ni ser palabra reservada
+
+FALTA MUCHO MAS, DA PEREZA
+
+3.4 Parametros shell
+Entidad que guarda valores
+Variable:Parametro con un nombre, tiene un valor y 0 o mas atributos.
+si no asignas valor es el null string
+todos los valores pasan por tilde expansion, parameter and variable expansion, command substitution, arithmetic expansion, and quote removal.
+los valores con el atributo integer pasado son evaluados aritmeticamente incluso si $((...))expansion no se usa.
+Separacion de palabras y expansion de nombre de archivo no se realizan.
+Assignment statements may also appear as arguments to the alias, declare, typeset, export, readonly, and local builtin commands (declaration commands).
+name=[value]
+Atributo:Se asignan usando declare, export y readonly dan atributos concretos.
+unset sirve para eliminar una variable.
+
+FALTAN COSAS.
+
+3.5 Expansiones de shell
+
+Se hacen en el orden que esta escrito, siendo brace el primero y quote removal el ultimo.
+brace
+tilde
+parameter
+variable
+arithmetic
+command substitution
+word splitting
+filename
+quote removal
+
+3.6 Redirecciones
+
+Antes de ejecutar un comando, se puede redirigir el input y output con una noacion especial.
+Esto permite: Duplicar, abrir, cerrar, referir distintos archivos, cmbiar desde donde lee o escribe el comando.
+
+Each redirection that may be preceded by a file descriptor number may instead be preceded by a word of the form {varname}. In this case, for each redirection operator except >&- and <&-, the shell allocates a file descriptor greater than or equal to 10 and assigns it to {varname}. If {varname} precedes >&- or <&-, the value of varname defines the file descriptor to close. If {varname} is supplied, the redirection persists beyond the scope of the command, which allows the shell programmer to manage the file descriptor’s lifetime manually without using the exec builtin. The varredir_close shell option manages this behavior
+
+Si saltas el < o > es el stdin y stdout por defecto.
+La palabra del redireccion es sujeta a expansiones habituales, si expande a mas de una palabra da error.
+Orden de redirecciones es importante.
+Un fallo de abrir o crear un archivo hace que la redireccion falle.
+Redirecciones de fd>9 se deben hacer con cuidado ya que pueden intercceder con fd que el shell use internamente.
+
+Special filenames: Si el OS iene eestos archivos los usa, si no, los simula internamente.
+/dev/fd/fd -> If fd is a valid integer, duplicate file descriptor fd.
+/dev/stdin -> File descriptor 0 is duplicated.
+/dev/stdout -> File descriptor 1 is duplicated.
+/dev/stderr -> File descriptor 2 is duplicated.
+/dev/tcp/host/port -> If host is a valid hostname or Internet address, and port is an integer port number or service name, Bash attempts to open the corresponding TCP socket.
+/dev/udp/host/port -> If host is a valid hostname or Internet address, and port is an integer port number or service name, Bash attempts to open the corresponding UDP socket.
+
+Redirigir input: En caso de que palabra no sea especificada es fd0(stdin)
+[n]<palabra
+Redirigir output: En caso de palabra no especificada  es fd1 si no existe se crea, si existe se trunca a tamanyo 0, >| itenta redirigir incluso si el archivo existe.
+[n]>[|]palabra
+Anexando output redirrigido: Igual que redirigir output sin truncar.
+[n]>>palabra
+Redirigir stdout y stderror: Redirigi ambos al filename de palabra, en la forma 2 no debe exxpandir a numero o - por compatibilidad.
+&>palabra
+>&palabra
+>palabra 2>&1
+Anexando stdout y stderror:
+&>>palabra
+>>palabra>&1
+Here docs
+Lee el documento hasta un delimitador especifico
+Here strings
+Duplicando fd
+Moviendo fd
+Abriendo fd modo rw
+
+FALTAN COSAS
+
+3.7 Ejecuciones de comandos
+
+3.8 Shell scripts
+
+4 Builtins
+
+4.1 Shell
+
+4.2 Bash
+
+4.3 Modificar shell
+
+4.4 Special builtins
+
+5 Shell variables
+5.1 Bosh
+5.2 Bash
+
+6 Bash features
+6.1
+6.2
+6.3
+6.4 Bash conditionals
+6.5 Shell aritmetic
+6.6 Aliases
+6.7 Arrays
+6.8 Directory stack
+6.9 Controlling prompt
+6.10 Restricted shell
+6.11 POSIX
+6.12 Shell compatibility mode
+
+7 Job control
+7.1 Basics
+7.2 Builtins
+7.3 Variables
+
+8 Command line editing
+8.2 Readline interaction
+8.3 Readline init file
+8.4 Bindable readline commands
+8.5 Readline vi mode
+8.6 Programable completion
+
+9 History

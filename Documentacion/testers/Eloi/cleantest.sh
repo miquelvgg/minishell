@@ -1,0 +1,2 @@
+make fclean
+rm *.txt

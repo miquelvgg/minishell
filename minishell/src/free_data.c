@@ -1,0 +1,4 @@
+void	free_data()
+{
+
+}

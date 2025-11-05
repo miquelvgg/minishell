@@ -1,0 +1,4 @@
+void	exit_shelly()
+{
+
+}

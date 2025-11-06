@@ -15,5 +15,10 @@
 
 [POSIX](https://pubs.opengroup.org/onlinepubs/9699919799/)
 
+[system calls](https://stackoverflow.com/questions/65510246/can-a-system-call-happen-in-a-c-program)
+
+[heredoc](https://phoenixnap.com/kb/bash-heredoc)
+
+[linux states machine](https://www.baeldung.com/linux/process-states)
 TOKENIZACION: romper un string por partes y las tratas por categorias (llena un struct)
 EJECUCION: Interpreta los tokens creados (Consume la estructura)

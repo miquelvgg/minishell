@@ -2,6 +2,7 @@
 
 int	check_execution(t_data *data, int argc, char **argv)
 {
+	argv[0] = 0;
 	if (argc == 1)
 		data->is_interactive = 1;
 	else if (argc == 3)

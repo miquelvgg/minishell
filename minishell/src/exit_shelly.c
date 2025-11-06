@@ -1,4 +1,0 @@
-void	exit_shelly()
-{
-
-}

@@ -4,12 +4,39 @@
 // Includes
 # include "includes.h"
 
-//Definiciones de estructuras de datos y typedefs utilizados
-# define PROMPT ">>> shelly: "
-
 // Macros
 # define	TRUE 1
 # define	FALSE 0
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// Tipos de token 
+typedef enum e_token
+{
+	T_GENERAL,
+	T_CMD,      
+	T_PIPE,     
+	T_RDIR_IN, 
+	T_RDIR_OUT,
+	T_APPEND    
+}	typ_token;
+
+// estructura de datos 
+typedef struct s_token
+{
+	int index;      
+	char *data;           
+	int type;             
+	struct s_token *next; 
+} t_token;
+
+typedef struct s_mshell
+{
+	t_token *tokens;
+	char **env;       
+}t_mshell;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 // deberia ponerlo volatile sigatomic??
 extern int	g_status;
@@ -28,6 +55,14 @@ typedef struct	s_data
 }	t_data;
 
 //Definiciones de funciones del proyecto
+
+//signal
+void unblock_signal(int signal);
+void block_signal(int signal);
+void sigint_handler(int signal);
+void set_signal_action(void);
+
+
 
 //Comprovadores de definiciones
 int	ft_isblank(int c);

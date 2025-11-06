@@ -27,14 +27,14 @@ CLIB = .a #Determina tipo de libreria para si windows o linux
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIB_DIR)/$(LIBFT_DIR)$(CLIB)
-	$(CC) $(CFLAGS) -v -o $@ $^ -I $(INC_DIR) 
+	$(CC) $(CFLAGS) -v -o $@ $^ -I $(INC_DIR) $(RDFLAG)
 
 #	$(CC) $(CFLAGS) -v -o $@ $^ -I $(INC_DIR) -l:$(LIBFT_DIR)/$(LIBFT_DIR)$(CLIB)
 
 $(LIB_DIR)/$(LIBFT_DIR)$(CLIB):
 	@make -C $(LIBFT_DIR) # Compile libft library
 	@mkdir -p $(LIB_DIR) # Create libs directory if it doesn't exist
-	@cp -a $(LIBFT_DIR)/$(LIBFT_DIR)$(CLIB) $(LIB_DIR)/ # Copy the library to libs
+	@cp -a $(LIBFT_DIR)/$(OBJ_DIR)/$(LIBFT_DIR)$(CLIB) $(LIB_DIR)/ # Copy the library to libs
 
 $(INC_DIR):
 	@mkdir -p $(INC_DIR) # Create Includes directory if it doesn't exist

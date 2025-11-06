@@ -1,15 +1,55 @@
 #include "minishell.h"
 
+int mshell(t_data	*data)
+{
+	int salir;
+	char *line;
+
+	//(void)data;
+	data->signal_status = 0;
+	salir = 0;
+	block_signal(SIGQUIT);
+	block_signal(SIGINT);
+  	
+	using_history();     //initialize history 
+	while (!salir)	
+	{
+		line = readline(READLINE_MSG);
+	    if (line[0] == 'x')
+	    {
+	    	salir = 1;
+	    }
+		 if (*line) 
+		 {
+			add_history(line);
+		 }
+	    	
+		free(line);    
+	}
+   	unblock_signal(SIGINT);
+	unblock_signal(SIGQUIT);
+	return(0);
+}
 
 
-int main(int argc, char **argv, char **env)
+/* definir errores de salida */
+
+int main(int argc, char **argv)
 {
 	t_data	data;
+	int		res;
 
-	(void)env;
+	if (argc != 1)
+		return(1);
+	
+	// guardar valores de 	extern char **environ;
+	
+
 	ft_memset(&data, 0, sizeof(t_data));
+	res	= mshell(&data);
+
 	if (!check_execution(&data, argc, argv))
-		exit_shelly();
+		ft_exit();
 	if (data.is_interactive)
 		exect_interactive(&data);
 //	else

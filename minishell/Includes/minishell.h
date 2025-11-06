@@ -7,6 +7,7 @@
 // Macros
 # define	TRUE 1
 # define	FALSE 0
+# define 	READLINE_MSG "\033[1;36mshell\033[34m$> \033[0m"
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // Tipos de token 
@@ -45,6 +46,7 @@ extern int	g_status;
 typedef struct	s_data
 {
 	int			is_interactive;
+	int			signal_status;
 //	t_token		*token;
 	char		*user_input;
 	char		**env;
@@ -61,8 +63,8 @@ void unblock_signal(int signal);
 void block_signal(int signal);
 void sigint_handler(int signal);
 void set_signal_action(void);
-
-
+//
+void ft_exit(void);
 
 //Comprovadores de definiciones
 int	ft_isblank(int c);

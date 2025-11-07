@@ -70,7 +70,7 @@ void	reset_prompt(int signo)
 void	exect_interactive(t_data *data)
 {
 	struct sigaction	act;
-	
+	printf("%s\n",data->token->data);
 	ft_memset(&act, 0, sizeof(act));
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, NULL);

@@ -45,15 +45,16 @@ extern int	g_status;
 // Data structures
 typedef struct	s_data
 {
-	int			is_interactive;
+	int 		is_interactive;
 	int			signal_status;
-//	t_token		*token;
+	t_token		*token;
 	char		*user_input;
 	char		**env;
+
 	char		*working_dir;
 	char		*old_working_dir;
 //	t_command	*cmd;
-	pid_t		pid;
+	
 }	t_data;
 
 //Definiciones de funciones del proyecto
@@ -97,7 +98,7 @@ int		checkacces(char **s_cmd, char **allpath, char **exec);
 int		notempty(char **a, char **b);
 
 // EXECUTE
-void	execute();
+void	execute(t_data *minishell);
 // interactive
 void	reset_prompt(int signo);
 void	exect_interactive(t_data *data);

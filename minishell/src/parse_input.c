@@ -1,4 +1,0 @@
-void	parse_input()
-{
-
-}

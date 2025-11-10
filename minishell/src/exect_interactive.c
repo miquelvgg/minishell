@@ -28,6 +28,7 @@ void	reset_prompt(int signo)
 void	exect_interactive(t_data *data)
 {
 	(void)data;
+	//Cambiar al execute
 	/*	struct sigaction	act;
 	
 	ft_memset(&act, 0, sizeof(act));

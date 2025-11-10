@@ -60,7 +60,6 @@ int  init_var(t_data	*data)
 	t_token *new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return(1);
-	data->is_interactive = 0;
 	data->signal_status= 0;
 	data->token	= new_token;
 	data->user_input =NULL; 	/* */
@@ -104,14 +103,7 @@ int main(int argc, char **argv, char **env)
 	if (!res)
 		res	= mshell(&data);
 	exit_var(&data);
-	/*
-	if (!check_execution(&data, argc, argv))
-		ft_exit();
-	if (data.is_interactive)
-		exect_interactive(&data);
-//	else
-//		exect_noninteractive(&data, argc, argv);//temporal, hasta que rellenemos el data en checkexecution
-	*/
+
 //	exit_shelly(&data);
 	return (0);
 }

@@ -55,7 +55,6 @@ extern int	g_status;
 // Data structures
 typedef struct	s_data
 {
-	int 		is_interactive;
 	int			signal_status;
 	t_token		*token;
 	char		*user_input;

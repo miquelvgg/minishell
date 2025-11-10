@@ -13,6 +13,7 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 # include "libft.h"
+# include "eloi.h"
 
 // Terminal y entorno
 # include <termios.h>

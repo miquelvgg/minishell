@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_cmd_helper.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rdellaza <rdellaza@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/31 16:00:00 by rdellaza          #+#    #+#             */
-/*   Updated: 2025/10/31 16:00:00 by rdellaza         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../_includes/minishell.h"
+#include "minishell.h"
 
 /**
  * @brief Checks if cd has too many arguments
@@ -70,4 +58,28 @@ int	change_directory(char *path, t_minishell *shell)
 	}
 	shell->last_exit_status = 0;
 	return (0);
+}
+
+/*
+		  CD built-in implementation
+		  Takes argv Command and arguments
+		  Takes shell Minishell structure
+		  */
+void	execute_cd(char **argv, t_minishell *shell)
+{
+	char	*path;
+	char	old_pwd[PATH_MAX];
+
+	if (check_cd_args(argv, shell))
+		return ;
+	if (getcwd(old_pwd, sizeof(old_pwd)) == NULL)
+	{
+		perror("minishell: cd: getcwd");
+		shell->last_exit_status = 1;
+		return ;
+	}
+	path = get_cd_target_path(argv, shell);
+	if (!path)
+		return ;
+	change_directory(path, shell);
 }

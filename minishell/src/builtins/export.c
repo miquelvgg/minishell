@@ -1,16 +1,36 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_env_helper.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rdellaza <rdellaza@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/31 16:15:00 by rdellaza          #+#    #+#             */
-/*   Updated: 2025/10/31 16:15:00 by rdellaza         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "minishell.h"
 
-#include "../_includes/minishell.h"
+/*
+Export built-in implementation (first half)
+*/
+static void	export_print_all(t_minishell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->envp[i])
+	{
+		ft_printf("declare -x %s\n", shell->envp[i]);
+		i++;
+	}
+}
+
+/*
+Export built-in implementation (second half)
+Takes argv Command and arguments
+Takes shell Minishell structure
+*/
+void	execute_export(char **argv, t_minishell *shell)
+{
+	if (!argv[1])
+	{
+		export_print_all(shell);
+		shell->last_exit_status = 0;
+		return ;
+	}
+	shell->last_exit_status = process_export_args(argv, shell);
+}
+
 
 /**
  * @brief Prints invalid identifier error message

@@ -26,9 +26,7 @@ int mshell(t_data	*data)
 		}
 
 		 if (*line) 
-		 {
 			add_history(line);
-		 }
 	    	
 		free(line);    
 	}

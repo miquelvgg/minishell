@@ -1,11 +1,7 @@
 #include "minishell.h"
 
-/*
-Check if string is a valid number (handles +/- prefix)
-Takes str String to check
-Return 1 if valid number, 0 otherwise
-*/
-static int	is_valid_number(char *str)
+//Comprueva si un string es un numero valido
+int	is_valid_number(char *str)
 {
 	int	i;
 
@@ -26,9 +22,8 @@ static int	is_valid_number(char *str)
 }
 
 /*
-Validates if a string is a valid variable identifier
-Takes str String to validate (can be "VAR" or "VAR=value")
-Returns 1 if valid, 0 if invalid
+Comprueba si una variable es una declaracion valida
+Hacepta strings de formato ( "VAR" or "VAR=value")
 */
 int	is_valid_identifier(char *str)
 {

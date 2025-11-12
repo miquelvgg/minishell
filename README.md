@@ -29,13 +29,13 @@ Ejecucion
 - [ ] cntr-D
 - [ ] cntr-\
 ## builtins
-- [ ] echo -n
-- [ ] cd
-- [ ] pwd
-- [ ] export
-- [ ] unset
+- [x] echo -n
+- [x] cd
+- [x] pwd
+- [x] export
+- [x] unset
 - [x] env
-- [ ] exit
+- [x] exit
 ## Isdefinition
 Son funciones que comprueban y devuelven booleanos.
 - [x] metacharacter

@@ -3,7 +3,6 @@
 
 // Includes
 # include "includes.h"
-
 // Macros
 # define	TRUE 1
 # define	FALSE 0
@@ -87,7 +86,26 @@ int	is_token(char *str);
 int	is_word(char *s);
 
 //Builtins
-void	enver(char**environ);
+void	execute_builtin(char**argv, t_mshell *shell);
+int		is_builtin(char *cmd);
+void	execute_env(char **argv, t_mshell *shell);
+void	execute_echo(char **argv, t_mshell *shell);
+int		is_valid_identifier(char *str);
+void	execute_exit(char **argv, t_mshell *shell);
+void	execute_export(char **argv, t_mshell *shell);
+void	execute_pwd(char **argv, t_mshell *shell);
+void	execute_cd(char **argv, t_mshell *shell);
+void	execute_unset(char **argv, t_mshell *shell);
+int		is_valid_identifier(char *str);
+int		is_valid_number(char *str);
+int		process_export_arg(char *arg, t_mshell *shell);
+
+//Env
+void	set_env_var(t_mshell *shell, char *var_assignment);
+void	unset_env_var(t_mshell *shell, char *var_name);
+int		find_env_var(char **envp, const char *name, int name_len);
+void	add_env_var(t_mshell *shell, char *var_assignment);
+
 
 // PARSER
 // execution.c

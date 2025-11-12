@@ -1,10 +1,6 @@
 #include "minishell.h"
 
-/*
-Checks if a command is a built-in
-Takes cmd Command name to check
-Return 1 if built-in, 0 otherwise
-*/
+//Comprueba si un comando es un Builtin
 int	is_builtin(char *cmd)
 {
 	if (!cmd)
@@ -26,12 +22,8 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-/*
-Main dispatcher for built-in commands
-Takes argv Command and arguments
-Takes shell Minishell structure containing environment
-*/
-void	execute_builtin(char **argv, t_minishell *shell)
+//Ejecuta los builtins si los encuentra
+void	execute_builtin(char **argv, t_mshell *shell)
 {
 	if (!argv || !argv[0])
 		return ;
@@ -50,5 +42,5 @@ void	execute_builtin(char **argv, t_minishell *shell)
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 		execute_exit(argv, shell);
 	else
-		ft_printf("minishell: %s: built-in not yet implemented\n", argv[0]);
+		ft_printf("minishell: %s: builtin no implementado\n", argv[0]);
 }

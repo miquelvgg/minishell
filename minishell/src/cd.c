@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Comprueba los argumentos del cd
-static int	check_cd_args(char **argv, t_mshell *shell)
+static int	check_cd_args(char **argv)
 {
 	if (argv[1] && argv[2])
 	{
@@ -14,7 +14,7 @@ static int	check_cd_args(char **argv, t_mshell *shell)
 
 //Obtiene el path del directorio al que cambiar
 //Si no esta la env HOME falla
-static char	*get_cd_target_path(char **argv, t_mshell *shell)
+static char	*get_cd_target_path(char **argv)
 {
 	char	*path;
 
@@ -33,7 +33,7 @@ static char	*get_cd_target_path(char **argv, t_mshell *shell)
 }
 
 //Intenta cambiar el directorio y muestra error si falla
-static int	change_directory(char *path, t_mshell *shell)
+static int	change_directory(char *path)
 {
 	if (chdir(path) == -1)
 	{
@@ -47,12 +47,12 @@ static int	change_directory(char *path, t_mshell *shell)
 }
 
 //Ejecuta el cd con sus comprovaciones
-void	execute_cd(char **argv, t_mshell *shell)
+void	execute_cd(char **argv)
 {
 	char	*path;
 	char	old_pwd[PATH_MAX];
 
-	if (check_cd_args(argv, shell))
+	if (check_cd_args(argv))
 		return ;
 	if (getcwd(old_pwd, sizeof(old_pwd)) == NULL)
 	{
@@ -60,8 +60,8 @@ void	execute_cd(char **argv, t_mshell *shell)
 		errno = 1;
 		return ;
 	}
-	path = get_cd_target_path(argv, shell);
+	path = get_cd_target_path(argv);
 	if (!path)
 		return ;
-	change_directory(path, shell);
+	change_directory(path);
 }

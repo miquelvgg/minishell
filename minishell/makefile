@@ -3,7 +3,7 @@ NAME = minishell
 CC = cc
 
 # Compiler flags
-CFLAGS = -MD -MP #-Wall -Werror -Wextra -MD -MP -g	# Estass flags son importantes
+CFLAGS = -MD -MP -Wall -Werror -Wextra -g	# Estass flags son importantes
 BFLAGS = -g -fsanitize=address
 RDFLAG = -lreadline
 

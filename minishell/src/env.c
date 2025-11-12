@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Ejecuta env ignorando argumentos
-void	execute_env(char **argv, t_mshell *shell)
+void	execute_env(char **argv, t_data *shell)
 {
 	int	i;
 

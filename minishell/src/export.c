@@ -51,13 +51,13 @@ static void	ft_sortpstr(char***envp)
 }
 
 //Export builtin sin argumentos
-static void	export_print_all(char**env/*t_minishell *shell*/)
+static void	export_print_all(t_data *shell)
 {
 	int	i;
 	char **envtemp;
 
 	i = 0;
-	envtemp = /*shell->*/env;
+	envtemp = shell->env;
 	ft_sortpstr(&envtemp);
 	while (envtemp[i])
 	{
@@ -82,7 +82,7 @@ static void	print_export_error(char *arg)
 }
 
 //Procesa un export de valor unico
-int	process_export_arg(char *arg, t_mshell *shell)
+int	process_export_arg(char *arg, t_data *shell)
 {
 	if (!is_valid_identifier(arg))
 	{
@@ -97,7 +97,7 @@ int	process_export_arg(char *arg, t_mshell *shell)
 }
 
 //Procesa export con varios argumentos
-static int	process_export_args(char **argv, t_mshell *shell)
+static int	process_export_args(char **argv, t_data *shell)
 {
 	int	i;
 	int	has_error;
@@ -116,7 +116,7 @@ static int	process_export_args(char **argv, t_mshell *shell)
 }
 
 //Export builtin
-void	execute_export(char **argv, t_mshell *shell)
+void	execute_export(char **argv, t_data *shell)
 {
 	if (!argv[1])
 	{

@@ -17,7 +17,7 @@ int	find_env_var(char **env, const char *name, int name_len)
 }
 
 //Actualiza una env var
-static void	update_env_var(t_mshell *shell, char *var_assignment, int idx)
+static void	update_env_var(t_data *shell, char *var_assignment, int idx)
 {
 	free(shell->env[idx]);
 	shell->env[idx] = (char *)malloc(ft_strlen(var_assignment) + 1);
@@ -27,7 +27,7 @@ static void	update_env_var(t_mshell *shell, char *var_assignment, int idx)
 }
 
 //Assigna una env var
-void	set_env_var(t_mshell *shell, char *var_assignment)
+void	set_env_var(t_data *shell, char *var_assignment)
 {
 	char	*equal_sign;
 	size_t	name_len;
@@ -46,7 +46,7 @@ void	set_env_var(t_mshell *shell, char *var_assignment)
 
 
 //Crea un env sin la variable eliminada
-static char	**create_new_env(t_mshell *shell, int skip_idx, int count)
+static char	**create_new_env(t_data *shell, int skip_idx, int count)
 {
 	char	**new_env;
 	int		i;
@@ -73,7 +73,7 @@ static char	**create_new_env(t_mshell *shell, int skip_idx, int count)
 }
 
 //Elimina una env var
-void	unset_env_var(t_mshell *shell, char *var_name)
+void	unset_env_var(t_data *shell, char *var_name)
 {
 	int		idx;
 	int		count;

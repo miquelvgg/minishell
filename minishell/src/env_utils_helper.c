@@ -39,7 +39,7 @@ static char	*create_var_copy(char *var_assignment)
 }
 
 //Anade nueva variable al env array
-void	add_env_var(t_mshell *shell, char *var_assignment)
+void	add_env_var(t_data *shell, char *var_assignment)
 {
 	int		count;
 	char	**new_envp;

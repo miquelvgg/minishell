@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Ejecuta exit como lo hace bash
-void	execute_exit(char **argv, t_mshell *shell)
+void	execute_exit(char **argv)
 {
 	unsigned char	num;
 

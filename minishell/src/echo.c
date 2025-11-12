@@ -19,7 +19,7 @@ static int	ft_flag(char *str, char c, void *flag)
 }
 
 //Ejecuta echo
-void	execute_echo(char **argv, t_mshell *shell)
+void	execute_echo(char **argv)
 {
 	int	newline;
 	int	i;
@@ -45,6 +45,6 @@ void	execute_echo(char **argv, t_mshell *shell)
 int	main(int c, char **argv)
 {
 	c = 0;
-	execute_echo(argv, NULL);
+	execute_echo(argv);
 	return (0);
 }*/

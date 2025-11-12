@@ -23,14 +23,14 @@ int	is_builtin(char *cmd)
 }
 
 //Ejecuta los builtins si los encuentra
-void	execute_builtin(char **argv, t_mshell *shell)
+void	execute_builtin(char **argv, t_data *shell)
 {
 	if (!argv || !argv[0])
 		return ;
 	if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		execute_pwd(argv, shell);
+		execute_pwd();
 	else if (ft_strncmp(argv[0], "echo", 5) == 0)
-		execute_echo(argv, shell);
+		execute_echo(argv);
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 		execute_env(argv, shell);
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
@@ -38,9 +38,9 @@ void	execute_builtin(char **argv, t_mshell *shell)
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 		execute_unset(argv, shell);
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		execute_cd(argv, shell);
+		execute_cd(argv);
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		execute_exit(argv, shell);
+		execute_exit(argv);
 	else
 		ft_printf("minishell: %s: builtin no implementado\n", argv[0]);
 }

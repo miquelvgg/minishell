@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Ejecuta unset builtin
-void	execute_unset(char **argv, t_mshell *shell)
+void	execute_unset(char **argv, t_data *shell)
 {
 	int	i;
 

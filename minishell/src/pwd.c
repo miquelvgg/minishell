@@ -1,11 +1,10 @@
 #include "minishell.h"
 
 //Ejecuta el builtin pwd
-void	execute_pwd(char **argv, t_mshell *shell)
+void	execute_pwd()
 {
 	char	cwd[PATH_MAX];
 
-	(void)argv;
 	if (getcwd(cwd, sizeof(cwd)))
 	{
 		ft_printf("%s\n", cwd);

@@ -1,10 +1,53 @@
 #include "minishell.h"
 
+void paint_token(char ***token, int nt)
+{
+	int i;
+	char **mtoken;
+
+	i = 0;
+	if (!token)
+		return ;
+	mtoken = *token;
+
+	while ((mtoken[i] != NULL ) &&(i < nt))
+	{
+		printf("(%d) %s \n",i,mtoken[i]);
+		i++;
+	}
+}
+
+
+void free_token(char ***token, int nt)
+{
+	int i;
+	char **mtoken;
+	
+	i = 0;
+	if (!token)
+		return ;
+	mtoken = *token;
+
+	while ((mtoken[i] != NULL ) &&(i < nt))
+	{
+		free(mtoken[i]);
+		i++;
+	}
+	free(mtoken);
+	
+}
+
+
 int mshell(t_data	*data)
 {
 	int salir;
 	char *line;
+	//int t;
+	char **atoken;
+	int ntoken;
 
+	ntoken = 0;
+	atoken = NULL;
 	//(void)data;
 	data->signal_status = 0;
 	salir = 0;
@@ -21,6 +64,11 @@ int mshell(t_data	*data)
 	    }
 		else 
 		{
+			//t = count_tokens_and_validate(line) ;
+			//printf(" %d\n",t);
+			ntoken =shell_tokenize(line, &atoken);
+			paint_token(&atoken, ntoken);
+			free_token(&atoken, ntoken);
 			data->token->data=line;
 			execute(data);
 		}

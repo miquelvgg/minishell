@@ -14,6 +14,7 @@
 # include <stdbool.h>
 # include "libft.h"
 # include "eloi.h"
+# include "micky.h"
 
 // Terminal y entorno
 # include <termios.h>

@@ -62,6 +62,7 @@ typedef struct	s_data
 	t_token		*token;
 	char		*user_input;
 	char		**env;
+	char		**argv;
 	char		*working_dir;
 	char		*old_working_dir;
 //	t_command	*cmd;
@@ -89,7 +90,18 @@ int	is_token(char *str);
 int	is_word(char *s);
 
 //Builtins
-void	enver(char**environ);
+void	execute_builtin(char**argv, t_data *shell);
+int		is_builtin(char *cmd);
+void	execute_env(char **argv, t_data *shell);
+void	execute_echo(char **argv);
+int		is_valid_identifier(char *str);
+void	execute_exit(char **argv);
+void	execute_export(char **argv, t_data *shell);
+void	execute_pwd();
+void	execute_cd(char **argv);
+void	execute_unset(char **argv, t_data *shell);
+int		is_valid_identifier(char *str);
+int		is_valid_number(char *str);
 
 //  PARSER & TOKEN
 	int count_tokens_and_validate(const char *line) ;

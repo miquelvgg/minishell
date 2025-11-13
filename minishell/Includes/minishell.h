@@ -16,8 +16,8 @@ typedef enum e_redir
 	R_NULL,
 	R_INPUT,  
 	R_OUTPUT,  
-	R_APPEND 
-//	R_HEREDOC 
+	R_APPEND,
+	R_HEREDOC 
 } typ_redir;
 
 // Tipos de token 
@@ -46,6 +46,9 @@ typedef struct s_mshell
 	char **env;       
 }t_mshell;
 
+#define METACHARED "|<>"
+#define FORBDDEN "&\\"
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -55,12 +58,10 @@ extern int	g_status;
 // Data structures
 typedef struct	s_data
 {
-	int 		is_interactive;
 	int			signal_status;
 	t_token		*token;
 	char		*user_input;
 	char		**env;
-
 	char		*working_dir;
 	char		*old_working_dir;
 //	t_command	*cmd;
@@ -90,6 +91,9 @@ int	is_word(char *s);
 //Builtins
 void	enver(char**environ);
 
+//  PARSER & TOKEN
+	int count_tokens_and_validate(const char *line) ;
+	int shell_tokenize(const char *line, char ***tokens);
 // PARSER
 // execution.c
 int		check_execution(t_data *data, int argc, char **argv);

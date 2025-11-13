@@ -46,10 +46,7 @@ Son funciones que comprueban y devuelven booleanos.
 - [x] whitespace
 - [ ] Control operator
 - [ ] Redirection operator
-## Extras
-- [ ] &&
-- [ ] ||
-- [ ] *
+
 
 # Funciones permitidas
 

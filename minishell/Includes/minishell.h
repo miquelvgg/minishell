@@ -102,6 +102,7 @@ void	execute_unset(char **argv, t_data *shell);
 int		is_valid_identifier(char *str);
 int		is_valid_number(char *str);
 int		process_export_arg(char *arg, t_data *shell);
+char	**create_new_env(t_data *shell, int skip_idx, int count);
 
 //Env
 void	set_env_var(t_data *shell, char *var_assignment);

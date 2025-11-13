@@ -27,9 +27,7 @@ void	execute_echo(char **argv)
 	newline = 1;
 	i = 1;
 	while (argv[i] && ft_flag(argv[i], 'n', &newline) == 1)
-	{
 		i++;
-	}
 	while (argv[i])
 	{
 		printf("%s", argv[i]);

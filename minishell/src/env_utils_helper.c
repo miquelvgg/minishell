@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-//Cuenta cuantas variables hay
-static int	count_env_vars(char **envp)
-{
-	int	count;
-
-	count = 0;
-	while (envp[count])
-		count++;
-	return (count);
-}
-
 //Copia variables de entorno a nuevo array
 static void	copy_existing_vars(char **new_envp, char **old_envp, int count)
 {
@@ -44,7 +33,7 @@ void	add_env_var(t_data *shell, char *var_assignment)
 	int		count;
 	char	**new_envp;
 
-	count = count_env_vars(shell->env);
+	count = ft_stringlen(shell->env);
 	new_envp = (char**)malloc(sizeof(char *) * (count + 2));
 	if (!new_envp)
 		return ;

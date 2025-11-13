@@ -46,7 +46,7 @@ void	set_env_var(t_data *shell, char *var_assignment)
 
 
 //Crea un env sin la variable eliminada
-static char	**create_new_env(t_data *shell, int skip_idx, int count)
+char	**create_new_env(t_data *shell, int skip_idx, int count)
 {
 	char	**new_env;
 	int		i;

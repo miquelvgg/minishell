@@ -30,7 +30,7 @@ static void	update_env_var(t_data *shell, char *var_assignment, int idx)
 void	set_env_var(t_data *shell, char *var_assignment)
 {
 	char	*equal_sign;
-	size_t	name_len;
+	int		name_len;
 	int		idx;
 
 	equal_sign = ft_strchr(var_assignment, '=');

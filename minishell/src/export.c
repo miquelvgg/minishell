@@ -91,9 +91,7 @@ int	process_export_arg(char *arg, t_data *shell)
 		return (1);
 	}
 	if (ft_strchr(arg, '='))
-	{
 		set_env_var(shell, arg);
-	}
 	return (0);
 }
 

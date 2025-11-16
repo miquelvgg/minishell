@@ -16,6 +16,20 @@ int	find_env_var(char **env, const char *name, int name_len)
 	return (-1);
 }
 
+//Cuando corres la shell sin environment necesita minimo estos env
+void	init_minimal_env(t_data *shell)
+{
+	int	path_idx;
+	int	pwd_idx;
+
+	path_idx = find_env_var(shell->env, "PATH", 4);
+	if (path_idx < 0)
+		set_env_var(shell, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	pwd_idx = find_env_var(shell->env, "PWD", 3);
+	if (pwd_idx < 0)
+		set_env_var(shell, "PWD=/bin");
+}
+
 //Actualiza una env var
 static void	update_env_var(t_data *shell, char *var_assignment, int idx)
 {

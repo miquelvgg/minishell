@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 17:32:53 by epascual          #+#    #+#             */
-/*   Updated: 2025/04/30 13:53:30 by epascual         ###   ########.fr       */
+/*   Updated: 2025/11/16 18:38:12 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	pipex(int input, int argc, char **argv, char**envp)
 	if (input < 0)
 	{
 		//ft_printfd(2, "no such file or directory: %s\n", argv[1]);
-		 write_error("no such file or directory");
+		write_error("no such file or directory");
 		close(input);
 		exit(errno);
 	}

@@ -144,7 +144,7 @@ int main(int argc, char **argv, char **env)
 	// guardar valores de 	extern char **environ;
 	
 	res = init_var(&data);
-	data.env = env;
+	data.env = env; //esto ha de ser una copia con malloc
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);

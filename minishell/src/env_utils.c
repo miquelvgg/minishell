@@ -17,17 +17,11 @@ int	find_env_var(char **env, const char *name, int name_len)
 }
 
 //Cuando corres la shell sin environment necesita minimo estos env
-void	init_minimal_env(t_data *shell)
+void	init_minimal_env(t_data*shell)
 {
-	int	path_idx;
-	int	pwd_idx;
-
-	path_idx = find_env_var(shell->env, "PATH", 4);
-	if (path_idx < 0)
-		set_env_var(shell, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
-	pwd_idx = find_env_var(shell->env, "PWD", 3);
-	if (pwd_idx < 0)
-		set_env_var(shell, "PWD=/bin");
+	shell->env = (char**)malloc(sizeof(char*) * 2);
+	set_env_var(shell, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	set_env_var(shell, "PWD=/bin");
 }
 
 //Actualiza una env var
@@ -58,6 +52,28 @@ void	set_env_var(t_data *shell, char *var_assignment)
 		add_env_var(shell, var_assignment);
 }
 
+//Crea el primer env que sera usado luego
+char	**create_first_env(char**environ, t_data*shell)
+{
+	char	**new_env;
+	int		i;
+	int		c;
+
+	c = ft_stringlen(environ);
+	if (environ[0] == NULL)
+		init_minimal_env(shell);
+	new_env = (char **)malloc(sizeof(char *) * c);
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (environ[i])
+	{
+		new_env[i] = environ[i];
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
 
 //Crea un env sin la variable eliminada
 char	**create_new_env(t_data *shell, int skip_idx, int count)

@@ -15,6 +15,7 @@
 # include "libft.h"
 # include "eloi.h"
 # include "micky.h"
+# include "Structs.h"
 
 // Terminal y entorno
 # include <termios.h>

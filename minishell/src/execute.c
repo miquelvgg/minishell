@@ -20,8 +20,8 @@ void	execute(t_data *minishell)
 		path = get_path(s_cmd[0], minishell->env);
 		excode = execve(path, s_cmd, NULL);
 	}
-	if (excode != 0)
+	/*if (excode != 0)
 	{
 		ft_free_pointstring(s_cmd);
-	}
+	}*/
 }

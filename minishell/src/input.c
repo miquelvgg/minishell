@@ -67,3 +67,38 @@ int	checkoutput(char *path)
 	}
 	return (fd);
 }
+
+//Prueba que se pueda abrir el output en modo append
+int	checkoutappend(char *path)
+{
+	int fd;
+
+	fd = 0;
+	if (access(path, W_OK) == 0)
+	{
+		printf("writable");
+		fd = open(path, 0, O_APPEND);
+		if (fd < 0)
+		{
+			printf("Not opened");
+			close(fd);
+			exit(errno);
+			fd = 0;
+		}
+		else
+		{
+			printf("Opened in append mode");
+		}
+	}
+	else{printf("Not writable");
+		fd = open(path, 0, O_CREAT);
+		if (fd < 0)
+		{
+			printf("Could not create file");
+			close(fd);
+			exit(errno);
+			fd = 0;
+		}
+	}
+	return (fd);
+}

@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 17:32:53 by epascual          #+#    #+#             */
-/*   Updated: 2025/11/16 18:38:12 by epascual         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:25:15 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ char	*get_path(char *cmd, char **env)
 	{
 		path_part = ft_strjoin(allpath[i], "/");
 		exec = ft_strjoin(path_part, s_cmd[0]);
-		free(path_part);
+		//free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
 			ft_free_pointstring(s_cmd);
 			return (exec);
 		}
-		free(exec);
+		//free(exec);
 	}
 	doblefree(s_cmd, allpath);
 	return (cmd);

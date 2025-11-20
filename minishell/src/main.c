@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+
+void free_data_struc(tn_data *dt)
+{
+	int i;
+
+	i = 0;
+	while (dt->token[i]!= NULL)
+	{
+		free(dt->token[i]);
+		i++;
+	}
+	if (dt->token != NULL)
+		free(dt->token);
+} 
+
 void paint_token(char ***token, int nt)
 {
 	int i;
@@ -17,34 +32,31 @@ void paint_token(char ***token, int nt)
 	}
 }
 
-
-void free_token(char ***token, int nt)
+void paint_token1(tn_data	*dt)
 {
 	int i;
-	char **mtoken;
 	
 	i = 0;
-	if (!token)
-		return ;
-	mtoken = *token;
-
-	while ((mtoken[i] != NULL ) &&(i < nt))
+	
+	while (dt->token[i]!= NULL)
 	{
-		free(mtoken[i]);
+		printf("(%d) type:(%d) data %s \n",dt->token[i]->index,dt->token[i]->type,dt->token[i]->data);
 		i++;
 	}
-	free(mtoken);
-	
+
 }
 
 
-int mshell(t_data	*data)
+
+
+int mshell(tn_data	*data)
 {
 	int salir;
 	char *line;
 	//int t;
 	char **atoken;
 	int ntoken;
+	int rt;
 
 	ntoken = 0;
 	atoken = NULL;
@@ -67,12 +79,17 @@ int mshell(t_data	*data)
 			//t = count_tokens_and_validate(line) ;
 			//printf(" %d\n",t);
 			ntoken =shell_tokenize(line, &atoken);
-			paint_token(&atoken, ntoken);
-			free_token(&atoken, ntoken);
-			data->token->data=line;
-			execute(data);
+			if (ntoken > 0)
+			{
+				rt = ft_syntax(data, &atoken, ntoken);
+				if (!rt)
+					paint_token1(data);
+				//data->token->data = line;
+				//execute(data);
+				free_data_struc(data); // free space malloc
+				free_token(&atoken, ntoken);
+			}
 		}
-
 		 if (*line) 
 			add_history(line);
 	    	
@@ -101,22 +118,21 @@ int ft_control(int argc, char **argv)
 	return (0);
 }
 
-int  init_var(t_data	*data)
+int  init_var(tn_data	*data)
 {
-	t_token *new_token = malloc(sizeof(t_token));
+/*	tn_token *new_token = malloc(sizeof(tn_token));
 	if (!new_token)
-		return(1);
+		return(1);*/
 	data->signal_status= 0;
-	data->token	= new_token;
-	data->user_input =NULL; 	/* */
-	data->env=NULL;			/* */
-	data->working_dir=NULL;	/* */
-	data->old_working_dir=NULL; /* */
-
+	data->token	= NULL;	//&new_token;
+	data->user_input =NULL;
+	data->env=NULL;			
+	data->working_dir=NULL;	
+	data->old_working_dir=NULL; 
 	return(0);
 }
 
-int  exit_var(t_data	*data)
+int  exit_var(tn_data	*data)
 {
 	if (data->token)
 		free(data->token);
@@ -124,18 +140,15 @@ int  exit_var(t_data	*data)
 	return(0);
 }
 
-
 /* definir errores de salida */
 
 int main(int argc, char **argv, char **env)
 {
-	t_data	data;
+	tn_data	data;
 	int		res;
 	
 	if (ft_control(argc,argv))
 		return (1);
-	
-
     if (!isatty(STDOUT_FILENO)) {
         fprintf(stderr, "Error: No se permite redireccionar la salida estándar.\n");
         return 1;
@@ -148,7 +161,7 @@ int main(int argc, char **argv, char **env)
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);
-	exit_var(&data);
+//	exit_var(&data);
 
 //	exit_shelly(&data);
 	return (0);

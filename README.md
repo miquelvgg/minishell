@@ -5,7 +5,7 @@ Our own terminal 42 project.
 
 ## Organizacion
 Tokenizacion
-- [ ] Parseo de token
+- [x] Parseo de token
 - [ ] Elimina significado especial
 - [ ] Expande significado especial
 - [ ] Shell expansion

@@ -1,183 +1,294 @@
 #include "minishell.h"
 
-const char *skip_espace(const char *str) {
-    while (*str && isspace((unsigned char)*str)) {
-        str++;
-    }
+void free_token(char ***token, int nt)
+{
+	int i;
+	char **mtoken;
+	
+	i = 0;
+	if (!token)
+		return ;
+	mtoken = *token;
+
+	while ((mtoken[i] != NULL ) &&(i < nt))
+	{
+		free(mtoken[i]);
+		i++;
+	}
+	free(mtoken);
+}
+
+const char *skip_espace(const char *str) 
+{
+    while (*str && isspace((unsigned char)*str)) 
+    	str++;
     return str;
 }
 
-// Helper: Crea un duplicado de una porción de string
-char *strndup_safe(const char *s, size_t n) {
-    char *p = (char *)malloc(n + 1);
-    if (p == NULL) return NULL;
-    strncpy(p, s, n);
+char *strndup_safe(const char *s, size_t n) 
+{
+    char *p;
+    p = (char *)malloc(n + 1);
+    if (!p) 
+        return NULL;
+    memcpy(p, s, n);
     p[n] = '\0';
     return p;
 }
-// control de comillas
-char *quotation_marks(char *input, int  *count, int  *ret)
+// ok echo test "'"
+// ok echo test '"'
+// ok echo test "''"
+// ok echo test '""'
+// fail echo test '"'"'
+// fail echo test "'"'"
+// fail echo test "'"'"'a'"'"'"
+
+/*
+
+    if (c == in_q [ iq - 1] )
+        iq--;
+        in_q [ iq ] = 0;
+        cerrar;
+    
+    if ((c == "\"" ) && ( in_q [ iq - 1] != "\""))
+        in_q [iq] = c;
+        iq++;
+
+    if ((c == "\'" ) && ( in_q [ iq - 1] != "\'"))
+        in_q [iq] = c;
+        iq++;
+
+
+
+
+*/
+
+
+static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, int *err_uc)
 {
-	char quote_type = 0;
-	
-	*ret = 0;
-    if (*input == '\'' || *input == '\"') 
-	{
-        quote_type = *input;
-        input++; // Saltar comilla de apertura
-        // Buscar comilla de cierre del mismo tipo
-        while (*input && *input != quote_type) {
-            input++;
+    const char *s = p;
+    char 		in_q[120];            /* 0=no, '\"' si dentro de comillas */
+    size_t 		raw = 0; 
+    size_t 		unz = 0;
+    char c;
+    int iq =0;
+
+    while (iq < 2)
+        in_q[iq++] =0;
+
+    iq = 0;
+    while (s[raw]) {
+        c = s[raw];
+        if (iq)
+        {
+            if (c == in_q [ iq - 1] )
+            {          
+                in_q[iq-1]= 0;
+                iq--;
+                raw++;                 
+                continue;
+            }
         }
-        // VALIDAR CIERRE
-        if (!*input) {
-            fprintf(stderr, "Error: Comillas %c sin cerrar.\n", quote_type);
-            *ret =-1;
-            return NULL;
+        /* fuera de comillas: fin de palabra si espacio o metachar */   
+        if ((isspace((unsigned char)c) && (!iq)) || strchr(METACHARED, c)) 
+        //if ((isspace((unsigned char)c) ) || strchr(METACHARED, c)) 
+        	break;
+          if (c == '\'' )
+        {  /* apertura de comillas */
+            in_q[iq]= c;
+            iq ++;
+            raw++;                     /* comilla no cuenta en unz */
+            continue;
         }
-        input++; // Saltar comilla de cierre
-        *count=*count+1;
-        input =(char *) skip_espace((const char *)input);
-        *ret =1;
-		return (input);
+        else if (c == '\"' ) 
+        {
+            in_q[iq]= c;
+            iq ++;
+            raw++;                     /* comilla no cuenta en unz */
+            continue;
+        }
+        /* carácter normal */
+        raw++;
+        unz++;
     }
-	return (input);
+    if ((iq)) {               /* comilla sin cerrar */
+        if (err_uc) 
+        	*err_uc = 1;
+    } else 
+    	if (err_uc) 
+    	{
+        	*err_uc = 0;
+    	}
+	if (raw_len) *raw_len = raw;
+    if (unz_len) *unz_len = unz;
+	return s + raw;
 }
 
 
-int count_tokens_and_validate(const char *line) 
+
+/* Copia una palabra sin comillas (longitud descomillada conocida) */
+static void copy_unquoted(char *dst, const char *src, size_t raw_len)
+{
+    size_t i =0;
+    size_t j = 0;
+//    char in_q = 0;
+
+    while ((src[i])&&(i < raw_len))
+    {
+      dst[j] =  src[i];
+      j++;
+      i++;
+    }
+
+ /* 
+    for (i = 0; i < raw_len; i++) {
+        char c = src[i];
+      if (in_q) 
+        {
+            if (c == in_q) 
+            { 
+            	in_q = 0; 
+	            continue; 
+            } 
+            dst[j++] = c;
+        } 
+        else 
+        {
+                if (c == '\'' || c == '\"') {
+                    in_q = c; 
+                    continue; 
+                    } 
+            dst[j++] = c;
+        }
+    }
+*/
+    dst[j] = '\0';
+}
+
+/* -------- contador corregido -------- */
+int count_tokens_and_validate(const char *line)
 {
     int count = 0;
-	int ret = 0;
-    const char *input = line;
+    const char *p;
 
-	if (!line || *line == '\0') 
-        return 0;	
-    
-    input = skip_espace(input);	
+    if (!line) return 0;
+    p = skip_espace(line);
 
-    while (*input) {
-
-        if (strchr(FORBDDEN, *input))
-        {
-            fprintf(stderr, "Error: caracter %c \n", *input);
-            return (-2);
+    while (*p) {
+        /* prohibidos “sueltos” */
+        if (strchr(FORBDDEN, *p)) {
+            fprintf(stderr, "Error: caracter %c\n", *p);
+            return -2;
         }
-        if (strchr(METACHARED, *input)) {
+
+        /* metacaracteres (1 ó 2) */
+        if (strchr(METACHARED, *p)) {
             count++;
-            if (strchr("<>", *input) && *(input + 1) == *input) {
-                input += 2;
-            } else {
-                input += 1;
-            }
-            input = skip_espace(input);
+            if ((*p == '<' || *p == '>') && *(p + 1) == *p) p += 2;
+            else p += 1;
+            p = skip_espace(p);
             continue;
         }
-		input = quotation_marks((char *)input, &count, &ret);
-		
-		if (ret)
-		{
-			if (ret < 0)
-				return (-1);
-			else 
-				continue;
-		}
-        while (*input && !isspace((unsigned char)*input) && !strchr(METACHARED, *input)) {
-            input++;
+
+        /* palabra (con o sin comillas) */
+        size_t raw_len, unz_len;
+        int err_uc;
+        const char *end = scan_word(p, &raw_len, &unz_len, &err_uc);
+        if (err_uc) {
+            fprintf(stderr, "Error1: Comillas sin cerrar.\n");
+            return -1;
+        }
+        if (raw_len == 0) {   /* debería no ocurrir, pero por seguridad */
+            p++;
+            continue;
         }
         count++;
-        input = skip_espace(input);
+        p = skip_espace(end);
     }
     return count;
 }
 
-int shell_tokenize(const char *line, char ***tokens) {
-    // 1. Contar tokens y validar comillas
-    int num_tokens = count_tokens_and_validate(line);
-    
-    if (num_tokens < 0) {
-        *tokens = NULL;
-        return -1; // Error de comillas sin cerrar
-    }
-    if (num_tokens == 0) {
-        *tokens = NULL;
-        return 0; // Línea vacía
-    }
+/* -------- tokenizador  -------- */
+int shell_tokenize(const char *line, char ***tokens)
+{
+    int num_tokens; 
+    int k;
+    int len;
+    const char *p;
 
-    // 2. Asignación de memoria exacta (num_tokens + 1 para el terminador NULL)
-    char **token_list = (char **)malloc(sizeof(char *) * (num_tokens + 1));
-    if (!token_list) {
-        perror("Fallo de malloc para token_list");
+    /* palabra */
+    size_t raw_len; 
+    size_t unz_len;
+    int err_uc;
+
+
+    num_tokens = count_tokens_and_validate(line);
+    printf("(%d)\n",num_tokens);
+    if (num_tokens < 0) 
+    {
         *tokens = NULL;
         return -1;
     }
-
-    // 3. Rellenar el array de tokens (La lógica es la misma que la función de conteo)
-    char *input = (char *)line;
-    int current_token = 0;
-    
-    input = (char *)skip_espace(input);
-
-    while (*input) {
-        // La lógica de cálculo de 'token_len' es idéntica a 'count_tokens_and_validate'
-        // Simplemente copiamos la porción de string en lugar de solo contar.
-        
-        // [CÓDIGO DE CÁLCULO DE token_len y quote_type (omitido por espacio, pero debe ser el mismo que el contador)]
-        
-        int token_len = 0;
-        char quote_type = 0;
-        int is_metachar = 0;
-        char *token_start = input;
-
-        if (strchr(METACHARED, *input)) {
-            is_metachar = 1;
-            token_len = 1; 
-            if (strchr("<>", *input) && *(input + 1) == *input) token_len = 2;
-        }
-        else {
-            if (*input == '\'' || *input == '\"') {
-                quote_type = *input;
-                input++; 
-                token_len++;
-            }
-            while (*(input + token_len)) 
-            {
-                if (quote_type) 
-                {
-                    if (*(input + token_len) == quote_type) 
-                    {
-                        token_len++;
-                        break;
-                    }
-                } 
-                else if (isspace((unsigned char)*(input + token_len)) || strchr(METACHARED, *(input + token_len))) {
-                    break; 
-                }
-                token_len++;
-            }
-        }
-        
-        // 4. Almacenar el Token
-        token_list[current_token] = strndup_safe(token_start, token_len);
-        if (!token_list[current_token]) {
-            // Fallo de malloc en strndup, requiere liberar tokens anteriores
-            for (int i = 0; i < current_token; i++) free(token_list[i]);
-            free(token_list);
-            *tokens = NULL;
-            return -1; 
-        }
-        current_token++;
-
-        // 5. Mover y limpiar
-        input += token_len;
-        if (!is_metachar && quote_type) input--;
-        input = (char *)skip_espace(input);
+    if (num_tokens == 0) {
+        *tokens = NULL;
+        return 0;
     }
-    
-    // 6. Terminar con NULL
-    token_list[num_tokens] = NULL;
-    *tokens = token_list;
-    return num_tokens;
+    char **v = (char **)malloc(sizeof(char *) * (num_tokens + 1));
+    if (!v) {
+        perror("malloc token_list");
+        *tokens = NULL;
+        return -1;
+    }
+    p = skip_espace(line);
+    k = 0;
+    while (*p) {
+        if (strchr(METACHARED, *p)) 
+        {
+            len = 1;
+            if ((*p == '<' || *p == '>') && *(p + 1) == *p) len = 2;
+            v[k] = strndup_safe(p, (size_t)len);
+            if (!v[k]) 
+            {          
+            printf("Error (malloc)\n");              
+            free_token(&v,k);
+            return (-1);
+
+//                goto oom;// da error
+            }
+            k++;
+            p += len;
+            p = skip_espace(p);
+            continue;
+        }
+
+        const char *end = scan_word(p, &raw_len, &unz_len, &err_uc);
+        
+        if (err_uc) { /* no debería pasar por el validador previo, pero por si acaso */
+            fprintf(stderr, "Error2: Comillas sin cerrar.\n");
+            printf("Error\n");
+            //goto fail;
+            free_token(&v,k);
+            return (-1);
+        }
+
+        /* reservar y copiar sin comillas */
+        //v[k] = (char *)malloc(unz_len + 1);
+        v[k] = (char *)malloc(raw_len + 1);
+        if (!v[k]) 
+        {
+            free_token(&v,k);
+            return (-1);
+        }
+
+            //goto oom;
+        //printf("1 len :%lu -->%lu\n",raw_len,unz_len);
+        copy_unquoted (v[k], p, raw_len);
+        k++;
+        p = skip_espace(end);
+    }
+
+    v[k] = NULL;
+    *tokens = v;
+    return k;
+
 }
-
-

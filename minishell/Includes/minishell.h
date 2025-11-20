@@ -27,7 +27,8 @@ typedef enum e_token
 	T_PIPE,     
 	T_RDIR_IN, 
 	T_RDIR_OUT,
-	T_APPEND    
+	T_APPEND,
+	T_HERDOC
 }	typ_token;
 
 // estructura de datos 
@@ -38,12 +39,6 @@ typedef struct s_token
 	int type;             
 	struct s_token *next; 
 } t_token;
-
-typedef struct s_mshell
-{
-	t_token *tokens;
-	char **env;       
-}t_mshell;
 
 #define METACHARED "|<>"
 #define FORBDDEN "&\\"

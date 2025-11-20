@@ -16,13 +16,65 @@ int	find_env_var(char **env, const char *name, int name_len)
 	return (-1);
 }
 
+void init_minimal_env(t_data *shell)
+{
+	char**newenv;
+    char *pwd;
+    char *pat;
+    char cwd[PATH_MAX];  // Buffer for current working directory (adjust size as needed)
+    // Allocate the env array (with space for 3 pointers + NULL terminator)
+    newenv = shell->env;
+    if (!newenv)
+		return;  // Handle malloc failure (e.g., exit or error message)
+
+	free(shell->env);
+	shell->env = (char**)malloc(sizeof(char*) * 4);
+	printf("PATH ALLOCADO\n");
+    pat = (char *)malloc(sizeof(char) * 65);  // Adjust size based on your PATH length
+    if (!pat)
+    {
+        free(newenv);
+        return;
+    }
+    ft_strcpy(pat, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	printf("PATH ajustado\n");
+    // Get actual current working directory and allocate/set PWD
+    if (getcwd(cwd, sizeof(cwd)) == NULL)
+        ft_strcpy(cwd, "/");
+    size_t pwd_len = ft_strlen("PWD=") + ft_strlen(cwd) + 1;
+	printf("PWDALLOCADO\n");
+    pwd = (char *)malloc(sizeof(char) * pwd_len);
+    if (!pwd)
+    {
+        free(pat);
+        free(newenv);
+        return;
+    }
+    ft_strcpy(pwd, "PWD=");
+    ft_strlcat(pwd, cwd, pwd_len);
+	printf("PWD AJUSTADO\n");
+    // Set the env array
+    newenv[0] = pat;
+    newenv[1] = pwd;
+    newenv[2] = NULL;  // NULL-terminate
+	printf("%s\n%s\n", pat, pwd);
+}
+/*
 //Cuando corres la shell sin environment necesita minimo estos env
 void	init_minimal_env(t_data*shell)
 {
-	shell->env = (char**)malloc(sizeof(char*) * 2);
-	set_env_var(shell, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
-	set_env_var(shell, "PWD=/bin");
-}
+	char	*pwd;
+	char	*pat;
+
+	shell->env = (char**)malloc(sizeof(char*) * 3);
+	//pat = (char*)malloc(sizeof(char) * 65);
+	pat = "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
+	//pwd = (char*)malloc(sizeof(char) * 9);
+	pwd = "PWD=/bin";
+	shell->env[0] = pat;
+	shell->env[1] = pwd;
+	shell->env[2] = NULL;
+}*/
 
 //Actualiza una env var
 static void	update_env_var(t_data *shell, char *var_assignment, int idx)

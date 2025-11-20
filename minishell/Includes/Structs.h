@@ -56,6 +56,9 @@ typedef struct	s_data
 {
 	int			signal_status;
 	t_token		*token;
+	int			fdin;
+	int			fint;
+	int			fdout;
 	char		*user_input;
 	char		**env;
 	char		**argv;

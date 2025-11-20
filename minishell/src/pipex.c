@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 17:32:53 by epascual          #+#    #+#             */
-/*   Updated: 2025/11/17 20:25:15 by epascual         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:16:13 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ char	*get_path(char *cmd, char **env)
 
 	i = -1;
 	allpath = ft_split(my_getenv("PATH", env), ':');
+	if (!allpath)
+		exit(2);
 	s_cmd = ft_split(cmd, ' ');
 	while (allpath[++i])
 	{
@@ -67,12 +69,12 @@ char	*get_path(char *cmd, char **env)
 		//free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			ft_free_pointstring(s_cmd);
+			//ft_free_pointstring(s_cmd);
 			return (exec);
 		}
 		//free(exec);
 	}
-	doblefree(s_cmd, allpath);
+	//doblefree(s_cmd, allpath);
 	return (cmd);
 }
 

@@ -41,7 +41,7 @@ void	set_env_var(t_data *shell, char *var_assignment)
 	int		name_len;
 	int		idx;
 
-	equal_sign = ft_strchr(var_assignment, '=');
+	equal_sign = ft_strrchr(var_assignment, '=');
 	if (!equal_sign)
 		return ;
 	name_len = equal_sign - var_assignment;
@@ -94,8 +94,8 @@ char	**create_new_env(t_data *shell, int skip_idx, int count)
 			new_env[j] = shell->env[i];
 			j++;
 		}
-		else
-			free(shell->env[i]);
+	//	else
+	//		free(shell->env[i]);
 		i++;
 	}
 	new_env[j] = NULL;

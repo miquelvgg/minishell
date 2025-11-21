@@ -10,6 +10,8 @@ void paint_token(char ***token, int nt)
 		return ;
 	mtoken = *token;
 
+	if (!mtoken)
+		return ;
 	while ((mtoken[i] != NULL ) &&(i < nt))
 	{
 		printf("(%d) %s \n",i,mtoken[i]);
@@ -24,7 +26,7 @@ void free_token(char ***token, int nt)
 	char **mtoken;
 	
 	i = 0;
-	if (!token)
+	if (!token || !*token)
 		return ;
 	mtoken = *token;
 

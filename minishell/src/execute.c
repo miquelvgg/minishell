@@ -3,12 +3,14 @@
 //executa un comando
 void execute(t_data *minishell)
 {
-    printf("%s\n", minishell->token->data);
+    //printf("%s\n", minishell->token->data);
     char *path;
     int excode;
     char **s_cmd;
     int pid;
 
+	if (!(minishell->token->data) || !(*(minishell->token->data)))
+		return ;
     excode = 0;
     s_cmd = ft_split(minishell->token->data, ' ');
     if (is_builtin(s_cmd[0]))

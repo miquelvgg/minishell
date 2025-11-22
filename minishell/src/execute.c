@@ -23,15 +23,16 @@ void execute(t_data *minishell)
         pid = fork();
         if (pid == 0)
         {
+			printf("%s\n", minishell->token->data);
             path = get_path(s_cmd[0], minishell->env);
-			dup2(minishell->fdin, 0);//activa el stdin
 			dup2(minishell->fdout, 1);
+			dup2(minishell->fdin, 0);//activa el stdin
             excode = execve(path, s_cmd, NULL);
             if (excode == -1)
-            {
-                ft_free_pointstring(s_cmd);
+			{
+				ft_free_pointstring(s_cmd);
 				errno = 1;
-                exit(errno);
+				exit(errno);
             }
         }
         else

@@ -10,7 +10,7 @@ int	initfd(t_data*shell)
 	shell->fdin = fdi;
 	shell->fdout = 1;
 	fdo = checkoutput("output");
-	shell->fdin = fdo;
+	shell->fdout = fdo;
 	return (0);
 }
 

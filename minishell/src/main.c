@@ -72,6 +72,7 @@ int mshell(t_data	*data)
 			paint_token(&atoken, ntoken);
 			free_token(&atoken, ntoken);
 			data->token->data=line;
+			initfd(data);
 			execute(data);
 		}
 

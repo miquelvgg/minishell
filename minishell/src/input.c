@@ -8,11 +8,11 @@ int	checkinput(char *path)
 	fd = 0;
 	if (access(path, R_OK) == 0)
 	{
-		printf("readable");
+	//	printf("readable");
 		fd = open(path, 0, O_RDONLY);
 		if (fd < 0)
 		{
-			printf("Not opened");
+	//		printf("Not opened");
 			close(fd);
 			exit(errno);
 		}
@@ -38,11 +38,11 @@ int	checkoutput(char *path)
 {
 	int fd;
 
-	fd = 0;
+	fd = 1;/*
 	if (access(path, W_OK) == 0)
 	{
 		printf("writable");
-		fd = open(path, 0, O_WRONLY);
+		fd = open(path, O_WRONLY);
 		if (fd < 0)
 		{
 			printf("Not opened");
@@ -55,16 +55,16 @@ int	checkoutput(char *path)
 			printf("opened");
 		}
 	}
-	else{printf("Not writable");
-		fd = open(path, 0, O_CREAT);
+	else{printf("Not writable");*/
+		fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
 			printf("Could not create file");
-			close(fd);
-			exit(errno);
-			fd = 0;
+			//close(fd);
+			//exit(errno);
+			fd = 1;
 		}
-	}
+	//}
 	return (fd);
 }
 

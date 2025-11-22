@@ -24,6 +24,8 @@ void execute(t_data *minishell)
         if (pid == 0)
         {
             path = get_path(s_cmd[0], minishell->env);
+			dup2(minishell->fdin, 0);//activa el stdin
+			dup2(minishell->fdout, 1);
             excode = execve(path, s_cmd, NULL);
             if (excode == -1)
             {

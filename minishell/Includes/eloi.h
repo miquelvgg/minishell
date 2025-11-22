@@ -5,3 +5,6 @@ int		is_builtin(char*cmd);
 int		ft_stringlen(char**str);
 void	exec(char *cmd, char **env);
 char	**create_first_env(char**environ, t_data*shell);
+int		initfd(t_data*shell);
+int		checkinput(char *path);
+int		checkoutput(char *path);

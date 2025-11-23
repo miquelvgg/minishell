@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Comprueba el tamanyo de char**str
-static int	ft_stringlen(char**str)
+int	ft_stringlen(char**str)
 {
 	int	i;
 
@@ -57,13 +57,14 @@ static void	export_print_all(t_data *shell)
 	char **envtemp;
 
 	i = 0;
-	envtemp = shell->env;
+	envtemp = create_new_env(shell, -1, ft_stringlen(shell->env));
 	ft_sortpstr(&envtemp);
 	while (envtemp[i])
 	{
 		printf("declare -x %s\n", envtemp[i]);
 		i++;
 	}
+	free(envtemp);
 }
 
 /*main de prueba de export sin args
@@ -90,9 +91,7 @@ int	process_export_arg(char *arg, t_data *shell)
 		return (1);
 	}
 	if (ft_strchr(arg, '='))
-	{
 		set_env_var(shell, arg);
-	}
 	return (0);
 }
 

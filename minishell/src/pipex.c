@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 17:32:53 by epascual          #+#    #+#             */
-/*   Updated: 2025/04/30 13:53:30 by epascual         ###   ########.fr       */
+/*   Updated: 2025/11/18 19:16:13 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,22 @@ char	*get_path(char *cmd, char **env)
 
 	i = -1;
 	allpath = ft_split(my_getenv("PATH", env), ':');
+	if (!allpath)
+		exit(2);
 	s_cmd = ft_split(cmd, ' ');
 	while (allpath[++i])
 	{
 		path_part = ft_strjoin(allpath[i], "/");
 		exec = ft_strjoin(path_part, s_cmd[0]);
-		free(path_part);
+		//free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			ft_free_pointstring(s_cmd);
+			//ft_free_pointstring(s_cmd);
 			return (exec);
 		}
-		free(exec);
+		//free(exec);
 	}
-	doblefree(s_cmd, allpath);
+	//doblefree(s_cmd, allpath);
 	return (cmd);
 }
 
@@ -129,7 +131,7 @@ void	pipex(int input, int argc, char **argv, char**envp)
 	if (input < 0)
 	{
 		//ft_printfd(2, "no such file or directory: %s\n", argv[1]);
-		 write_error("no such file or directory");
+		write_error("no such file or directory");
 		close(input);
 		exit(errno);
 	}

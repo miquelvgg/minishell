@@ -21,7 +21,7 @@ void paint_token(char ***token, int nt)
 	char **mtoken;
 
 	i = 0;
-	if (!token)
+	if ((!token) || (!*token))
 		return ;
 	mtoken = *token;
 
@@ -31,23 +31,6 @@ void paint_token(char ***token, int nt)
 		i++;
 	}
 }
-
-void paint_token1(tn_data	*dt)
-{
-	int i;
-	
-	i = 0;
-	
-	while (dt->token[i]!= NULL)
-	{
-		printf("(%d) type:(%d) data %s \n",dt->token[i]->index,dt->token[i]->type,dt->token[i]->data);
-		i++;
-	}
-
-}
-
-
-
 
 int mshell(tn_data	*data)
 {
@@ -70,26 +53,24 @@ int mshell(tn_data	*data)
 	while (!salir)	
 	{
 		line = readline(READLINE_MSG);
-	    if (line[0] == 'x')
-	    {
-	    	salir = 1;
-	    }
-		else 
-		{
 			//t = count_tokens_and_validate(line) ;
 			//printf(" %d\n",t);
 			ntoken =shell_tokenize(line, &atoken);
 			if (ntoken > 0)
 			{
 				rt = ft_syntax(data, &atoken, ntoken);
-				if (!rt)
-					paint_token1(data);
+//				if (!rt)
+//					paint_token(data);
 				//data->token->data = line;
 				//execute(data);
 				free_data_struc(data); // free space malloc
 				free_token(&atoken, ntoken);
 			}
-		}
+			paint_token(&atoken, ntoken);
+			free_token(&atoken, ntoken);
+			data->token->data=line;
+			initfd(data);
+			execute(data);
 		 if (*line) 
 			add_history(line);
 	    	
@@ -157,7 +138,7 @@ int main(int argc, char **argv, char **env)
 	// guardar valores de 	extern char **environ;
 	
 	res = init_var(&data);
-	data.env = env;
+	data.env = create_first_env(env, &data);
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);

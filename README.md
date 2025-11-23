@@ -14,10 +14,10 @@ Ejecucion
 - [ ] Ejecutar comando
 - [ ] Interpretar operadores
 - [ ] Espera exit status de comando
-- [ ] Hace exit statuss disponible para inspeccion o proceso
+- [x] Hace exit statuss disponible para inspeccion o proceso
 ## Subject
-- [ ] Entrada
-- [ ] Historial
+- [x] Entrada
+- [x] Historial
 - [ ] Global de la senyal
 - [ ] Redirecciones
 - [ ] Pipes |
@@ -32,7 +32,7 @@ Ejecucion
 - [x] echo -n
 - [x] cd
 - [x] pwd
-- [x] export
+- [ ] export
 - [x] unset
 - [x] env
 - [x] exit

@@ -34,7 +34,7 @@ typedef struct s_token
 	int index;      
 	char *data;           
 	int type;             
-	struct s_token *next; 
+	//struct s_token *next; 
 } t_token;
 
 #define METACHARED "|<>"
@@ -50,7 +50,7 @@ extern int	g_status;
 typedef struct	s_data
 {
 	int			signal_status;
-	t_token		*token;
+	t_token		**token;
 	int			fdin;
 	int			fint;
 	int			fdout;

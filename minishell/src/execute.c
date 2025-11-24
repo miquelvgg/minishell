@@ -9,10 +9,8 @@ void execute(t_data *minishell)
     char **s_cmd;
     int pid;
 
-	if (!(minishell->token->data) || !(*(minishell->token->data)))
-		return ;
     excode = 0;
-    s_cmd = ft_split(minishell->token->data, ' ');
+    s_cmd = ft_split((minishell->token[0]->data), ' ');
     if (is_builtin(s_cmd[0]))
     {
         execute_builtin(s_cmd, minishell);
@@ -23,7 +21,7 @@ void execute(t_data *minishell)
         pid = fork();
         if (pid == 0)
         {
-			printf("%s\n", minishell->token->data);
+			printf("%s\n", (minishell->token[0]->data));
             path = get_path(s_cmd[0], minishell->env);
 			dup2(minishell->fdout, 1);
 			dup2(minishell->fdin, 0);//activa el stdin

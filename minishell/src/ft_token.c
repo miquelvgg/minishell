@@ -31,7 +31,7 @@ char *strndup_safe(const char *s, size_t n)
     p = (char *)malloc(n + 1);
     if (!p) 
         return NULL;
-    memcpy(p, s, n);
+    ft_memcpy(p, s, n);
     p[n] = '\0';
     return p;
 }
@@ -67,7 +67,7 @@ char *strndup_safe(const char *s, size_t n)
 static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, int *err_uc)
 {
     const char *s = p;
-    char 		in_q[120];            /* 0=no, '\"' si dentro de comillas */
+    char 		in_q[20];            /* 0=no, '\"' si dentro de comillas */
     size_t 		raw = 0; 
     size_t 		unz = 0;
     char c;
@@ -215,13 +215,15 @@ int shell_tokenize(const char *line, char ***tokens)
     int k;
     int len;
     const char *p;
+    char **v;
 
     /* palabra */
     size_t raw_len; 
     size_t unz_len;
     int err_uc;
+    const char *end;
 
-
+    end = NULL;
     num_tokens = count_tokens_and_validate(line);
     printf("(%d)\n",num_tokens);
     if (num_tokens < 0) 
@@ -233,7 +235,7 @@ int shell_tokenize(const char *line, char ***tokens)
         *tokens = NULL;
         return 0;
     }
-    char **v = (char **)malloc(sizeof(char *) * (num_tokens + 1));
+    v = (char **)malloc(sizeof(char *) * (num_tokens + 1));
     if (!v) {
         perror("malloc token_list");
         *tokens = NULL;
@@ -249,11 +251,9 @@ int shell_tokenize(const char *line, char ***tokens)
             v[k] = strndup_safe(p, (size_t)len);
             if (!v[k]) 
             {          
-            printf("Error (malloc)\n");              
-            free_token(&v,k);
-            return (-1);
-
-//                goto oom;// da error
+                printf("Error (malloc)\n");              
+                free_token(&v,k);
+                return (-1);
             }
             k++;
             p += len;
@@ -261,7 +261,7 @@ int shell_tokenize(const char *line, char ***tokens)
             continue;
         }
 
-        const char *end = scan_word(p, &raw_len, &unz_len, &err_uc);
+        end = scan_word(p, &raw_len, &unz_len, &err_uc);
         
         if (err_uc) { /* no debería pasar por el validador previo, pero por si acaso */
             fprintf(stderr, "Error2: Comillas sin cerrar.\n");

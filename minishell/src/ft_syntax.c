@@ -73,10 +73,11 @@ int	get_type(char *str, int *i)
 
 
 
-void ft_analysis(char *token, tn_token *mtk, int ix)
+void ft_analysis(char *token, t_token *mtk, int ix)
 {
 	int tp;
 	int i;
+	char *tmp;
 
 	i = 0;
 
@@ -91,11 +92,22 @@ void ft_analysis(char *token, tn_token *mtk, int ix)
 		mtk->data = token;
 		mtk->type = tp;
 		//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, token[i]);	
-
-
+		
+		
+		tmp = eval_expan(mtk->data);
+		mtk->data = tmp;
+		printf("%s\n",tmp);
+		/*
+		if (tmp)
+		{
+			free(mtk->data);
+			mtk->data = tmp;
+		}
+			*/
+		
 }
 
-int ft_syntax(tn_data *dt, char ***tokens, int ntoken)
+int ft_syntax(t_data *dt, char ***tokens, int ntoken)
 {
 	int i;
 	char **mtoken;
@@ -104,12 +116,12 @@ int ft_syntax(tn_data *dt, char ***tokens, int ntoken)
 	if (!tokens)
 		return(0) ;
 	mtoken = *tokens;
-	dt->token = (tn_token **) malloc(sizeof(tn_token **) * (ntoken+1));
+	dt->token = (t_token **) malloc(sizeof(t_token **) * (ntoken+1));
 	if (!dt->token)
 		return (-1);
 	while ((mtoken[i] != NULL ))
 	{
-		dt->token[i] = malloc(sizeof(tn_token));
+		dt->token[i] = malloc(sizeof(t_token));
 		if (!dt->token[i])
 		{
 			while (--i)

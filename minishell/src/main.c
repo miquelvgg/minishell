@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 
-void free_data_struc(tn_data *dt)
+void free_data_struc(t_data *dt)
 {
 	int i;
 
@@ -32,7 +32,7 @@ void paint_token(char ***token, int nt)
 	}
 }
 
-int mshell(tn_data	*data)
+int mshell(t_data	*data)
 {
 	int salir;
 	char *line;
@@ -55,6 +55,9 @@ int mshell(tn_data	*data)
 		line = readline(READLINE_MSG);
 			//t = count_tokens_and_validate(line) ;
 			//printf(" %d\n",t);
+			
+			if (line[0]=='x')
+				salir =1;
 			ntoken =shell_tokenize(line, &atoken);
 			if (ntoken > 0)
 			{
@@ -63,14 +66,17 @@ int mshell(tn_data	*data)
 //					paint_token(data);
 				//data->token->data = line;
 				//execute(data);
+				free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 				free_data_struc(data); // free space malloc
-				free_token(&atoken, ntoken);
+				
 			}
-			paint_token(&atoken, ntoken);
-			free_token(&atoken, ntoken);
-			data->token->data=line;
-			initfd(data);
-			execute(data);
+			//printf("%s\n",data->token[0]->data);
+			
+			//paint_token(&atoken, ntoken);
+			//free_token(&atoken, ntoken);
+			//data->token->data=line;
+			/*initfd(data);
+			execute(data);*/
 		 if (*line) 
 			add_history(line);
 	    	
@@ -99,7 +105,7 @@ int ft_control(int argc, char **argv)
 	return (0);
 }
 
-int  init_var(tn_data	*data)
+int  init_var(t_data	*data)
 {
 /*	tn_token *new_token = malloc(sizeof(tn_token));
 	if (!new_token)
@@ -113,7 +119,7 @@ int  init_var(tn_data	*data)
 	return(0);
 }
 
-int  exit_var(tn_data	*data)
+int  exit_var(t_data	*data)
 {
 	if (data->token)
 		free(data->token);
@@ -125,7 +131,7 @@ int  exit_var(tn_data	*data)
 
 int main(int argc, char **argv, char **env)
 {
-	tn_data	data;
+	t_data	data;
 	int		res;
 	
 	if (ft_control(argc,argv))
@@ -138,7 +144,9 @@ int main(int argc, char **argv, char **env)
 	// guardar valores de 	extern char **environ;
 	
 	res = init_var(&data);
-	data.env = create_first_env(env, &data);
+	if (!env || !*env)
+		data.env = create_first_env(env, &data);
+	data.env =env;
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);

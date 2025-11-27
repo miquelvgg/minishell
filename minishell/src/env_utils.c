@@ -16,47 +16,44 @@ int	find_env_var(char **env, const char *name, int name_len)
 	return (-1);
 }
 
-void init_minimal_env(t_data *shell)
+void	init_minimal_env(t_data *shell)
 {
-	char**newenv;
-    char *pwd;
-    char *pat;
-    char cwd[PATH_MAX];  // Buffer for current working directory (adjust size as needed)
-    // Allocate the env array (with space for 3 pointers + NULL terminator)
-    newenv = shell->env;
-    if (!newenv)
-		return;  // Handle malloc failure (e.g., exit or error message)
-
+	char	**newenv;
+	char	*pwd;
+	char	*pat;
+	char	cwd[PATH_MAX];// Buffer for current working directory
+	size_t	pwd_len;
+// Allocate the env array (with space for 3 pointers + NULL terminator)
+	newenv = shell->env;
+	if (!newenv)
+		return ;// Handle malloc failure (e.g., exit or error message)
 	free(shell->env);
 	shell->env = (char**)malloc(sizeof(char*) * 4);
 	printf("PATH ALLOCADO\n");
-    pat = (char *)malloc(sizeof(char) * 65);  // Adjust size based on your PATH length
-    if (!pat)
-    {
-        free(newenv);
-        return;
-    }
-    ft_strcpy(pat, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	pat = (char *)malloc(sizeof(char) * 65);  // Adjust size based on your PATH length
+	if (!pat)
+		return (free(newenv));
+	ft_strcpy(pat, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
 	printf("PATH ajustado\n");
-    // Get actual current working directory and allocate/set PWD
-    if (getcwd(cwd, sizeof(cwd)) == NULL)
-        ft_strcpy(cwd, "/");
-    size_t pwd_len = ft_strlen("PWD=") + ft_strlen(cwd) + 1;
+// Get actual current working directory and allocate/set PWD
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		ft_strcpy(cwd, "/");
+	pwd_len = ft_strlen("PWD=") + ft_strlen(cwd) + 1;
 	printf("PWDALLOCADO\n");
-    pwd = (char *)malloc(sizeof(char) * pwd_len);
-    if (!pwd)
-    {
-        free(pat);
-        free(newenv);
-        return;
-    }
-    ft_strcpy(pwd, "PWD=");
-    ft_strlcat(pwd, cwd, pwd_len);
+	pwd = (char *)malloc(sizeof(char) * pwd_len);
+	if (!pwd)
+	{
+		free(pat);
+		free(newenv);
+		return ;
+	}
+	ft_strcpy(pwd, "PWD=");
+	ft_strlcat(pwd, cwd, pwd_len);
 	printf("PWD AJUSTADO\n");
-    // Set the env array
-    newenv[0] = pat;
-    newenv[1] = pwd;
-    newenv[2] = NULL;  // NULL-terminate
+// Set the env array
+	newenv[0] = pat;
+	newenv[1] = pwd;
+	newenv[2] = NULL;// NULL-terminate
 	printf("%s\n%s\n", pat, pwd);
 }
 /*

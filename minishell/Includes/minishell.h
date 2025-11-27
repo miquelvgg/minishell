@@ -68,7 +68,7 @@ int		checkacces(char **s_cmd, char **allpath, char **exec);
 int		notempty(char **a, char **b);
 
 // EXECUTE
-void	execute(t_data *minishell);
+void	execute(t_data *minishell, char *str);
 // interactive
 void	reset_prompt(int signo);
 void	exect_interactive(t_data *data);

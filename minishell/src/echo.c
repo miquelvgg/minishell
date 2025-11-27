@@ -3,8 +3,8 @@
 //Comprueba la existencia de una flag en un string
 static int	ft_flag(char *str, char c, void *flag)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (str[i] == '-')
 		i++;
@@ -13,7 +13,7 @@ static int	ft_flag(char *str, char c, void *flag)
 	if (i >= 2 && (str[i] == '\0' || ft_isspace(str[i])))
 	{
 		*(int *)flag = 0;
-		return(1);
+		return (1);
 	}
 	return (0);
 }

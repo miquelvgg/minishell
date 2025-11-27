@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //Ejecuta el builtin pwd
-void	execute_pwd()
+void	execute_pwd(void)
 {
 	char	cwd[PATH_MAX];
 

@@ -11,7 +11,7 @@ void	execute(t_data *minishell, char *str)
 
 	excode = 0;
 	s_cmd = ft_split((minishell->token[0]->data), ' ');
-	if (is_builtin(s_cmd[0]))
+	if (is_builtin(str))
 	{
 		execute_builtin(s_cmd, minishell);
 		ft_free_pointstring(s_cmd);

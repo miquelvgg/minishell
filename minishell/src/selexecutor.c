@@ -32,47 +32,38 @@ void	selexecute(t_data *shell)
 	int		i;
 	t_token	*actual;
 	char	*cmd;
-	char	cflag;
 
-	cflag = 0;
 	i = 0;
 	actual = shell->token[i];
 	while (actual)
 	{
-		if (cflag)
-		{
-		while (actual && actual->type == 1)
-		{
-			cmd = ft_freestrjoin(cmd, actual->data);
-			cmd = ft_strjoin(cmd, " ");
-			printf("%s", cmd);
-			i++;
-			actual = shell->token[i];
-		//printf("//ejecuta comando o anade a string que ejecutara");
-		}	
-		cflag = 0;
-		execute(shell, cmd);
-		}
-		else
-		{
 		if (actual->type == 1)
 		{
 			cmd = actual->data;
-			if (shell->token[i+1] && (shell->token[i+1]->type == 1))
-				cflag = 1;
-			else
-				execute(shell, cmd);
+			printf("//ejecuta comando o anade a string que ejecutara");
+			execute(shell, cmd);
 		}
 		if (actual->type == 2)
+		{
+			printf("Abriendo input");
 			initfdi(shell, actual->data);
+		}
 			//Abre fdin
 		if (actual->type == 3)
+		{
+			printf("abriendo output");
 			initfdo(shell, actual->data);
 			//Abre fdout
+		}
 		if (actual->type == 4)
+		{
+			printf("Abre append output");
 			initfdoa(shell, actual->data);
 			//Abre fdoutappend
-		if (actual->type == 5)
+		}
+			if (actual->type == 5)
+		{
+			printf("Abre heredoc");
 			heredoc(actual);
 			//printf("//Abre fdinheredoc");
 		}

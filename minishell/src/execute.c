@@ -1,6 +1,52 @@
 #include "minishell.h"
 
-//executa un comando
+//executa un comando builtin
+void	executebuiltin(t_data *minishell, char *str)
+{
+	char	**s_cmd;
+
+	s_cmd = ft_split(str, ' ');
+	printf("Builtin\n");
+	execute_builtin(s_cmd, minishell);
+	ft_free_pointstring(s_cmd);
+}
+
+//executa un comando externo
+void	executecomand(t_data *minishell, char *str)
+{
+	char	*path;
+	int		excode;
+	char	**s_cmd;
+	int		pid;
+
+	excode = 0;
+	s_cmd = ft_split(str, ' ');
+	printf("No builtin\n");
+	pid = fork();
+	if (pid == 0)
+	{
+		printf("%s\n", str);
+		path = get_path(str, minishell->env);
+		printf("Intenta ejecutar execve\n");
+		excode = execve(path, s_cmd, NULL);
+		if (excode == -1)
+		{
+			printf("Fallo execve\n");
+			ft_free_pointstring(s_cmd);
+			free(path);
+			errno = 1;
+			exit(errno);
+		}
+	}
+	else
+	{
+		printf("Padre espera\n");
+		waitpid(pid, NULL, 0);
+		ft_free_pointstring(s_cmd);
+	}
+}
+/*
+//executa un comandoVersion antigua, diferencia aqui entre builtin i comando en lugar de en la tokenizacion
 void	execute(t_data *minishell, char *str)
 {
     //printf("%s\n", minishell->token->data);
@@ -10,22 +56,25 @@ void	execute(t_data *minishell, char *str)
 	int		pid;
 
 	excode = 0;
-	s_cmd = ft_split((minishell->token[0]->data), ' ');
+	s_cmd = ft_split(str, ' ');
 	if (is_builtin(str))
 	{
+		printf("Builtin\n");
 		execute_builtin(s_cmd, minishell);
 		ft_free_pointstring(s_cmd);
 	}
-	else
-	{
+	else if (!is_builtin(str)){
+		printf("No builtin\n");
 		pid = fork();
 		if (pid == 0)
 		{
-			printf("%s\n", (minishell->token[0]->data));
+			printf("%s\n", str);
             path = get_path(str, minishell->env);
+			printf("Intenta ejecutar execve\n");
 			excode = execve(path, s_cmd, NULL);
 			if (excode == -1)
 			{
+				printf("Fallo execve\n");
 				ft_free_pointstring(s_cmd);
 				errno = 1;
 				exit(errno);
@@ -33,8 +82,9 @@ void	execute(t_data *minishell, char *str)
 		}
 		else
 		{
+			printf("Padre espera\n");
 			waitpid(pid, NULL, 0);
 			ft_free_pointstring(s_cmd);
 		}
 	}
-}
+}*/

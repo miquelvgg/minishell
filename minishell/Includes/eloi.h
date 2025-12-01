@@ -13,3 +13,5 @@ int		checkoutput(char *path);
 int		checkoutappend(char *path);
 void	selexecute(t_data *shell);
 void	heredoc(t_token *hdoc);
+void	executecomand(t_data *minishell, char *str);
+void	executebuiltin(t_data *minishell, char *str);

@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 17:32:53 by epascual          #+#    #+#             */
-/*   Updated: 2025/11/29 15:26:44 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:20:59 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ char	*get_path(char *cmd, char **env)
 		//free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			//ft_free_pointstring(s_cmd);
+			ft_free_pointstring(s_cmd);
+			free(allpath);
 			return (exec);
 		}
 		//free(exec);
 	}
-	//doblefree(s_cmd, allpath);
+	//free(s_cmd);
+	//free(allpath);
 	return (cmd);
 }
 

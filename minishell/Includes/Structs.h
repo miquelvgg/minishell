@@ -46,11 +46,26 @@ typedef struct s_token
 // deberia ponerlo volatile sigatomic??
 extern int	g_status;
 
+
+typedef struct s_action
+{
+	int index;
+	char **argv;
+	char *infile;
+	char *outfile;
+	int append; // 0 = reescribir  (>), 1 = abrir (>>)
+	int fd_in;
+	int fd_out;
+} t_action;
+
+
 // Data structures
 typedef struct	s_data
 {
 	int			signal_status;
 	t_token		**token;
+	t_action	*actions; //  acciones
+	int			n_actions; // Número de acciones
 	int			fdin;
 	int			fint;
 	int			fdout;
@@ -60,6 +75,6 @@ typedef struct	s_data
 	char		*working_dir;
 	char		*old_working_dir;
 //	t_command	*cmd;
-	
+
 }	t_data;
 #endif

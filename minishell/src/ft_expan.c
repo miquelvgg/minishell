@@ -1,5 +1,27 @@
 #include "minishell.h"
 
+size_t	ft_strncpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	len;
+
+	if (src == NULL)
+		return (0);
+	len = 0;
+	while (src[len] != '\0')
+		len++;
+	if (size == 0)
+		return (len);
+	i = 0;
+	while (src[i] != '\0' && i < size )
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	return (len);
+}
+
+
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
@@ -44,23 +66,6 @@ char	*get_var_value(const char *var_name)
 }
 
 
-int	extract_var_name_len(const char *s)
-{
-	int	len;
-
-	len = 0;
-	// Una variable de Bash puede empezar con un '_' o un caracter alfabético
-	if (s[len] == '_' || isalpha((unsigned char)s[len]))
-	{
-		while (s[len] && (isalnum((unsigned char)s[len]) || s[len] == '_'))
-			len++;
-	}
-	// Manejo especial de "$?" (código de salida del último comando)
-	else if (s[len] == '?')
-		len++;
-	// Si no es un nombre válido (ej: "$ "), la longitud es 0.
-	return (len);
-}
 
 int	append_to_buffer(char **dst, int *current_len, const char *src, int src_len)
 {
@@ -70,16 +75,19 @@ int	append_to_buffer(char **dst, int *current_len, const char *src, int src_len)
 	if (src_len <= 0)
 		return (1);
 	new_len = *current_len + src_len;
-	new_dst = (char *)realloc(*dst, (new_len + 1) * sizeof(char));
+	new_dst = (char *)ft_realloc(*dst,*current_len, (new_len + 1) * sizeof(char));
 	if (!new_dst)
 		return (0); // Fallo de realloc
 	*dst = new_dst;
-	strncpy(*dst + *current_len, src, src_len);
+	//strncpy(*dst + *current_len, src, src_len);
+	ft_strncpy(*dst + *current_len, src, src_len);
 	(*dst)[new_len] = '\0';
 	*current_len = new_len;
 	return (1);
 }
 
+// tenemos de pasar (g_last_status $? )
+/* simplificar y no hacerlo caracter por caracter  */
 char	*eval_expan(const char *token_str)
 {
 	char	*expanded_token;
@@ -90,9 +98,9 @@ char	*eval_expan(const char *token_str)
 	char	*var_name;
 	char	*var_value;
 	char	*status_str;
-	int		g_last_status =0;
+	int		g_last_status;
 
-
+	g_last_status =0;
 	expanded_token = (char *)malloc(1);
 	if (!expanded_token)
 		return (NULL);
@@ -102,12 +110,11 @@ char	*eval_expan(const char *token_str)
 	i = 0;
 	while (token_str[i] != '\0')
 	{
-		/* 1. Manejo de comillas */
 		if (token_str[i] == '\'' || token_str[i] == '"')
 		{
 			if (quote_state == 0)
 			{
-				/* Entrar en comillas */
+				/*  comillas */
 				quote_state = token_str[i];
 				i++;
 				continue ;
@@ -119,10 +126,8 @@ char	*eval_expan(const char *token_str)
 				i++;
 				continue ;
 			}
-			/* Si llegamos aquí, es una comilla diferente a la actual: se trata como literal */
 		}
-
-		/* 2. Lógica de expansión de '$' (no se expande dentro de comillas simples) */
+		/* 2. expansion de $ tiene en cuenta no expande comillas simples*/
 		if (token_str[i] == '$' && quote_state != '\'')
 		{
 			i++; /* Saltar '$' */
@@ -161,8 +166,7 @@ char	*eval_expan(const char *token_str)
 					var_value = get_var_value(var_name);
 					if (var_value)
 					{
-						if (!append_to_buffer(&expanded_token, &len,
-								var_value, ft_strlen(var_value)))
+						if (!append_to_buffer(&expanded_token, &len,var_value, ft_strlen(var_value)))
 						{
 							free(var_name);
 							free(expanded_token);
@@ -185,6 +189,7 @@ char	*eval_expan(const char *token_str)
 		}
 
 		/* 3. Carácter literal */
+		
 		if (!append_to_buffer(&expanded_token, &len, &token_str[i], 1))
 		{
 			free(expanded_token);

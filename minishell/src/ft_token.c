@@ -18,92 +18,37 @@ void free_token(char ***token, int nt)
 	free(mtoken);
 }
 
-const char *skip_espace(const char *str) 
-{
-    while (*str && isspace((unsigned char)*str)) 
-    	str++;
-    return str;
-}
-
-char *strndup_safe(const char *s, size_t n) 
-{
-    char *p;
-    p = (char *)malloc(n + 1);
-    if (!p) 
-        return NULL;
-    ft_memcpy(p, s, n);
-    p[n] = '\0';
-    return p;
-}
-// ok echo test "'"
-// ok echo test '"'
-// ok echo test "''"
-// ok echo test '""'
-// fail echo test '"'"'
-// fail echo test "'"'"
-// fail echo test "'"'"'a'"'"'"
-
-/*
-
-    if (c == in_q [ iq - 1] )
-        iq--;
-        in_q [ iq ] = 0;
-        cerrar;
-    
-    if ((c == "\"" ) && ( in_q [ iq - 1] != "\""))
-        in_q [iq] = c;
-        iq++;
-
-    if ((c == "\'" ) && ( in_q [ iq - 1] != "\'"))
-        in_q [iq] = c;
-        iq++;
-
-
-
-
-*/
-
-
 static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, int *err_uc)
 {
     const char *s = p;
-    char 		in_q[20];            /* 0=no, '\"' si dentro de comillas */
+    char 		in_q;            /* 0=no, '\"' si dentro de comillas */
     size_t 		raw = 0; 
     size_t 		unz = 0;
     char c;
     int iq =0;
 
-    while (iq < 2)
-        in_q[iq++] =0;
-
     iq = 0;
     while (s[raw]) {
         c = s[raw];
-        if (iq)
-        {
-            if (c == in_q [ iq - 1] )
-            {          
-                in_q[iq-1]= 0;
-                iq--;
+        if (c == in_q )
+        {          
+                in_q= 0;
+                
                 raw++;                 
                 continue;
-            }
         }
-        /* fuera de comillas: fin de palabra si espacio o metachar */   
-        if ((isspace((unsigned char)c) && (!iq)) || strchr(METACHARED, c)) 
-        //if ((isspace((unsigned char)c) ) || strchr(METACHARED, c)) 
+        /* caracter considerado normal si hay unas comillas abiertas da igual  fin de palabra si espacio o metachar */   
+        if (isspace((unsigned char)c) || ft_strchr(METACHARED, c)) 
         	break;
-          if (c == '\'' )
+        if (c == '\'' )
         {  /* apertura de comillas */
-            in_q[iq]= c;
-            iq ++;
+            in_q = c;
             raw++;                     /* comilla no cuenta en unz */
             continue;
         }
         else if (c == '\"' ) 
         {
-            in_q[iq]= c;
-            iq ++;
+            in_q= c;
             raw++;                     /* comilla no cuenta en unz */
             continue;
         }
@@ -111,11 +56,13 @@ static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, in
         raw++;
         unz++;
     }
-    if ((iq)) {               /* comilla sin cerrar */
+    if (in_q) {               /* comilla sin cerrar */
         if (err_uc) 
-        	*err_uc = 1;
+    	{
+           	*err_uc = 1;
+        }
     } else 
-    	if (err_uc) 
+        if (err_uc) 
     	{
         	*err_uc = 0;
     	}
@@ -132,6 +79,8 @@ static void copy_unquoted(char *dst, const char *src, size_t raw_len)
     size_t i =0;
     size_t j = 0;
 //    char in_q = 0;
+// char c
+
 
     while ((src[i])&&(i < raw_len))
     {
@@ -140,9 +89,9 @@ static void copy_unquoted(char *dst, const char *src, size_t raw_len)
       i++;
     }
 
- /* 
-    for (i = 0; i < raw_len; i++) {
-        char c = src[i];
+ /* while ((src[i])&&(i < raw_len))
+     {
+     c = src[i];
       if (in_q) 
         {
             if (c == in_q) 
@@ -160,6 +109,7 @@ static void copy_unquoted(char *dst, const char *src, size_t raw_len)
                     } 
             dst[j++] = c;
         }
+        i++;    
     }
 */
     dst[j] = '\0';
@@ -209,6 +159,7 @@ int count_tokens_and_validate(const char *line)
 }
 
 /* -------- tokenizador  -------- */
+/* line --> tokens */
 int shell_tokenize(const char *line, char ***tokens)
 {
     int num_tokens; 
@@ -225,13 +176,14 @@ int shell_tokenize(const char *line, char ***tokens)
 
     end = NULL;
     num_tokens = count_tokens_and_validate(line);
-    printf("(%d)\n",num_tokens);
+
     if (num_tokens < 0) 
     {
         *tokens = NULL;
         return -1;
     }
-    if (num_tokens == 0) {
+    if (num_tokens == 0) 
+    {
         *tokens = NULL;
         return 0;
     }
@@ -244,10 +196,11 @@ int shell_tokenize(const char *line, char ***tokens)
     p = skip_espace(line);
     k = 0;
     while (*p) {
-        if (strchr(METACHARED, *p)) 
+        if (ft_strchr(METACHARED, *p)) 
         {
             len = 1;
-            if ((*p == '<' || *p == '>') && *(p + 1) == *p) len = 2;
+            if ((*p == '<' || *p == '>') && *(p + 1) == *p)  //">> or <<"
+                len = 2;
             v[k] = strndup_safe(p, (size_t)len);
             if (!v[k]) 
             {          
@@ -271,7 +224,7 @@ int shell_tokenize(const char *line, char ***tokens)
             return (-1);
         }
 
-        /* reservar y copiar sin comillas */
+        /* reservar y copiar con comillas*/
         //v[k] = (char *)malloc(unz_len + 1);
         v[k] = (char *)malloc(raw_len + 1);
         if (!v[k]) 
@@ -290,5 +243,4 @@ int shell_tokenize(const char *line, char ***tokens)
     v[k] = NULL;
     *tokens = v;
     return k;
-
 }

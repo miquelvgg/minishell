@@ -81,22 +81,21 @@ void ft_analysis(char *token, t_token *mtk, int ix)
 
 	i = 0;
 
-	
 	while (token[i])
 	{
 		tp = get_type(token,&i);
 		//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, mtk->data);
 		i++;
 	}
-		mtk->index = ix;
-		mtk->data = token;
-		mtk->type = tp;
-		//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, token[i]);	
-		
-		
-		tmp = eval_expan(mtk->data);
-		mtk->data = tmp;
-		printf("%s\n",tmp);
+	mtk->index = ix;
+	mtk->data = token;
+	mtk->type = tp;
+	//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, token[i]);	
+	printf("1test :%s\n ",mtk->data);
+	tmp = eval_expan(mtk->data); // expande realloc
+	mtk->data = tmp;	
+	printf("2test :%s\n ",mtk->data);
+	//printf("%s\n",tmp);
 		/*
 		if (tmp)
 		{
@@ -107,6 +106,9 @@ void ft_analysis(char *token, t_token *mtk, int ix)
 		
 }
 
+
+/* tokens --> dt->token  */
+/* Guardo los apuntadores del array in icial de todo*/
 int ft_syntax(t_data *dt, char ***tokens, int ntoken)
 {
 	int i;
@@ -114,7 +116,7 @@ int ft_syntax(t_data *dt, char ***tokens, int ntoken)
 	
 	i = 0;
 	if (!tokens)
-		return(0) ;
+		return(-1) ;
 	mtoken = *tokens;
 	dt->token = (t_token **) malloc(sizeof(t_token **) * (ntoken+1));
 	if (!dt->token)

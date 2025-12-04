@@ -1,13 +1,73 @@
 #include "minishell.h"
 
 
+void	print_actions(t_data *d)
+{
+	int		i;
+	int		j;
+	t_action *act;
+
+	if (!d)
+	{
+		printf("print_actions: data es NULL\n");
+		return ;
+	}
+	if (!d->actions || d->n_actions <= 0)
+	{
+		printf("print_actions: no hay acciones\n");
+		return ;
+	}
+	printf("===== ACCIONES (total: %d) =====\n", d->n_actions);
+	i = 0;
+	while (i < d->n_actions)
+	{
+		act = &d->actions[i];
+		printf("---- Acción %d ----\n", i);
+		printf("index   : %d\n", act->index);
+
+		/* argv */
+		printf("argv    : ");
+		if (!act->argv)
+			printf("(null)\n");
+		else
+		{
+			j = 0;
+			while (act->argv[j])
+			{
+				printf("[%d] \"%s\"  ", j, act->argv[j]);
+				j++;
+			}
+			if (j == 0)
+				printf("(vacío)");
+			printf("\n");
+		}
+
+		/* redirecciones */
+		printf("infile  : %s\n", act->infile ? act->infile : "(null)");
+		printf("outfile : %s\n", act->outfile ? act->outfile : "(null)");
+		printf("append  : %d\n", act->append);
+
+		/* fds (si los usas) */
+		printf("fd_in   : %d\n", act->fd_in);
+		printf("fd_out  : %d\n", act->fd_out);
+
+		printf("--------------------\n");
+		i++;
+	}
+	printf("===== FIN ACCIONES =====\n");
+}
 void free_data_struc(t_data *dt)
 {
 	int i;
 
+	if (!dt->token)
+		return ;
+
 	i = 0;
 	while (dt->token[i]!= NULL)
 	{
+		if  (dt->token[i]->data)	
+			free(dt->token[i]->data);
 		free(dt->token[i]);
 		i++;
 	}
@@ -15,19 +75,17 @@ void free_data_struc(t_data *dt)
 		free(dt->token);
 } 
 
-void paint_token(char ***token, int nt)
+void paint_token(t_data	*data)
 {
 	int i;
-	char **mtoken;
+	t_token **mtoken;
 
 	i = 0;
-	if ((!token) || (!*token))
-		return ;
-	mtoken = *token;
+	mtoken = data->token;
 
-	while ((mtoken[i] != NULL ) &&(i < nt))
+	while ((mtoken[i] != NULL ))
 	{
-		printf("(%d) %s \n",i,mtoken[i]);
+		printf("(%d) %s \n",i,mtoken[i]->data);
 		i++;
 	}
 }
@@ -57,9 +115,6 @@ int mshell(t_data	*data)
 			//printf(" %d\n",t);
 			
 			if (line[0]=='x')
-				salir =1;
-			ntoken =shell_tokenize(line, &atoken);
-			if (ntoken > 0)
 			{
 				rt = ft_syntax(data, &atoken, ntoken);
 //				if (!rt)
@@ -69,7 +124,6 @@ int mshell(t_data	*data)
 				free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 				free_data_struc(data); // free space malloc
 				
-			}
 			//printf("%s\n",data->token[0]->data);
 			
 			//paint_token(&atoken, ntoken);
@@ -79,6 +133,46 @@ int mshell(t_data	*data)
 			add_history(line);
 	    	
 		free(line);    
+				salir =1;
+			}
+			else 
+			{
+				ntoken =shell_tokenize(line, &atoken);
+				if (ntoken > 0)
+				{
+					
+					rt = ft_syntax(data, &atoken, ntoken);
+					if (rt)
+					{
+						free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
+						free_data_struc(data); // free space malloc
+						return(1);
+					}
+
+					//paint_token(atoken,ntoken);
+					paint_token(data);
+					rt = ft_actions(data);
+					print_actions(data );
+					if (rt)
+					{
+						free_actions(data);
+						free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
+						free_data_struc(data); // free space malloc
+						return(1);
+					}
+
+					//data->token->data = line;
+					//execute(data);
+					free_actions(data);
+					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
+					free_data_struc(data); // free space malloc
+					
+				}
+			if (*line) 
+				add_history(line);
+			}
+				
+			free(line);    
 	}
    	unblock_signal(SIGINT);
 	unblock_signal(SIGQUIT);
@@ -117,11 +211,14 @@ int  init_var(t_data	*data)
 	return(0);
 }
 
-int  exit_var(t_data	*data)
+int  exit_var(t_data *data)
 {
-	if (data->token)
-		free(data->token);
+	int i;
 
+	if (!data->env)
+		return(0);
+	i = 0 ;
+ 	free(data->env);
 	return(0);
 }
 
@@ -142,13 +239,12 @@ int main(int argc, char **argv, char **env)
 	// guardar valores de 	extern char **environ;
 	
 	res = init_var(&data);
-	if (!env || !*env)
-		data.env = create_first_env(env, &data);
-	data.env =env;
+
+	data.env = create_first_env(env, &data);
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);
-//	exit_var(&data);
+	exit_var(&data);
 
 //	exit_shelly(&data);
 	return (0);

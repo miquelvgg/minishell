@@ -3,7 +3,7 @@
 //Comprueba que se pueda abrir el input y devuelve el fd
 int	checkinput(char *path)
 {
-	int fd;
+	int	fd;
 
 	fd = 0;
 	if (access(path, R_OK) == 0)

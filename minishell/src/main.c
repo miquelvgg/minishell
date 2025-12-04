@@ -120,7 +120,7 @@ int mshell(t_data	*data)
 //				if (!rt)
 //					paint_token(data);
 				//data->token->data = line;
-				selexecute(data);
+				////////////////selexecute(data);
 				free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 				free_data_struc(data); // free space malloc
 				
@@ -162,7 +162,7 @@ int mshell(t_data	*data)
 					}
 
 					//data->token->data = line;
-					//execute(data);
+					exactions(data);
 					free_actions(data);
 					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 					free_data_struc(data); // free space malloc

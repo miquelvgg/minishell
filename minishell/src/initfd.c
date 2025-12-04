@@ -1,34 +1,37 @@
 #include "minishell.h"
 
-int	initfdo(t_data*shell, char *doc)
+int	initfdo(int*fdout, char *doc)
 {
 	int	fdo;
 
 	fdo = 1;
-	fdo = checkoutput(doc);
-	shell->fdout = fdo;
-	dup2(shell->fdout, 1);
+	if (doc)
+		fdo = checkoutput(doc);
+	*fdout = fdo;
+	dup2(*fdout, 1);
 	return (0);
 }
 
-int	initfdi(t_data*shell, char *doc)
+int	initfdi(int*fdin, char *doc)
 {
 	int fdi;
 
 	fdi = 0;
-	fdi = checkinput(doc);
-	shell->fdin = fdi;
-	dup2(shell->fdin, 0);
+	if (doc)
+		fdi = checkinput(doc);
+	*fdin = fdi;
+	dup2(*fdin, 0);
 	return (0);
 }
 
-int	initfdoa(t_data*shell, char *doc)
+int	initfdoa(int*fdout, char *doc)
 {
 	int fdo;
 
 	fdo = 1;
-	fdo = checkoutappend(doc);
-	shell->fdout = fdo;
-	dup2(shell->fdout, 1);
+	if (doc)
+		fdo = checkoutappend(doc);
+	*fdout = fdo;
+	dup2(*fdout, 1);
 	return (0);
 }

@@ -26,6 +26,7 @@ char *ft_freestrjoin(char *s1, char *s2)
 	return (str);
 	
 }
+/*
 //itera los tokens y ejecuta
 void	selexecute(t_data *shell)
 {
@@ -78,4 +79,4 @@ void	selexecute(t_data *shell)
 		i++;
 		actual = shell->token[i];
 	}
-}
+}*/

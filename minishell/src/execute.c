@@ -45,25 +45,27 @@ void	executecomand(t_data *minishell, char *str)
 		ft_free_pointstring(s_cmd);
 	}
 }
-/*
+
 //executa un comandoVersion antigua, diferencia aqui entre builtin i comando en lugar de en la tokenizacion
-void	execute(t_data *minishell, char *str)
+void	execute(t_action act, t_data*minishell)
 {
     //printf("%s\n", minishell->token->data);
 	char	*path;
 	int		excode;
 	char	**s_cmd;
+	char	*str;
 	int		pid;
 
 	excode = 0;
-	s_cmd = ft_split(str, ' ');
-	if (is_builtin(str))
+	s_cmd = act.argv;//ft_split(str, ' ');
+	str		= s_cmd[0];
+	if (is_builtin(s_cmd[0]))
 	{
 		printf("Builtin\n");
 		execute_builtin(s_cmd, minishell);
 		ft_free_pointstring(s_cmd);
 	}
-	else if (!is_builtin(str)){
+	else{
 		printf("No builtin\n");
 		pid = fork();
 		if (pid == 0)
@@ -87,4 +89,4 @@ void	execute(t_data *minishell, char *str)
 			ft_free_pointstring(s_cmd);
 		}
 	}
-}*/
+}

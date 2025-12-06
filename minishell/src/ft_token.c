@@ -6,16 +6,21 @@ void free_token(char ***token, int nt)
 	char **mtoken;
 	
 	i = 0;
-	if (!token)
+	if ((!token) ||(*token == NULL))
 		return ;
 	mtoken = *token;
 
+
 	while ((mtoken[i] != NULL ) &&(i < nt))
 	{
+        
 		free(mtoken[i]);
+        mtoken[i] =NULL;
 		i++;
 	}
+
 	free(mtoken);
+    mtoken = NULL;
 }
 
 static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, int *err_uc)

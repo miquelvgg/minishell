@@ -91,10 +91,10 @@ void ft_analysis(char *token, t_token *mtk, int ix)
 	mtk->data = token;
 	mtk->type = tp;
 	//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, token[i]);	
-	printf("1test :%s\n ",mtk->data);
+	//printf("1test :%s\n ",mtk->data);
 	tmp = eval_expan(mtk->data); // expande realloc
 	mtk->data = tmp;	
-	printf("2test :%s\n ",mtk->data);
+	//printf("2test :%s\n ",mtk->data);
 	//printf("%s\n",tmp);
 		/*
 		if (tmp)
@@ -131,7 +131,7 @@ int ft_syntax(t_data *dt, char ***tokens, int ntoken)
 			free(dt->token);
 			return (-1);
 		}
-		ft_analysis(mtoken[i], dt->token[i],i);
+		ft_analysis(mtoken[i], dt->token[i],i);// copia valor i/o expande
 		i++;	
 	}
 	dt->token[i] =NULL;

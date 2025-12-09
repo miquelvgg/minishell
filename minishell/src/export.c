@@ -34,7 +34,7 @@ static void	ft_sortpstr(char***envp)
 
 	env = *envp;
 	i = 0;
-	while (i < ft_stringlen(env))
+	while (i < ft_stringlen(env) - 1)
 	{
 		j = 0;
 		while (j < ft_stringlen(env) - 1)
@@ -54,12 +54,14 @@ static void	ft_sortpstr(char***envp)
 static void	export_print_all(t_data *shell)
 {
 	int	i;
+	int max;
 	char **envtemp;
 
 	i = 0;
+	max = ft_stringlen(shell->env);
 	envtemp = create_new_env(shell, -1, ft_stringlen(shell->env));
 	ft_sortpstr(&envtemp);
-	while (envtemp[i])
+	while (i < max)
 	{
 		printf("declare -x %s\n", envtemp[i]);
 		i++;

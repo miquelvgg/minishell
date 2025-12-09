@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 11:55:38 by mvives-s          #+#    #+#             */
-/*   Updated: 2024/10/19 11:55:41 by mvives-s         ###   ########.fr       */
+/*   Updated: 2025/12/09 15:04:57 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_print_string(char *str)
 {
 	int	len;
 
-	if (!str)
+	if (!str || !*str)
 		str = "(null)";
 	len = ft_strlen(str);
 	write(1, str, len);

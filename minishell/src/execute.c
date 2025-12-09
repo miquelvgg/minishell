@@ -59,11 +59,11 @@ void	execute(t_action act, t_data*minishell)
 	excode = 0;
 	s_cmd = act.argv;//ft_split(str, ' ');
 	str		= s_cmd[0];
-	if (is_builtin(s_cmd[0]))
+	if (is_builtin(str))
 	{
 		printf("Builtin\n");
 		execute_builtin(s_cmd, minishell);
-		ft_free_pointstring(s_cmd);
+		//ft_free_pointstring(s_cmd);
 	}
 	else{
 		printf("No builtin\n");
@@ -77,8 +77,10 @@ void	execute(t_action act, t_data*minishell)
 			if (excode == -1)
 			{
 				printf("Fallo execve\n");
-				ft_free_pointstring(s_cmd);
-				errno = 1;
+				//	free_actions(minishell);
+				//	free_data_struc(minishell); // free space malloc
+				//ft_free_pointstring(s_cmd);
+				errno = 127;
 				exit(errno);
 			}
 		}
@@ -86,7 +88,10 @@ void	execute(t_action act, t_data*minishell)
 		{
 			printf("Padre espera\n");
 			waitpid(pid, NULL, 0);
-			ft_free_pointstring(s_cmd);
+
+			if (excode == -1)
+				exit(127);
+			//ft_free_pointstring(s_cmd);
 		}
 	}
 }

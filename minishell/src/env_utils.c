@@ -76,6 +76,7 @@ void	init_minimal_env(t_data*shell)
 //Actualiza una env var
 static void	update_env_var(t_data *shell, char *var_assignment, int idx)
 {
+	printf("Updating env\n");
 	free(shell->env[idx]);
 	shell->env[idx] = (char *)malloc(ft_strlen(var_assignment) + 1);
 	if (!shell->env[idx])

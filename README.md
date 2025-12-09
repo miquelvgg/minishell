@@ -9,19 +9,19 @@ Tokenizacion
 - [ ] Elimina significado especial
 - [ ] Expande significado especial
 - [ ] Shell expansion
-- [ ] Redireccion
+- [x] Redireccion
 Ejecucion
-- [ ] Ejecutar comando
+- [x] Ejecutar comando
 - [ ] Interpretar operadores
-- [ ] Espera exit status de comando
+- [x] Espera exit status de comando
 - [x] Hace exit statuss disponible para inspeccion o proceso
 ## Subject
 - [x] Entrada
 - [x] Historial
-- [ ] Global de la senyal
-- [ ] Redirecciones
+- [x] Global de la senyal
+- [x] Redirecciones
 - [ ] Pipes |
-- [ ] Entorno
+- [x] Entorno
 - [ ] $?
 - [ ]
 ## Interactivos
@@ -32,7 +32,7 @@ Ejecucion
 - [x] echo -n
 - [x] cd
 - [x] pwd
-- [ ] export
+- [x] export
 - [x] unset
 - [x] env
 - [x] exit

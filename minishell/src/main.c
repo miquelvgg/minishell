@@ -154,9 +154,9 @@ int mshell(t_data	*data)
 					}
 
 					//data->token->data = line;
-					//exactions(data);
-					free_actions(data);
 					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
+					exactions(data);
+					free_actions(data);
 					free_data_struc(data); // free space malloc
 					
 				}

@@ -6,6 +6,8 @@ int	checkinput(char *path)
 	int	fd;
 
 	fd = 0;
+	if (path && *path)
+	{
 	if (access(path, R_OK) == 0)
 	{
 	//	printf("readable");
@@ -20,6 +22,7 @@ int	checkinput(char *path)
 		printf("opened");}
 	}
 	else{printf("Not readable");}
+	}
 	return (fd);
 }
 /*//Main de prueba
@@ -56,7 +59,9 @@ int	checkoutput(char *path)
 		}
 	}
 	else{printf("Not writable");*/
-		fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (path && *path)
+	{
+	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
 			printf("Could not create file");
@@ -64,7 +69,7 @@ int	checkoutput(char *path)
 			//exit(errno);
 			fd = 1;
 		}
-	//}
+	}
 	return (fd);
 }
 
@@ -74,6 +79,8 @@ int	checkoutappend(char *path)
 	int fd;
 
 	fd = 0;
+	if (path && *path)
+	{
 	if (access(path, W_OK) == 0)
 	{
 		printf("writable");
@@ -99,6 +106,7 @@ int	checkoutappend(char *path)
 			exit(errno);
 			fd = 0;
 		}
+	}
 	}
 	return (fd);
 }

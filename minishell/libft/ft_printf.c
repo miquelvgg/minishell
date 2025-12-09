@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 11:52:53 by mvives-s          #+#    #+#             */
-/*   Updated: 2024/10/16 11:58:30 by mvives-s         ###   ########.fr       */
+/*   Updated: 2025/12/09 15:07:04 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	ft_process_format(const char *format, int *i, va_list args)
 	int	count;
 
 	count = 0;
+	if (!i || !args || !format)
+		return (count);
 	if (format[*i] == 'c')
 		count += ft_print_char(va_arg(args, int));
 	else if (format[*i] == 's')

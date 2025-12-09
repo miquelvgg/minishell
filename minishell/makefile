@@ -27,7 +27,7 @@ CLIB = .a #Determina tipo de libreria para si windows o linux
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIB_DIR)/$(LIBFT_DIR)$(CLIB)
-	$(CC) $(CFLAGS) -v -g3 -fsanitize=address  -o $@ $^ -I $(INC_DIR) $(RDFLAG)
+	$(CC) $(CFLAGS) -v -fsanitize=address  -o $@ $^ -I $(INC_DIR) $(RDFLAG)
 #	$(CC) $(CFLAGS) -v -o $@ $^ -I $(INC_DIR) -l:$(LIBFT_DIR)/$(LIBFT_DIR)$(CLIB)
 
 $(LIB_DIR)/$(LIBFT_DIR)$(CLIB):

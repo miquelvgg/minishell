@@ -112,7 +112,7 @@ char	**create_first_env(char**environ, t_data*shell)
 	c = ft_stringlen(environ);
 	if (environ[0] == NULL)
 		init_minimal_env(shell);
-	new_env = (char **)malloc(sizeof(char *) * c);
+	new_env = (char **)ft_calloc(sizeof(char *) * c, 1);
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -132,7 +132,7 @@ char	**create_new_env(t_data *shell, int skip_idx, int count)
 	int		i;
 	int		j;
 
-	new_env = (char **)malloc(sizeof(char *) * count);
+	new_env = (char **)ft_calloc(sizeof(char *) * count, 1);
 	if (!new_env)
 		return (NULL);
 	i = 0;

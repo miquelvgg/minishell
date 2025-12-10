@@ -233,6 +233,7 @@ int main(int argc, char **argv, char **env)
 	res = init_var(&data);
 
 	data.env = create_first_env(env, &data);
+	print_env(&data);
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);

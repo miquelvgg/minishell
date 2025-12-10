@@ -19,6 +19,8 @@ static void	ft_swapenv(char **swap, int i, int j)
 {
 	char *tmp;
 
+	if (!swap[i] || !swap[j])
+		return ;
 	tmp = swap[i];
 	swap[i] = swap[j];
 	swap[j] = tmp;
@@ -31,16 +33,18 @@ static void	ft_sortpstr(char***envp)
 	int i;
 	int j;
 	int	c;
+	int m;
 
 	env = *envp;
+	m = ft_stringlen(env) - 1;
 	i = 0;
-	while (i < ft_stringlen(env) - 1)
+	while (i < m)
 	{
 		j = 0;
-		while (j < ft_stringlen(env) - 1)
+		while (j < m)
 		{
 			c = 0;
-			while (env[j][c] == env[j + 1][c])
+			while (env[j][c] == env[j +1][c])
 				c++;
 			if (env[j][c] > env[j +1][c])
 				ft_swapenv(env, j, j +1);

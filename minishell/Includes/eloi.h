@@ -21,3 +21,4 @@ void	executebuiltin(t_data *minishell, char *str);
 void	exaction(t_action act, t_data*data);
 void	exactions(t_data*data);
 void	free_data_struc(t_data *dt);
+void	executep(t_action act, t_data*minishell);

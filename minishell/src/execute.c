@@ -18,6 +18,7 @@ void	executecomand(t_data *minishell, char *str)
 	int		excode;
 	char	**s_cmd;
 	int		pid;
+	
 
 	excode = 0;
 	s_cmd = ft_split(str, ' ');
@@ -28,7 +29,7 @@ void	executecomand(t_data *minishell, char *str)
 		printf("%s\n", str);
 		path = get_path(str, minishell->env);
 		printf("Intenta ejecutar execve\n");
-		excode = execve(path, s_cmd, NULL);
+		excode = execve(path, s_cmd, minishell->env);
 		if (excode == -1)
 		{
 			printf("Fallo execve\n");
@@ -73,7 +74,7 @@ void	execute(t_action act, t_data*minishell)
 			printf("%s\n", str);
             path = get_path(str, minishell->env);
 			printf("Intenta ejecutar execve\n");
-			excode = execve(path, s_cmd, NULL);
+			excode = execve(path, s_cmd, minishell->env);
 			if (excode == -1)
 			{
 				printf("Fallo execve\n");
@@ -94,4 +95,80 @@ void	execute(t_action act, t_data*minishell)
 			//ft_free_pointstring(s_cmd);
 		}
 	}
+}
+
+
+//executa un pipecomand
+void	executep(t_action act, t_data*minishell)
+{
+	char	*path;
+	int		excode;
+	char	**s_cmd;
+	char	*str;
+	int		pid;
+	int		p_fd[2];
+
+	excode = 0;
+	s_cmd = act.argv;//ft_split(str, ' ');
+	str		= s_cmd[0];
+	if (pipe(p_fd) == -1)
+		exit(errno);
+	pid = fork();
+	if (pid == -1)
+		exit(errno);
+	if (pid == 0)
+	{
+		close(p_fd[0]);
+		dup2(p_fd[1], 1);
+		printf("No builtin\n");
+		printf("%s\n", str);
+		path = get_path(str, minishell->env);
+		printf("Intenta ejecutar execve\n");
+		excode = execve(path, s_cmd, minishell->env);
+		if (excode == -1)
+		{
+			printf("Fallo execve\n");
+			errno = 127;
+			exit(errno);
+		}
+		if (excode == -1)
+			exit(127);
+	}
+	else
+	{
+		if (is_builtin(str))
+		{
+		close(p_fd[1]);
+		dup2(p_fd[0], 0);
+			printf("Builtin\n");
+			execute_builtin(s_cmd, minishell);
+		}
+		printf("Padre espera\n");
+		waitpid(pid, NULL, 0);
+	}
+	/*pid = fork();
+
+if (pid == 0)  // CHILD
+{
+    close(p_fd[0]);
+    dup2(p_fd[1], STDOUT_FILENO);
+
+    if (is_builtin(str))
+        execute_builtin(s_cmd, minishell);
+    else {
+        path = get_path(str, minishell->env);
+        execve(path, s_cmd, minishell->env);
+        perror("execve");
+        exit(127);
+    }
+}
+else if (pid > 0)  // PARENT
+{
+    close(p_fd[1]);
+    dup2(p_fd[0], STDIN_FILENO);
+
+    waitpid(pid, NULL, 0);
+}*/
+	close(p_fd[0]);
+	close(p_fd[1]);
 }

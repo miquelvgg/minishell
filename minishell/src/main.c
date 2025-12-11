@@ -117,7 +117,7 @@ int mshell(t_data	*data)
 	block_signal(SIGQUIT);
 	block_signal(SIGINT);
   	
-	using_history();     //initialize history 
+	using_history();//initialize history 
 	while (!salir)	
 	{
 		line = readline(READLINE_MSG);

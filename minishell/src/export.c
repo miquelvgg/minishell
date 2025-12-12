@@ -43,11 +43,14 @@ static void	ft_sortpstr(char***envp)
 		j = 0;
 		while (j < m)
 		{
+			if (env[j])
+			{
 			c = 0;
 			while (env[j][c] == env[j +1][c])
 				c++;
 			if (env[j][c] > env[j +1][c])
 				ft_swapenv(env, j, j +1);
+			}
 			j++;
 		}
 		i++;

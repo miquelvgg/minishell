@@ -34,7 +34,7 @@ void	add_env_var(t_data *shell, char *var_assignment)
 	char	**new_envp;
 
 	count = ft_stringlen(shell->env);
-	new_envp = (char **)ft_calloc(sizeof(char *), (count + 2));
+	new_envp = (char **)ft_calloc(sizeof(char *), (count + 1));//esto lo cambie de +2 a +1
 	if (!new_envp)
 		return ;
 	copy_existing_vars(new_envp, shell->env, count);

@@ -10,11 +10,11 @@ int	checkinput(char *path)
 	{
 	if (access(path, R_OK) == 0)
 	{
-	//	printf("readable");
+	//	printf("readable");//DEBUGEAO
 		fd = open(path, 0, O_RDONLY);
 		if (fd < 0)
 		{
-	//		printf("Not opened");
+	//		printf("Not opened");//DEBUGEAO
 			close(fd);
 			exit(errno);
 		}
@@ -83,7 +83,7 @@ int	checkoutappend(char *path)
 	{
 	if (access(path, W_OK) == 0)
 	{
-		printf("writable");
+		printf("writable");//DEBUGEAO
 		fd = open(path, 0, O_APPEND);
 		if (fd < 0)
 		{
@@ -94,10 +94,11 @@ int	checkoutappend(char *path)
 		}
 		else
 		{
-			printf("Opened in append mode");
+			printf("Opened in append mode");//DEBUGEAO
 		}
 	}
-	else{printf("Not writable");
+	else{
+		printf("Not writable");//DEBUGEAO
 		fd = open(path, 0, O_CREAT);
 		if (fd < 0)
 		{

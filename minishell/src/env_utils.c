@@ -28,9 +28,9 @@ void	init_minimal_env(t_data *shell)
 	if (!newenv)
 		return ;// Handle malloc failure (e.g., exit or error message)
 	free(shell->env);
-	shell->env = (char**)malloc(sizeof(char*) * 4);
+	shell->env = (char**)ft_calloc(sizeof(char*), 4);
 	printf("PATH ALLOCADO\n");
-	pat = (char *)malloc(sizeof(char) * 65);  // Adjust size based on your PATH length
+	pat = (char *)ft_calloc(sizeof(char), 65);  // Adjust size based on your PATH length
 	if (!pat)
 		return (free(newenv));
 	ft_strcpy(pat, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
@@ -40,7 +40,7 @@ void	init_minimal_env(t_data *shell)
 		ft_strcpy(cwd, "/");
 	pwd_len = ft_strlen("PWD=") + ft_strlen(cwd) + 1;
 	printf("PWDALLOCADO\n");
-	pwd = (char *)malloc(sizeof(char) * pwd_len);
+	pwd = (char *)ft_calloc(sizeof(char), pwd_len);
 	if (!pwd)
 	{
 		free(pat);
@@ -78,7 +78,7 @@ static void	update_env_var(t_data *shell, char *var_assignment, int idx)
 {
 	printf("Updating env\n");
 	free(shell->env[idx]);
-	shell->env[idx] = (char *)malloc(ft_strlen(var_assignment) + 1);
+	shell->env[idx] = (char *)ft_calloc(ft_strlen(var_assignment) + 1, 1);
 	if (!shell->env[idx])
 		return ;
 	ft_strlcpy(shell->env[idx], var_assignment, ft_strlen(var_assignment) + 1);
@@ -112,7 +112,7 @@ char	**create_first_env(char**environ, t_data*shell)
 	c = ft_stringlen(environ);
 	if (environ[0] == NULL)
 		init_minimal_env(shell);
-	new_env = (char **)ft_calloc(sizeof(char *) * c, 1);
+	new_env = (char **)ft_calloc(sizeof(char *), c);
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -132,7 +132,7 @@ char	**create_new_env(t_data *shell, int skip_idx, int count)
 	int		i;
 	int		j;
 
-	new_env = (char **)ft_calloc(sizeof(char *) * count, 1);
+	new_env = (char **)ft_calloc(sizeof(char *), count);
 	if (!new_env)
 		return (NULL);
 	i = 0;

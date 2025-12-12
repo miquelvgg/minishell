@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-
+//Imprime acciones
 void	print_actions(t_data *d)
 {
 	int		i;
@@ -56,6 +56,8 @@ void	print_actions(t_data *d)
 	}
 	printf("===== FIN ACCIONES =====\n");
 }
+
+//Libera el data struct
 void free_data_struc(t_data *dt)
 {
 	int i;
@@ -82,6 +84,7 @@ void free_data_struc(t_data *dt)
 		free(dt->token);
 } 
 
+//Imprime los tokens
 void paint_token(t_data	*data)
 {
 	int i;
@@ -100,6 +103,7 @@ void paint_token(t_data	*data)
 	}
 }
 
+//Nucleo del proyecto
 int mshell(t_data	*data)
 {
 	int salir;
@@ -142,7 +146,7 @@ int mshell(t_data	*data)
 					
 					//paint_token(data);
 					rt = ft_actions(data);
-					print_actions(data );
+					//print_actions(data );//DEBUGEAO
 					if (rt)
 					{
 						free_actions(data);
@@ -171,6 +175,7 @@ int mshell(t_data	*data)
 	return(0);
 }
 
+//Comprueba los estandares
 int ft_control(int argc, char **argv)
 {
 
@@ -189,6 +194,7 @@ int ft_control(int argc, char **argv)
 	return (0);
 }
 
+//Inicia data
 int  init_var(t_data	*data)
 {
 /*	tn_token *new_token = malloc(sizeof(tn_token));
@@ -203,6 +209,7 @@ int  init_var(t_data	*data)
 	return(0);
 }
 
+//Sale de data
 int  exit_var(t_data *data)
 {
 	int i;
@@ -215,7 +222,7 @@ int  exit_var(t_data *data)
 }
 
 /* definir errores de salida */
-
+//Main, inicia env
 int main(int argc, char **argv, char **env)
 {
 	t_data	data;
@@ -233,7 +240,7 @@ int main(int argc, char **argv, char **env)
 	res = init_var(&data);
 
 	data.env = create_first_env(env, &data);
-	print_env(&data);
+	//print_env(&data);//DEBUGEAO
 	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
 		res	= mshell(&data);

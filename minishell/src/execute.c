@@ -6,7 +6,7 @@ void	executebuiltin(t_data *minishell, char *str)
 	char	**s_cmd;
 
 	s_cmd = ft_split(str, ' ');
-	printf("Builtin\n");
+	printf("Builtin\n");//DEBUGEAO
 	execute_builtin(s_cmd, minishell);
 	ft_free_pointstring(s_cmd);
 }
@@ -22,13 +22,13 @@ void	executecomand(t_data *minishell, char *str)
 
 	excode = 0;
 	s_cmd = ft_split(str, ' ');
-	printf("No builtin\n");
+	printf("No builtin\n");//DEBUGEAO
 	pid = fork();
 	if (pid == 0)
 	{
 		printf("%s\n", str);
 		path = get_path(str, minishell->env);
-		printf("Intenta ejecutar execve\n");
+		printf("Intenta ejecutar execve\n");//DEBUGEAO
 		excode = execve(path, s_cmd, minishell->env);
 		if (excode == -1)
 		{
@@ -41,7 +41,7 @@ void	executecomand(t_data *minishell, char *str)
 	}
 	else
 	{
-		printf("Padre espera\n");
+		printf("Padre espera\n");//DEBUGEAO
 		waitpid(pid, NULL, 0);
 		ft_free_pointstring(s_cmd);
 	}
@@ -67,27 +67,29 @@ void	execute(t_action act, t_data*minishell)
 		//ft_free_pointstring(s_cmd);
 	}
 	else{
-		printf("No builtin\n");
+		printf("No builtin\n");//DEBUGEAO
 		pid = fork();
 		if (pid == 0)
 		{
-			printf("%s\n", str);
+			printf("%s\n", str);//DEBUGEAO
             path = get_path(str, minishell->env);
-			printf("Intenta ejecutar execve\n");
+			printf("%s\n", path);//DEBUGEAO
+			printf("Intenta ejecutar execve\n");//DEBUGEAO
 			excode = execve(path, s_cmd, minishell->env);
 			if (excode == -1)
 			{
 				printf("Fallo execve\n");
-				//	free_actions(minishell);
-				//	free_data_struc(minishell); // free space malloc
-				//ft_free_pointstring(s_cmd);
+			//		free_actions(minishell);
+			//		free_data_struc(minishell); // free space malloc
+		//		ft_free_pointstring(s_cmd);
+			//	free(path);
 				errno = 127;
 				exit(errno);
 			}
 		}
 		else
 		{
-			printf("Padre espera\n");
+			printf("Padre espera\n");//DEBUGEAO
 			waitpid(pid, NULL, 0);
 
 			if (excode == -1)
@@ -120,10 +122,10 @@ void	executep(t_action act, t_data*minishell)
 	{
 		close(p_fd[0]);
 		dup2(p_fd[1], 1);
-		printf("No builtin\n");
-		printf("%s\n", str);
+		printf("No builtin\n");//DEBUGEAO
+		printf("%s\n", str);//DEBUGEAO
 		path = get_path(str, minishell->env);
-		printf("Intenta ejecutar execve\n");
+		printf("Intenta ejecutar execve\n");//DEBUGEAO
 		excode = execve(path, s_cmd, minishell->env);
 		if (excode == -1)
 		{
@@ -146,29 +148,10 @@ void	executep(t_action act, t_data*minishell)
 		printf("Padre espera\n");
 		waitpid(pid, NULL, 0);
 	}
-	/*pid = fork();
-
-if (pid == 0)  // CHILD
-{
-    close(p_fd[0]);
-    dup2(p_fd[1], STDOUT_FILENO);
-
-    if (is_builtin(str))
-        execute_builtin(s_cmd, minishell);
-    else {
-        path = get_path(str, minishell->env);
-        execve(path, s_cmd, minishell->env);
-        perror("execve");
-        exit(127);
-    }
-}
-else if (pid > 0)  // PARENT
-{
-    close(p_fd[1]);
-    dup2(p_fd[0], STDIN_FILENO);
-
-    waitpid(pid, NULL, 0);
-}*/
+	/*if (act.fd_in != 0)
+		close(act.fd_in);
+	if (act.fd_in != 1)
+		close(act.fd_out);*/
 	close(p_fd[0]);
 	close(p_fd[1]);
 }

@@ -14,7 +14,7 @@ void	exaction(t_action act, t_data*data)
 //Ejecuta pipe(ultimo)
 void	exactionp(t_action act, t_data*data)
 {
-	printf("Habria aqui pipe\n");
+	printf("Habria aqui pipe\n");//DEBUGEAO
 	if (act.append)
 		initfdoa(&act.fd_out, act.outfile);
 	else
@@ -50,6 +50,7 @@ void	exactionp(t_action act, t_data*data)
 	}
 }
 */
+//Itera las acciones para ejecutarlas
 void	exactions(t_data*data)
 {
 	int	i;
@@ -57,13 +58,13 @@ void	exactions(t_data*data)
 	i = 0;
 	while(i < data->n_actions - 1)
 	{
-		printf("%i de %i\n", i, data->n_actions);
+		printf("%i de %i\n", i, data->n_actions);//DEBUGEAO
 		exactionp(data->actions[i], data);
 		i++;
 	}
 	if (i == data->n_actions -1)
 	{
-		printf("%i de %i\n", i, data->n_actions);
+		printf("%i de %i\n", i, data->n_actions);//DEBUGEAO
 		exaction(data->actions[i], data);
 	}
 }

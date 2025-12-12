@@ -3,7 +3,7 @@ NAME = minishell
 CC = cc
 
 # Compiler flags
-CFLAGS = -MD -MP -Wall -Werror -Wextra -g	# Estass flags son importantes
+CFLAGS = -MD -MP -Wall -Werror -Wextra -Wunused-function -Wuninitialized -g	# Estass flags son importantes
 BFLAGS = -g -fsanitize=address
 RDFLAG = -lreadline
 
@@ -39,10 +39,11 @@ $(INC_DIR):
 	@mkdir -p $(INC_DIR) # Create Includes directory if it doesn't exist
 	@cp -a $(LIBFT_DIR)/$(INC_DIR)/*.h $(INC_DIR) # Copy the header files to Includes
 
+# Compile source file to object file and generate .d file
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c makefile
 	@mkdir -p $(OBJ_DIR)  # Create object directory if it doesn't exist
 	@mkdir -p $(DEPS_DIR)  # Create dependencies directory if it doesn't exist
-	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(DEPS_DIR)/$*.d -I $(INC_DIR) # Compile source file to object file and generate .d file
+	$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(DEPS_DIR)/$*.d -I $(INC_DIR) 
 
 # Include dependency files
 -include $(DEP_FILES)
@@ -58,6 +59,11 @@ clean:
 	@rm -rf $(LIB_DIR) # Remove libs
 	@rm -rf $(DEPS_DIR) # Remove libs
 	@make fclean -C $(LIBFT_DIR)  # Clean libft
+
+test:
+	clear
+	make
+	./$(NAME)
 
 fclean: clean
 	@rm -f $(NAME)  # Remove the executable

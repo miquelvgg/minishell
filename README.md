@@ -20,14 +20,14 @@ Ejecucion
 - [x] Historial
 - [x] Global de la senyal
 - [x] Redirecciones
-- [ ] Pipes |
+- [x] Pipes |
 - [x] Entorno
 - [ ] $?
 - [ ]
 ## Interactivos
-- [ ] cntr-C
-- [ ] cntr-D
-- [ ] cntr-\
+- [x] cntr-C
+- [x] cntr-D
+- [x] cntr-\
 ## builtins
 - [x] echo -n
 - [x] cd
@@ -39,13 +39,13 @@ Ejecucion
 ## Isdefinition
 Son funciones que comprueban y devuelven booleanos.
 - [x] metacharacter
-- [ ] word
-- [ ] token
-- [ ] filename
+- [x] word
+- [x] token
+- [x] filename
 - [x] blank
 - [x] whitespace
-- [ ] Control operator
-- [ ] Redirection operator
+- [x] Control operator
+- [x] Redirection operator
 
 
 # Funciones permitidas

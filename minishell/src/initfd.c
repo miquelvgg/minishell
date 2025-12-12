@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+//Inicia fd output
 int	initfdo(int*fdout, char *doc)
 {
 	int	fdo;
@@ -12,6 +13,7 @@ int	initfdo(int*fdout, char *doc)
 	return (0);
 }
 
+//Inicia fdinput
 int	initfdi(int*fdin, char *doc)
 {
 	int fdi;
@@ -24,6 +26,7 @@ int	initfdi(int*fdin, char *doc)
 	return (0);
 }
 
+//Inicia fd outputappend
 int	initfdoa(int*fdout, char *doc)
 {
 	int fdo;

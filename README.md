@@ -9,43 +9,43 @@ Tokenizacion
 - [ ] Elimina significado especial
 - [ ] Expande significado especial
 - [ ] Shell expansion
-- [ ] Redireccion
+- [x] Redireccion
 Ejecucion
-- [ ] Ejecutar comando
+- [x] Ejecutar comando
 - [ ] Interpretar operadores
-- [ ] Espera exit status de comando
+- [x] Espera exit status de comando
 - [x] Hace exit statuss disponible para inspeccion o proceso
 ## Subject
 - [x] Entrada
 - [x] Historial
-- [ ] Global de la senyal
-- [ ] Redirecciones
-- [ ] Pipes |
-- [ ] Entorno
+- [x] Global de la senyal
+- [x] Redirecciones
+- [x] Pipes |
+- [x] Entorno
 - [ ] $?
 - [ ]
 ## Interactivos
-- [ ] cntr-C
-- [ ] cntr-D
-- [ ] cntr-\
+- [x] cntr-C
+- [x] cntr-D
+- [x] cntr-\
 ## builtins
 - [x] echo -n
 - [x] cd
 - [x] pwd
-- [ ] export
+- [x] export
 - [x] unset
 - [x] env
 - [x] exit
 ## Isdefinition
 Son funciones que comprueban y devuelven booleanos.
 - [x] metacharacter
-- [ ] word
-- [ ] token
-- [ ] filename
+- [x] word
+- [x] token
+- [x] filename
 - [x] blank
 - [x] whitespace
-- [ ] Control operator
-- [ ] Redirection operator
+- [x] Control operator
+- [x] Redirection operator
 
 
 # Funciones permitidas

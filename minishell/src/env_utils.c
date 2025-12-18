@@ -180,10 +180,10 @@ int exit_var(t_data *data) {
     return (0);
   i = 0;
   // CORRECCION MEMORIA: Liberar strings individuales
-  while (data->env[i]) {
+  /*while (data->env[i]) {
     free(data->env[i]);
     i++;
-  }
+  }*/
   free(data->env);
   data->env = NULL;
   return (0);

@@ -1,13 +1,13 @@
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
 // Includes
-# include "includes.h"
+#include "includes.h"
 // Macros
 
-//Definiciones de funciones del proyecto
+// Definiciones de funciones del proyecto
 
-//signal
+// signal
 void unblock_signal(int signal);
 void block_signal(int signal);
 void sigint_handler(int signal);
@@ -15,68 +15,69 @@ void set_signal_action(void);
 //
 void ft_exit(void);
 
-//Comprovadores de definiciones
-int	ft_isblank(int c);
-int	ft_ismeta(int c);
-int	ft_isspace(int c);
-int	is_controlop(char *str);
-int	is_filename(const char *s);
-int	is_redop(char *str);
-int	is_token(char *str);
-int	is_word(char *s);
+// Comprovadores de definiciones
+int ft_isblank(int c);
+int ft_ismeta(int c);
+int ft_isspace(int c);
+int is_controlop(char *str);
+int is_filename(const char *s);
+int is_redop(char *str);
+int is_token(char *str);
+int is_word(char *s);
 
-//Builtins
-void	execute_builtin(char**argv, t_data *shell);
-int		is_builtin(char *cmd);
-void	execute_env(char **argv, t_data *shell);
-void	execute_echo(char **argv);
-int		is_valid_identifier(char *str);
-void	execute_exit(char **argv);
-void	execute_export(char **argv, t_data *shell);
-void	execute_pwd();
-void	execute_cd(char **argv);
-void	execute_unset(char **argv, t_data *shell);
-int		is_valid_identifier(char *str);
-int		is_valid_number(char *str);
-int		process_export_arg(char *arg, t_data *shell);
-char	**create_new_env(t_data *shell, int skip_idx, int count);
+// Builtins
+void execute_builtin(char **argv, t_data *shell);
+int is_builtin(char *cmd);
+void execute_env(char **argv, t_data *shell);
+void execute_echo(char **argv);
+int is_valid_identifier(char *str);
+void execute_exit(char **argv);
+void execute_export(char **argv, t_data *shell);
+void execute_pwd();
+void execute_cd(char **argv);
+void execute_unset(char **argv, t_data *shell);
+int is_valid_identifier(char *str);
+int is_valid_number(char *str);
+int process_export_arg(char *arg, t_data *shell);
+char **create_new_env(t_data *shell, int skip_idx, int count);
 
-//Env
-void	set_env_var(t_data *shell, char *var_assignment);
-void	unset_env_var(t_data *shell, char *var_name);
-int		find_env_var(char **envp, const char *name, int name_len);
-void	add_env_var(t_data *shell, char *var_assignment);
+// Env
+void set_env_var(t_data *shell, char *var_assignment);
+void unset_env_var(t_data *shell, char *var_name);
+int find_env_var(char **envp, const char *name, int name_len);
+void add_env_var(t_data *shell, char *var_assignment);
 
 //  PARSER & TOKEN
-	int count_tokens_and_validate(const char *line) ;
-	int shell_tokenize(const char *line, char ***tokens);
+int count_tokens_and_validate(const char *line);
+int shell_tokenize(const char *line, char ***tokens);
 // PARSER
 // execution.c
-int		check_execution(t_data *data, int argc, char **argv);
+int check_execution(t_data *data, int argc, char **argv);
 // parse_input.c
-void	parse_input();
+void parse_input();
 
-//Pipex
-typedef signed int	t_pid;
-char	*getenvar(char *name, char **env);
-char	*my_getenv(char *name, char **env);
-void	cierra(int in, int out);
-void	finish(int error);
-void	ft_free_pointstring(char **tab);
-void	doblefree(char **a, char **b);
-int		checkacces(char **s_cmd, char **allpath, char **exec);
-int		notempty(char **a, char **b);
+// Pipex
+typedef signed int t_pid;
+char *getenvar(char *name, char **env);
+char *my_getenv(char *name, char **env);
+void cierra(int in, int out);
+void finish(int error);
+void ft_free_pointstring(char **tab);
+void doblefree(char **a, char **b);
+int checkacces(char **s_cmd, char **allpath, char **exec);
+int notempty(char **a, char **b);
 
 // interactive
-void	reset_prompt(int signo);
-void	exect_interactive(t_data *data);
+void reset_prompt(int signo);
+void exect_interactive(t_data *data);
 // noninteractive
-void	exectscript(t_data *data);
-//void	exect_noninteractive(t_data *data, int argc, char **argv);
-void	non_interactive(t_data *data, int argc, char **argv);
+void exectscript(t_data *data);
+// void	exect_noninteractive(t_data *data, int argc, char **argv);
+void non_interactive(t_data *data, int argc, char **argv);
 
 // TERMINATOR
-void	free_data();
-void	exit_shelly();
+void free_data();
+void exit_shelly();
+int exit_var(t_data *data);
 
 #endif

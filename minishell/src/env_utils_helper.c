@@ -20,7 +20,7 @@ static char	*create_var_copy(char *var_assignment)
 	size_t	var_len;
 
 	var_len = ft_strlen(var_assignment);
-	new_var = (char *)malloc(var_len +1);
+	new_var = (char *)ft_calloc(var_len +1, 1);
 	if (!new_var)
 		return (NULL);
 	ft_strlcpy(new_var, var_assignment, var_len + 1);
@@ -34,7 +34,7 @@ void	add_env_var(t_data *shell, char *var_assignment)
 	char	**new_envp;
 
 	count = ft_stringlen(shell->env);
-	new_envp = (char **)malloc(sizeof(char *) * (count + 2));
+	new_envp = (char **)ft_calloc(sizeof(char *), (count + 1));//esto lo cambie de +2 a +1
 	if (!new_envp)
 		return ;
 	copy_existing_vars(new_envp, shell->env, count);

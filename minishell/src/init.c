@@ -63,11 +63,10 @@ void manejador_sigint(int signum)
 }
 
 
-void  print_env(void)
+void  print_env(t_data*data)
 {
-	extern char **environ;
-	//...
 
+	char**environ= data->env;
 	int i = 0;
 	while(environ[i]) {
 	  printf("%s\n", environ[i++]); // prints in form of "variable=value"

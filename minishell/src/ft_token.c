@@ -30,9 +30,7 @@ static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, in
     size_t 		raw = 0; 
     size_t 		unz = 0;
     char c;
-    int iq =0;
 
-    iq = 0;
     while (s[raw]) {
         c = s[raw];
         if (c == in_q )
@@ -61,16 +59,19 @@ static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, in
         raw++;
         unz++;
     }
-    if (in_q) {               /* comilla sin cerrar */
+    if (in_q) 
+    {               /* comilla sin cerrar */
         if (err_uc) 
     	{
            	*err_uc = 1;
         }
     } else 
+    {
         if (err_uc) 
     	{
         	*err_uc = 0;
     	}
+    }   
 	if (raw_len) *raw_len = raw;
     if (unz_len) *unz_len = unz;
 	return s + raw;

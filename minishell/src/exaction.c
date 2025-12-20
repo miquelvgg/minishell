@@ -1,70 +1,118 @@
 #include "minishell.h"
 
-//Ejecuta sin pipe(ultimo)
-void	exaction(t_action act, t_data*data)
+//Cierra los pipes
+void	closepipes(t_data*data)
 {
-	if (act.append)
-		initfdoa(&act.fd_out, act.outfile);
+	int	j;
+
+	j = 0;
+	while (j < data->n_actions - 1)
+	{
+		close(data->pipes[j][0]);
+		close(data->pipes[j][1]);
+		j++;
+	}
+}
+
+//executa un pipecomand
+void	executep(t_action act, t_data*minishell)
+{
+	char	*path;
+	int		excode;
+	char	**s_cmd;
+
+	excode = 0;
+	s_cmd = act.argv;
+	path = get_path(s_cmd[0], minishell->env);
+	if (!path)
+	{
+		ft_putstr_fd("command not found\n", 2);
+		exit(127);
+	}
+	if (is_builtin(s_cmd[0]))
+	{
+		printf("Builtin\n");
+		execute_builtin(s_cmd, minishell);
+		exit(errno);
+	}
 	else
-		initfdo(&act.fd_out, act.outfile);
-	initfdi(&act.fd_in, act.infile);
-	execute(act, data);
+	{
+		excode = execve(path, s_cmd, minishell->env);
+		if (excode == -1)
+		{
+			printf("Fallo execve\n");
+			free(path);
+			errno = 127;
+			exit(errno);
+		}
+	}
+}
+
+void	preparepipes(t_action act, t_data *data)
+{
+	int	i;
+
+	i = act.index;
+	if (i > 0)
+		dup2(data->pipes[i - 1][0], STDIN_FILENO);
+	if (i < data->n_actions - 1)
+		dup2(data->pipes[i][1], STDOUT_FILENO);
+	closepipes(data);
 }
 
 //Ejecuta pipe(ultimo)
 void	exactionp(t_action act, t_data*data)
 {
-	printf("Habria aqui pipe\n");//DEBUGEAO
+	preparepipes(act, data);
+	initfdi(&act.fd_in, act.infile);
 	if (act.append)
 		initfdoa(&act.fd_out, act.outfile);
 	else
 		initfdo(&act.fd_out, act.outfile);
-	initfdi(&act.fd_in, act.infile);
 	executep(act, data);
 }
 
-//Ejecuta con pipe
-/*
-//Ejecuta con pipe
-void	exactionp(t_action act, t_data*data)
-{
-	t_pid	pid;
-	int		p_fd[2];
-
-	if (pipe(p_fd) == -1)
-		exit(-2);
-	pid = fork();
-	if (pid == -1)
-		exit(-2);
-	if (!pid)
-	{
-		close(p_fd[0]);
-		dup2(p_fd[1], 1);
-		execute(act, data);
-	}
-	else
-	{
-		close(p_fd[1]);
-		dup2(p_fd[0], 0);
-		waitpid(pid, NULL, 0);
-	}
-}
-*/
-//Itera las acciones para ejecutarlas
-void	exactions(t_data*data)
+//Espera a todos los hijos
+void	espera(t_data*data, int*pids)
 {
 	int	i;
 
 	i = 0;
-	while(i < data->n_actions - 1)
+	while (i < data->n_actions)
 	{
-		printf("%i de %i\n", i, data->n_actions);//DEBUGEAO
-		exactionp(data->actions[i], data);
+		waitpid(pids[i], &errno, 0);
 		i++;
 	}
-	if (i == data->n_actions -1)
+}
+
+//Itera las acciones para ejecutarlas
+void	exactions(t_data*data)
+{
+	int	i;
+	int	*pid;
+
+	i = 0;
+	if (data->n_actions == 1 && is_builtin((data->actions[0]).argv[0]))
+		execute_builtin((data->actions[0]).argv, data);
+	else
 	{
-		printf("%i de %i\n", i, data->n_actions);//DEBUGEAO
-		exaction(data->actions[i], data);
+		data->pipes = mempipas(data->n_actions);
+		if (initpipes(data->pipes, data->n_actions) == 0)
+		{
+			errno = 1;
+			exit(errno);
+		}
+		pid = (int *)ft_calloc(sizeof(int), (data->n_actions + 1));
+		while (i <= data->n_actions - 1)
+		{
+			pid[i] = fork();
+			if (!pid[i])
+				exactionp(data->actions[i], data);
+			i++;
+		}
+		closepipes(data);
+		espera(data, pid);
+		free(pid);
+		liberapipes(data->pipes, data->n_actions);
 	}
 }

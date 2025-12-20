@@ -45,13 +45,13 @@ extern int	g_status;
 
 typedef struct s_action
 {
-	int index;
-	char **argv;
-	char *infile;
-	char *outfile;
-	int append; // 0 = reescribir  (>), 1 = abrir (>>)
-	int fd_in;
-	int fd_out;
+	int		index;
+	char	**argv;
+	char	*infile;
+	char	*outfile;
+	int		append; // 0 = reescribir  (>), 1 = abrir (>>)
+	int		fd_in;
+	int		fd_out;
 } t_action;
 
 
@@ -70,6 +70,7 @@ typedef struct	s_data
 	char		**argv;
 	char		*working_dir;
 	char		*old_working_dir;
+	int		**pipes;
 //	t_command	*cmd;
 
 }	t_data;

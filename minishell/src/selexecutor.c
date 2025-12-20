@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-char *ft_freestrjoin(char *s1, char *s2)
+//Libera ambos cuando hace strjoin
+char	*ft_freestrjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -24,59 +25,4 @@ char *ft_freestrjoin(char *s1, char *s2)
 	free(s1);
 	free(s2);
 	return (str);
-	
 }
-/*
-//itera los tokens y ejecuta
-void	selexecute(t_data *shell)
-{
-	int		i;
-	t_token	*actual;
-
-	i = 0;
-	actual = shell->token[i];
-	while (actual)
-	{
-		printf("%i:%s:%i\n",actual->index,actual->data, actual->type);
-		if (actual->type == 0)
-		{
-			printf("//ejecuta comando o anade a string que ejecutara\n");
-			executecomand(shell, actual->data);
-		}
-		if (actual->type == 1)
-		{
-			printf("//ejecuta comando o anade a string que ejecutara\n");
-			executebuiltin(shell, actual->data);
-		}
-		if (actual->type == 3)
-		{
-			printf("Abriendo input\n");
-			initfdi(shell, actual->data);
-		}
-			//Abre fdin
-		if (actual->type == 4)
-		{
-			printf("abriendo output\n");
-			initfdo(shell, actual->data);
-			//Abre fdout
-		}
-		if (actual->type == 6)
-		{
-			printf("Abre append output\n");
-			initfdoa(shell, actual->data);
-			//Abre fdoutappend
-		}
-			if (actual->type == 5)
-		{
-			printf("Abre heredoc\n");
-			heredoc(actual);
-			//printf("//Abre fdinheredoc");
-		}
-			if (actual->type == 2)
-			{
-				printf("Pipe\n");
-			}
-		i++;
-		actual = shell->token[i];
-	}
-}*/

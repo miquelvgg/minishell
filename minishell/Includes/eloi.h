@@ -22,3 +22,8 @@ void	exaction(t_action act, t_data*data);
 void	exactions(t_data*data);
 void	free_data_struc(t_data *dt);
 void	executep(t_action act, t_data*minishell);
+//pipas.c
+int	initpipes(int **pipes, int size);
+int	liberapipes(int **pipes, int i);
+int	**mempipas(int max);
+

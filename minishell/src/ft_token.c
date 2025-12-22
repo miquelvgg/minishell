@@ -2,45 +2,41 @@
 
 void free_token(char ***token, int nt)
 {
-	int i;
-	char **mtoken;
+	int		i;
+	char	**mtoken;
 	
 	i = 0;
 	if ((!token) ||(*token == NULL))
 		return ;
 	mtoken = *token;
-
-
 	while ((mtoken[i] != NULL ) &&(i < nt))
 	{
-        
 		free(mtoken[i]);
-        mtoken[i] =NULL;
+		mtoken[i] =NULL;
 		i++;
 	}
-
 	free(mtoken);
-    mtoken = NULL;
+	mtoken = NULL;
 }
 
+/* 0=no, '\"' si dentro de comillas */
 static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, int *err_uc)
 {
     const char *s = p;
-    char 		in_q;            /* 0=no, '\"' si dentro de comillas */
-    size_t 		raw = 0; 
+    char 		in_q;
+    size_t 		raw = 0;
     size_t 		unz = 0;
-    char c;
-    int iq =0;
+    char        c;
+    int         iq =0;
 
     iq = 0;
     while (s[raw]) {
         c = s[raw];
         if (c == in_q )
-        {          
-                in_q= 0;
-                
-                raw++;                 
-                continue;
+        {
+            in_q= 0;
+            raw++;
+            continue;
         }
         /* caracter considerado normal si hay unas comillas abiertas da igual  fin de palabra si espacio o metachar */   
         if (isspace((unsigned char)c) || ft_strchr(METACHARED, c)) 

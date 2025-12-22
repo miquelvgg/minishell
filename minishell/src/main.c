@@ -7,49 +7,51 @@ void	print_actions(t_data *d)
 	int		j;
 	t_action *act;
 
-  if (!d) {
-    printf("print_actions: data es NULL\n");
-    return;
-  }
-  if (!d->actions || d->n_actions <= 0) {
-    printf("print_actions: no hay acciones\n");
-    return;
-  }
-  printf("===== ACCIONES (total: %d) =====\n", d->n_actions);
-  i = 0;
-  while (i < d->n_actions) {
-    act = &d->actions[i];
-    printf("---- Acción %d ----\n", i);
-    printf("index   : %d\n", act->index);
-
-    /* argv */
-    printf("argv    : ");
-    if (!act->argv)
-      printf("(null)\n");
-    else {
-      j = 0;
-      while (act->argv[j]) {
-        printf("[%d] \"%s\"  ", j, act->argv[j]);
-        j++;
-      }
-      if (j == 0)
-        printf("(vacío)");
-      printf("\n");
-    }
-
+	if (!d) {
+		printf("print_actions: data es NULL\n");
+		return;
+	}
+	if (!d->actions || d->n_actions <= 0) {
+		printf("print_actions: no hay acciones\n");
+		return;
+	}
+	
+	printf("===== ACCIONES (total: %d) =====\n", d->n_actions);
+	i = 0;
+	while (i < d->n_actions)
+	{
+		act = &d->actions[i];
+		printf("---- Acción %d ----\n", i);
+		printf("index   : %d\n", act->index);
+		/* argv */
+		printf("argv    : ");
+		if (!act->argv)
+			printf("(null)\n");
+		else 
+		{
+			j = 0;
+			while (act->argv[j])
+			{
+				printf("[%d] \"%s\"  ", j, act->argv[j]);
+				j++;
+      		}
+		if (j == 0)
+			printf("(vacío)");
+		printf("\n");
+	}
     /* redirecciones */
-    printf("infile  : %s\n", act->infile ? act->infile : "(null)");
-    printf("outfile : %s\n", act->outfile ? act->outfile : "(null)");
-    printf("append  : %d\n", act->append);
+	printf("infile  : %s\n", act->infile ? act->infile : "(null)");
+	printf("outfile : %s\n", act->outfile ? act->outfile : "(null)");
+	printf("append  : %d\n", act->append);
 
-    /* fds (si los usas) */
-    printf("fd_in   : %d\n", act->fd_in);
-    printf("fd_out  : %d\n", act->fd_out);
+	/* fds (si los usas) */
+	printf("fd_in   : %d\n", act->fd_in);
+	printf("fd_out  : %d\n", act->fd_out);
 
-    printf("--------------------\n");
-    i++;
-  }
-  printf("===== FIN ACCIONES =====\n");
+	printf("--------------------\n");
+	i++;
+	}
+	printf("===== FIN ACCIONES =====\n");
 }
 
 //Libera el data struct
@@ -57,75 +59,75 @@ void free_data_struc(t_data *dt)
 {
 	int i;
 
-  if (!dt->token)
-    return;
+	if (!dt->token)
+		return;
 
-  i = 0;
-  while (dt->token[i] != NULL) {
-    if (dt->token[i]->data) {
-      free(dt->token[i]->data);
-      dt->token[i]->data = NULL;
-    }
-    if (dt->token[i]) {
-      free(dt->token[i]);
-      dt->token[i] = NULL;
-    }
-    i++;
-  }
-  if (dt->token != NULL)
-    free(dt->token);
+	i = 0;
+	while (dt->token[i] != NULL)
+	{
+		if (dt->token[i]->data) 
+		{
+			free(dt->token[i]->data);
+			dt->token[i]->data = NULL;
+		}
+		if (dt->token[i]) 
+		{
+			free(dt->token[i]);
+			dt->token[i] = NULL;
+		}
+		i++;
+	}
+	if (dt->token != NULL)
+		free(dt->token);
 }
 
 //Imprime los tokens
 void paint_token(t_data	*data)
 {
-	int i;
+	int		i;
 	t_token **mtoken;
-
-  i = 0;
-  if (!data->token)
-    return;
-
-  mtoken = data->token;
-
-  while ((mtoken[i] != NULL)) {
-    printf("(%d) %s \n", i, mtoken[i]->data);
-    i++;
-  }
+	
+	i = 0;
+	if (!data->token)
+    	return;
+	mtoken = data->token;
+	
+	while ((mtoken[i] != NULL))
+	{
+		printf("(%d) %s \n", i, mtoken[i]->data);
+		i++;
+	}
 }
 
 //Nucleo del proyecto
 int mshell(t_data	*data)
 {
-	int salir;
-	char *line;
-	//int t;
-	char **atoken;
-	int ntoken;
-	int rt =0;
+	int		salir;
+	char	*line;
+	char	**atoken;
+	int		ntoken;
+	int		rt;
 
+	rt = 0;
 	ntoken = 0;
 	atoken = NULL;
-	//(void)data;
 	data->signal_status = 0;
 	salir = 0;
 	block_signal(SIGQUIT);
 	block_signal(SIGINT);
-  	
 	using_history();//initialize history 
-	while (!salir)	
+	while (!salir)
 	{
 		line = readline(READLINE_MSG);
 		if (line[0]=='x')
 		{
-			salir =1;
+			salir = 1;
 		}
 		else 
 		{
 			ntoken =shell_tokenize(line, &atoken);
 			if (ntoken > 0)
 			{
-					
 					rt = ft_syntax(data, &atoken, ntoken);
 					if (rt)
 					{
@@ -134,7 +136,6 @@ int mshell(t_data	*data)
 						free(line);
 						return(1);
 					}
-					
 					//paint_token(data);
 					rt = ft_actions(data);
 					//print_actions(data );//DEBUGEAO
@@ -147,7 +148,6 @@ int mshell(t_data	*data)
 						printf("salida 2 (rt:%d) \n",rt );
 						return(1);
 					}
-
 					//data->token->data = line;
 					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 					exactions(data);
@@ -158,7 +158,6 @@ int mshell(t_data	*data)
 			if (*line) 
 				add_history(line);
 			}
-				
 		free(line);
 	}
    	unblock_signal(SIGINT);
@@ -225,7 +224,7 @@ int main(int argc, char **argv, char **env)
 	if (!res)
 		res	= mshell(&data);
 	exit_var(&data);
-
+	
   //	exit_shelly(&data);
   return (0);
 }

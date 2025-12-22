@@ -10,12 +10,12 @@ const char *skip_espace(const char *str)
 
 char *strndup_safe(const char *s, size_t n) 
 {
-    char *p;
-    p = (char *)malloc(n + 1);
-    if (!p) 
-        return NULL;
-    ft_memcpy(p, s, n);
-    p[n] = '\0';
+	char *p;
+	p = (char *)malloc(n + 1);
+	if (!p) 
+		return NULL;
+	ft_memcpy(p, s, n);
+ 	p[n] = '\0';
     return p;
 }
 

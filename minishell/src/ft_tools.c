@@ -38,3 +38,15 @@ int	extract_var_name_len(const char *s)
 		len++;
 	return (len);
 }
+
+char *search_env(t_data *dt,const char *var_name )
+{
+	int n_even;
+	int len;
+	
+	len = ft_strlen(var_name);
+	n_even =find_env_var(dt->env, var_name, len);
+	if (n_even == -1)
+		return(NULL);
+	return(dt->env[n_even]+len+1);
+}

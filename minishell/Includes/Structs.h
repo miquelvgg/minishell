@@ -36,7 +36,7 @@ typedef struct s_token
 } t_token;
 
 #define METACHARED "|<>"
-#define FORBDDEN "&\\"
+#define FORBDDEN "&"
 
 
 // deberia ponerlo volatile sigatomic??

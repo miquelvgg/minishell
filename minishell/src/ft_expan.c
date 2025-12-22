@@ -55,14 +55,20 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	return (new_ptr);
 }
 
-char	*get_var_value(const char *var_name)
+char	*get_var_value(t_data *dt,const char *var_name)
 {
+	//int n_even;
 	if (!var_name || *var_name == '\0')
 		return (NULL);
 	if (var_name[0] == '?' && var_name[1] == '\0')
 		return (NULL); //el ultimo  status (exit)
 	
-	return (getenv(var_name)); // O tu propia lista de env
+	/*n_even =find_env_var(dt->env,var_name,ft_strlen(var_name));
+	if (n_even == -1)
+		return (NULL);
+	return (dt->env[n_even]); // O tu propia lista de env
+	*/
+	return(search_env(dt,var_name));
 }
 
 
@@ -88,7 +94,7 @@ int	append_to_buffer(char **dst, int *current_len, const char *src, int src_len)
 
 // tenemos de pasar (g_last_status $? )
 /* simplificar y no hacerlo caracter por caracter  */
-char	*eval_expan(const char *token_str)
+char	*eval_expan(t_data *dt,const char *token_str)
 {
 	char	*expanded_token;
 	int		len;
@@ -163,7 +169,7 @@ char	*eval_expan(const char *token_str)
 				else
 				{
 					/* Variable de entorno normal */
-					var_value = get_var_value(var_name);
+					var_value = get_var_value(dt,var_name);
 					if (var_value)
 					{
 						if (!append_to_buffer(&expanded_token, &len,var_value, ft_strlen(var_value)))

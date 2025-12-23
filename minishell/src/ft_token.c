@@ -26,12 +26,7 @@ static const char *scan_word(const char *p, size_t *raw_len, size_t *unz_len, in
     char 		in_q;
     size_t 		raw = 0;
     size_t 		unz = 0;
-<<<<<<< HEAD
     char        c;
-    int         iq =0;
-=======
-    char c;
->>>>>>> bac76e4190a2ab83e358b8370ded75e392b191d7
 
     while (s[raw]) {
         c = s[raw];

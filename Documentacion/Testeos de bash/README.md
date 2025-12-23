@@ -52,7 +52,7 @@
 - [ ] echo coucou | ;
 - [ ] echo "$HOME"
 - [ ] echo '$HOME'
-- [ ] export ; env # display is different for both commands
+- [x] export ; env # display is different for both commands
 - [ ] echo \$HOME
 - [ ] > log echo coucou
 - [ ] echo hudifg d | | hugdfihd
@@ -73,8 +73,8 @@
 - [ ] cd /
 - [ ] cd no_file
 - [ ] cd a b c d
-- [ ] pwd a
-- [ ] pwd a b c d
+- [x] pwd a
+- [x] pwd a b c d
 - [ ] export LOL=lala ROR=rara
 - [ ] unset LOL ROR
 - [ ] export "HI= hi"

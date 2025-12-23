@@ -60,8 +60,8 @@ typedef struct	s_data
 {
 	int			signal_status;
 	t_token		**token;
-	t_action	*actions; //  acciones
-	int			n_actions; // Número de acciones
+	t_action	*actions;
+	int			n_actions;
 	int			fdin;
 	int			fint;
 	int			fdout;
@@ -70,8 +70,8 @@ typedef struct	s_data
 	char		**argv;
 	char		*working_dir;
 	char		*old_working_dir;
-	int		**pipes;
-//	t_command	*cmd;
+	int			**pipes;
+	int			xstatus;
 
 }	t_data;
 #endif

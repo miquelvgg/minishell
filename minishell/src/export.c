@@ -132,5 +132,5 @@ void	execute_export(char **argv, t_data *shell)
 		errno = 0;
 		return ;
 	}
-	errno = process_export_args(argv, shell);
+	shell->xstatus = process_export_args(argv, shell);
 }

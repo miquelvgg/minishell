@@ -6,13 +6,13 @@ Our own terminal 42 project.
 ## Organizacion
 Tokenizacion
 - [x] Parseo de token
-- [ ] Elimina significado especial
-- [ ] Expande significado especial
-- [ ] Shell expansion
+- [x] Elimina significado especial
+- [x] Expande significado especial
+- [x] Shell expansion
 - [x] Redireccion
 Ejecucion
 - [x] Ejecutar comando
-- [ ] Interpretar operadores
+- [x] Interpretar operadores
 - [x] Espera exit status de comando
 - [x] Hace exit statuss disponible para inspeccion o proceso
 ## Subject
@@ -22,7 +22,7 @@ Ejecucion
 - [x] Redirecciones
 - [x] Pipes |
 - [x] Entorno
-- [ ] $?
+- [x] $?
 - [ ]
 ## Interactivos
 - [x] cntr-C

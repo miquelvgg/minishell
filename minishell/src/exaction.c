@@ -1,5 +1,43 @@
 #include "minishell.h"
 
+//Comprueba existencia archivo
+void	existcmd(char *cmd)
+{
+	if (cmd == NULL || access(cmd, F_OK) != 0)
+	{
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd("\n", 2);
+		exit(127);
+	}
+}
+
+//Comprueba archivo ejecutable
+void	is_exec(char *cmd)
+{
+	if (access(cmd, F_OK | X_OK) != 0)
+	{
+		ft_putstr_fd("Permission denied\n", 2);
+		exit(126);
+	}
+}
+
+//Comprueba ejecutable no sea directorio
+void	is_dir(char *cmd)
+{
+	struct stat	pathstat;
+
+	if (stat(cmd, &pathstat) == 0)
+	{
+		if (S_ISDIR(pathstat.st_mode))
+		{
+			ft_putstr_fd(cmd, 2);
+			ft_putstr_fd(" is a directory\n", 2);
+			exit(126);
+		}
+	}
+}
+
 //Cierra los pipes
 void	closepipes(t_data*data)
 {
@@ -14,40 +52,236 @@ void	closepipes(t_data*data)
 	}
 }
 
+//Obtiene una variable de environment
+char	*my_getenv(char *name, char **env)
+{
+	int		i;
+	int		j;
+	char	*sub;
+
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		sub = ft_substr(env[i], 0, j);
+		if (ft_strcmp(sub, name) == 0)
+		{
+			free(sub);
+			return (env[i] + j + 1);
+		}
+		free(sub);
+		i++;
+	}
+	return (NULL);
+}
+
+//Libera arrays de strings
+void	ft_free_pointstring(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
+//Error de no path
+void	ft_nopath(void)
+{
+	ft_putstr_fd("PATH env not set\n", 2);
+	exit(127);
+}
+
+//strjoin que no libera memoria
+char	*ft_nfstrjoin(char const *s1, char const *s2)
+{
+	char	*res;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = '\0';
+	return (res);
+}
+
+char	*get_path(char *cmd, char **env)
+{
+	int		i;
+	char	**paths;
+	char	*path_part;
+	char	*exec;
+	char	*env_path;
+
+	env_path = my_getenv("PATH", env);
+	if (!env_path)
+		return (NULL);
+
+	paths = ft_split(env_path, ':');
+	if (!paths)
+		return (NULL);
+
+	i = 0;
+	while (paths[i])
+	{
+		path_part = ft_nfstrjoin(paths[i], "/");
+		exec = ft_nfstrjoin(path_part, cmd);
+		free(path_part);
+
+		if (access(exec, F_OK) == 0)
+		{
+			is_dir(exec);
+			is_exec(exec);
+			ft_free_pointstring(paths);
+			return (exec);   // caller owns exec
+		}
+		free(exec);
+		i++;
+	}
+	ft_free_pointstring(paths);
+	return (NULL);
+}
+
+
+/*
+//IA VERS
+char	*get_path(char *cmd, char **env)
+{
+	int		i;
+	char	**paths;
+	char	*full;
+	char	*tmp;
+	char	*env_path;
+
+	if (!cmd || !*cmd)
+		return (NULL);
+
+	env_path = my_getenv("PATH", env);
+	if (!env_path)
+		return (NULL);
+
+	paths = ft_split(env_path, ':');
+	if (!paths)
+		return (NULL);
+
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_nfstrjoin(paths[i], "/");
+		if (!tmp)
+			break;
+		full = ft_nfstrjoin(tmp, cmd);
+		if (!full)
+			break;
+		if (access(full, F_OK) == 0)
+		{
+			is_dir(full);
+			is_exec(full);
+			ft_free_pointstring(paths);
+			return (full);
+		}
+		free(full);
+		i++;
+	}
+	ft_free_pointstring(paths);
+	return (NULL);
+}
+*/
+/*
+//Obtiene el path
+char	*get_path(char *cmd, char **env)
+{
+	int		i;
+	char	*exec;
+	char	**allpath;
+	char	*path_part;
+
+	i = -1;
+	if (my_getenv("PATH", env) == NULL)
+		ft_nopath();
+	allpath = ft_split(my_getenv("PATH", env), ':');
+	if (!allpath)
+		exit(2);
+	while (allpath[i++])
+	{
+		path_part = ft_strjoin(allpath[i], "/");
+		exec = ft_strjoin(path_part, cmd);
+		is_dir(exec);
+		if (access(exec, F_OK) == 0)
+		{
+			is_exec(exec);
+			free(allpath);
+			return (exec);
+		}
+		free(exec);
+	}
+	free(allpath);
+	existcmd(cmd);
+	return (NULL);
+}*/
+
+//Ejecuta ruta directa
+void	directexec(t_action act, t_data*minishell)
+{
+	int	excode;
+
+	excode = 0;
+	is_dir(act.argv[0]);
+	existcmd(act.argv[0]);
+	is_exec(act.argv[0]);
+	excode = execve(act.argv[0], act.argv, minishell->env);
+	exit(excode);
+}
+
 //executa un pipecomand
 void	executep(t_action act, t_data*minishell)
 {
 	char	*path;
 	int		excode;
-	char	**s_cmd;
 
 	excode = 0;
-	s_cmd = act.argv;
-	path = get_path(s_cmd[0], minishell->env);
+	if (ft_strchr(act.argv[0], '/'))
+		directexec(act, minishell);
+	path = get_path(act.argv[0], minishell->env);
 	if (!path)
+		existcmd(act.argv[0]);
+
+	if (is_builtin(act.argv[0]))
 	{
-		ft_putstr_fd("command not found\n", 2);
-		exit(127);
-	}
-	if (is_builtin(s_cmd[0]))
-	{
-		printf("Builtin\n");
-		execute_builtin(s_cmd, minishell);
-		exit(errno);
+		execute_builtin(act.argv, minishell);
+		exit(minishell->xstatus);
 	}
 	else
 	{
-		excode = execve(path, s_cmd, minishell->env);
+		excode = execve(path, act.argv, minishell->env);
 		if (excode == -1)
 		{
 			printf("Fallo execve\n");
 			free(path);
-			errno = 127;
-			exit(errno);
+			exit(127);
 		}
 	}
 }
 
+//Convierte sus pipes en STD y cierra las demas
 void	preparepipes(t_action act, t_data *data)
 {
 	int	i;
@@ -55,7 +289,7 @@ void	preparepipes(t_action act, t_data *data)
 	i = act.index;
 	if (i > 0)
 		dup2(data->pipes[i - 1][0], STDIN_FILENO);
-	if (i < data->n_actions - 1)
+	if (i < data->n_actions -1)
 		dup2(data->pipes[i][1], STDOUT_FILENO);
 	closepipes(data);
 }
@@ -73,14 +307,22 @@ void	exactionp(t_action act, t_data*data)
 }
 
 //Espera a todos los hijos
-void	espera(t_data*data, int*pids)
+void	espera(t_data *data, int *pids)
 {
 	int	i;
+	int	status;
 
 	i = 0;
 	while (i < data->n_actions)
 	{
-		waitpid(pids[i], &errno, 0);
+		waitpid(pids[i], &status, 0);
+		if (i == data->n_actions - 1)
+		{
+			if (WIFEXITED(status))
+				data->xstatus = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->xstatus = 128 + WTERMSIG(status);
+		}
 		i++;
 	}
 }
@@ -98,10 +340,7 @@ void	exactions(t_data*data)
 	{
 		data->pipes = mempipas(data->n_actions);
 		if (initpipes(data->pipes, data->n_actions) == 0)
-		{
-			errno = 1;
-			exit(errno);
-		}
+			exit(1);
 		pid = (int *)ft_calloc(sizeof(int), (data->n_actions + 1));
 		while (i <= data->n_actions - 1)
 		{

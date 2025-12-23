@@ -32,10 +32,11 @@ void	free_token(char ***token, int nt)
 }
 
 /*
-** Salta espacios y gestiona el avance del puntero p.
+** Salta espacios y gestiona el avance del puntero p. (count = inutil)
 */
-static const char	*skip_and_move(const char *p)
+static const char	*skip_and_move(const char *p, int count)
 {
+	(void)count;
 	while (*p && ((*p >= 9 && *p <= 13) || *p == 32))
 		p++;
 	return (p);
@@ -94,7 +95,7 @@ int	count_tokens_and_validate(const char *line)
 	const char	*p;
 
 	count = 0;
-	p = skip_and_move(line);
+	p = skip_and_move(line, count);
 	while (*p)
 	{
 		if (is_meta(*p, 0))
@@ -110,8 +111,7 @@ int	count_tokens_and_validate(const char *line)
 			if (err)
 				return (ft_putendl_fd("Error: Comillas abiertas", 2), -1);
 		}
-		count++;
-		p = skip_and_move(p);
+		p = skip_and_move(p, count++);
 	}
 	return (count);
 }
@@ -133,7 +133,7 @@ int	shell_tokenize(const char *line, char ***tokens)
 	*tokens = (char **)malloc(sizeof(char *) * (nt + 1));
 	if (!*tokens)
 		return (-1);
-	p = skip_and_move(line);
+	p = skip_and_move(line, nt);
 	k = 0;
 	while (k < nt)
 	{
@@ -142,7 +142,7 @@ int	shell_tokenize(const char *line, char ***tokens)
 		else
 			scan_word(p, &raw, &err);
 		(*tokens)[k++] = ft_substr(p, 0, raw);
-		p = skip_and_move(p + raw);
+		p = skip_and_move(p + raw, nt);
 	}
 	(*tokens)[k] = NULL;
 	return (k);

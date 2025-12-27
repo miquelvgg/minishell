@@ -60,6 +60,8 @@ char	*my_getenv(char *name, char **env)
 	char	*sub;
 
 	i = 0;
+	if (!env || !env[0])
+		return (NULL);
 	while (env[i])
 	{
 		j = 0;
@@ -123,120 +125,33 @@ char	*ft_nfstrjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-char	*get_path(char *cmd, char **env)
-{
-	int		i;
-	char	**paths;
-	char	*path_part;
-	char	*exec;
-	char	*env_path;
-
-	env_path = my_getenv("PATH", env);
-	if (!env_path)
-		return (NULL);
-
-	paths = ft_split(env_path, ':');
-	if (!paths)
-		return (NULL);
-
-	i = 0;
-	while (paths[i])
-	{
-		path_part = ft_nfstrjoin(paths[i], "/");
-		exec = ft_nfstrjoin(path_part, cmd);
-		free(path_part);
-
-		if (access(exec, F_OK) == 0)
-		{
-			is_dir(exec);
-			is_exec(exec);
-			ft_free_pointstring(paths);
-			return (exec);   // caller owns exec
-		}
-		free(exec);
-		i++;
-	}
-	ft_free_pointstring(paths);
-	return (NULL);
-}
-
-
-/*
-//IA VERS
-char	*get_path(char *cmd, char **env)
-{
-	int		i;
-	char	**paths;
-	char	*full;
-	char	*tmp;
-	char	*env_path;
-
-	if (!cmd || !*cmd)
-		return (NULL);
-
-	env_path = my_getenv("PATH", env);
-	if (!env_path)
-		return (NULL);
-
-	paths = ft_split(env_path, ':');
-	if (!paths)
-		return (NULL);
-
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_nfstrjoin(paths[i], "/");
-		if (!tmp)
-			break;
-		full = ft_nfstrjoin(tmp, cmd);
-		if (!full)
-			break;
-		if (access(full, F_OK) == 0)
-		{
-			is_dir(full);
-			is_exec(full);
-			ft_free_pointstring(paths);
-			return (full);
-		}
-		free(full);
-		i++;
-	}
-	ft_free_pointstring(paths);
-	return (NULL);
-}
-*/
-/*
 //Obtiene el path
 char	*get_path(char *cmd, char **env)
 {
 	int		i;
-	char	*exec;
-	char	**allpath;
+	char	**paths;
 	char	*path_part;
+	char	*exec;
 
+	paths = ft_split(my_getenv("PATH", env), ':');
+	if (!paths)
+		return (NULL);
 	i = -1;
-	if (my_getenv("PATH", env) == NULL)
-		ft_nopath();
-	allpath = ft_split(my_getenv("PATH", env), ':');
-	if (!allpath)
-		exit(2);
-	while (allpath[i++])
+	while (paths[i++])
 	{
-		path_part = ft_strjoin(allpath[i], "/");
-		exec = ft_strjoin(path_part, cmd);
-		is_dir(exec);
+		path_part = ft_nfstrjoin(paths[i], "/");
+		exec = ft_nfstrjoin(path_part, cmd);
+		free(path_part);
 		if (access(exec, F_OK) == 0)
 		{
+			is_dir(exec);
 			is_exec(exec);
-			free(allpath);
-			return (exec);
+			return (ft_free_pointstring(paths), exec);
 		}
 		free(exec);
 	}
-	free(allpath);
-	existcmd(cmd);
-	return (NULL);
-}*/
+	return (ft_free_pointstring(paths), NULL);
+}
 
 //Ejecuta ruta directa
 void	directexec(t_action act, t_data*minishell)
@@ -263,7 +178,6 @@ void	executep(t_action act, t_data*minishell)
 	path = get_path(act.argv[0], minishell->env);
 	if (!path)
 		existcmd(act.argv[0]);
-
 	if (is_builtin(act.argv[0]))
 	{
 		execute_builtin(act.argv, minishell);

@@ -9,10 +9,13 @@ void	execute_env(char **argv, t_data *shell)
 	(void)argv;
 	i = 0;
 	max = ft_stringlen(shell->env);
-	while (shell->env[i] && max)
+	if (shell->env && shell->env[0])
+	{
+	while (shell->env[i])
 	{
 		ft_printf("%s\n", shell->env[i]);
 		i++;
 	}
-	errno = 0;
+	}
+	shell->xstatus = 0;
 }

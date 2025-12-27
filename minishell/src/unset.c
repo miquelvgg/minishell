@@ -7,7 +7,7 @@ void	execute_unset(char **argv, t_data *shell)
 
 	if (!argv[1])
 	{
-		errno = 0;
+		shell->xstatus = 0;
 		return ;
 	}
 	i = 1;
@@ -16,5 +16,5 @@ void	execute_unset(char **argv, t_data *shell)
 		unset_env_var(shell, argv[i]);
 		i++;
 	}
-	errno = 0;
+	shell->xstatus = 0;
 }

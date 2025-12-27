@@ -28,9 +28,9 @@ void	execute_builtin(char **argv, t_data *shell)
 	if (!argv || !argv[0] || !argv[0][0])
 		return ;
 	if (ft_strncmp(argv[0], "pwd", 3) == 0)
-		execute_pwd();
+		execute_pwd(shell);
 	else if (ft_strncmp(argv[0], "echo", 4) == 0)
-		execute_echo(argv);
+		execute_echo(argv, shell);
 	else if (ft_strncmp(argv[0], "env", 3) == 0)
 		execute_env(argv, shell);
 	else if (ft_strncmp(argv[0], "export", 6) == 0)
@@ -38,9 +38,9 @@ void	execute_builtin(char **argv, t_data *shell)
 	else if (ft_strncmp(argv[0], "unset", 5) == 0)
 		execute_unset(argv, shell);
 	else if (ft_strncmp(argv[0], "cd", 2) == 0)
-		execute_cd(argv);
+		execute_cd(argv, shell);
 	else if (ft_strncmp(argv[0], "exit", 4) == 0)
-		execute_exit(argv);
+		execute_exit(argv, shell);
 	else
 		ft_printf("minishell: %s: builtin no implementado\n", argv[0]);
 }

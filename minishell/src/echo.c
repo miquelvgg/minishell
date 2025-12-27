@@ -19,7 +19,7 @@ static int	ft_flag(char *str, char c, void *flag)
 }
 
 //Ejecuta echo
-void	execute_echo(char **argv)
+void	execute_echo(char **argv, t_data *shell)
 {
 	int	newline;
 	int	i;
@@ -37,7 +37,7 @@ void	execute_echo(char **argv)
 	}
 	if (newline)
 		printf("\n");
-	errno = 0;
+	shell->xstatus = 0;
 }
 /*main de prueba, va correctamente
 int	main(int c, char **argv)

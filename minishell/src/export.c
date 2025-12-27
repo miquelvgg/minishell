@@ -66,6 +66,8 @@ static void	export_print_all(t_data *shell)
 
 	i = 0;
 	max = ft_stringlen(shell->env);
+	if (max != 0)
+	{
 	envtemp = create_new_env(shell, -1, ft_stringlen(shell->env));
 	ft_sortpstr(&envtemp);
 	while (i < max)
@@ -74,6 +76,7 @@ static void	export_print_all(t_data *shell)
 		i++;
 	}
 	free(envtemp);
+	}
 }
 
 /*main de prueba de export sin args
@@ -129,7 +132,7 @@ void	execute_export(char **argv, t_data *shell)
 	if (!argv[1])
 	{
 		export_print_all(shell);
-		errno = 0;
+		shell->xstatus = 0;
 		return ;
 	}
 	shell->xstatus = process_export_args(argv, shell);

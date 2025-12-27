@@ -22,3 +22,6 @@
 [linux states machine](https://www.baeldung.com/linux/process-states)
 TOKENIZACION: romper un string por partes y las tratas por categorias (llena un struct)
 EJECUCION: Interpreta los tokens creados (Consume la estructura)
+
+ls -l /proc/self/fd
+

@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+//Imprime el  numeric argument error
+static void	exiterror(char *ar, t_data *shell)
+{
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(ar, 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	shell->xstatus = 2;
+	exit(shell->xstatus);
+}
+
 //Ejecuta exit como lo hace bash
 void	execute_exit(char **argv, t_data *shell)
 {
@@ -7,14 +17,10 @@ void	execute_exit(char **argv, t_data *shell)
 	if (!argv[1])
 		exit(0);
 	if (!is_valid_number(argv[1]))
-	{
-		ft_printf("minishell: exit: %s: numeric argument required\n", argv[1]);
-		shell->xstatus = 2;
-		exit(shell->xstatus);
-	}
+		exiterror(argv[1], shell);
 	if (argv[2])
 	{
-		ft_printf("minishell: exit: too many arguments\n");
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		shell->xstatus = 1;
 		return ;
 	}

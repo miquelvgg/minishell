@@ -89,9 +89,9 @@ int	main(int a, char**av, char**env)
 //Imprime el error de invalid identifier
 static void	print_export_error(char *arg)
 {
-	perror("minishell: export: `");
-	perror(arg);
-	perror("': not a valid identifier\n");
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
 //Procesa un export de valor unico

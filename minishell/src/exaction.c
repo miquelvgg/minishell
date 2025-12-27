@@ -173,11 +173,6 @@ void	executep(t_action act, t_data*minishell)
 	int		excode;
 
 	excode = 0;
-	if (ft_strchr(act.argv[0], '/'))
-		directexec(act, minishell);
-	path = get_path(act.argv[0], minishell->env);
-	if (!path)
-		existcmd(act.argv[0]);
 	if (is_builtin(act.argv[0]))
 	{
 		execute_builtin(act.argv, minishell);
@@ -185,6 +180,11 @@ void	executep(t_action act, t_data*minishell)
 	}
 	else
 	{
+		if (ft_strchr(act.argv[0], '/'))
+			directexec(act, minishell);
+		path = get_path(act.argv[0], minishell->env);
+		if (!path)
+			existcmd(act.argv[0]);
 		excode = execve(path, act.argv, minishell->env);
 		if (excode == -1)
 		{

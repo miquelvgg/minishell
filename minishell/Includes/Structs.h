@@ -58,20 +58,20 @@ typedef struct s_action
 // Data structures
 typedef struct	s_data
 {
-	int			signal_status;
-	t_token		**token;
-	t_action	*actions;
-	int			n_actions;
-	int			fdin;
-	int			fint;
-	int			fdout;
-	char		*user_input;
-	char		**env;
-	char		**argv;
-	char		*working_dir;
-	char		*old_working_dir;
-	int			**pipes;
-	int			xstatus;
+	int				signal_status;
+	t_token			**token;
+	t_action		*actions;
+	int				n_actions;
+	int				fdin;
+	int				fint;
+	int				fdout;
+	char			*user_input;
+	char			**env;
+	char			**argv;
+	char			*working_dir;
+	char			*old_working_dir;
+	int				**pipes;
+	unsigned char	xstatus;
 
 }	t_data;
 #endif

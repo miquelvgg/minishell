@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eloi.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/28 12:20:38 by epascual          #+#    #+#             */
+/*   Updated: 2025/12/28 12:21:15 by epascual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Structs.h"
 
-
-void  print_env(t_data*data);
+void	print_env(t_data*data);
 char	*get_path(char *cmd, char**env);
 int		is_builtin(char*cmd);
 int		ft_stringlen(char**str);
@@ -22,8 +33,15 @@ void	exaction(t_action act, t_data*data);
 void	exactions(t_data*data);
 void	free_data_struc(t_data *dt);
 void	executep(t_action act, t_data*minishell);
-//pipas.c
-int	initpipes(int **pipes, int size);
-int	liberapipes(int **pipes, int i);
-int	**mempipas(int max);
 
+//pipas.c
+int		initpipes(int **pipes, int size);
+int		liberapipes(int **pipes, int i);
+int		**mempipas(int max);
+void	closepipes(t_data *data);
+void	preparepipes(t_action act, t_data *data);
+
+//envsorter
+void	ft_sortpstr(char***envp);
+//error
+void	print_export_error(char *arg);

@@ -1,37 +1,39 @@
 #include "minishell.h"
 
 //Abre el heredoc con delimitador y intenta redireccionar
-void heredoc(t_token *hdoc)
+void	heredoc(t_token *hdoc)
 {
-    pid_t pleer;
-    int fd[2];
-    char *linea;
-    if (pipe(fd) < 0)
-        exit(12);  // salida de error
-    pleer = fork();
-    if (pleer == 0)
-    {
-        close(fd[0]);  // Close read end in child
-        while ((linea = ft_get_next_line(0)))  // Read from stdin (fd 0)
-        {
-            if (ft_strncmp(linea, hdoc->data, ft_strlen(hdoc->data)) == 0)
-            {
-                free(linea);
-                exit(0);  // Stop on exact delimiter match
-            }
-            ft_putstr_fd(linea, fd[1]);  // Write to pipe
-            free(linea);
-        }
-        close(fd[1]);  // Close write end when done (e.g., on EOF)
-        exit(0);
-    }
-    else
-    {
+	pid_t	pleer;
+	int		fd[2];
+	char	*linea;
 
-        close(fd[1]);  // Close write end in parent
-        dup2(fd[0], 0);  // Redirect stdin to pipe read end
-        wait(NULL);
-    }
+	if (pipe(fd) < 0)
+		exit(12);
+	pleer = fork();
+	if (pleer == 0)
+	{
+		close(fd[0]);
+		linea = ft_get_next_line(0);
+		while (linea)
+		{
+			if (ft_strncmp(linea, hdoc->data, ft_strlen(hdoc->data)) == 0)
+			{
+				free(linea);
+				exit(0);
+			}
+			ft_putstr_fd(linea, fd[1]);
+			free(linea);
+			linea = ft_get_next_line(0);
+		}
+		close(fd[1]);
+		exit(0);
+	}
+	else
+	{
+		close(fd[1]);
+		dup2(fd[0], 0);
+		wait(NULL);
+	}
 }
 /*
 //main de prueba cc heredoc.c -L . -ltf

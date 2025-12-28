@@ -38,20 +38,6 @@ void	is_dir(char *cmd)
 	}
 }
 
-//Cierra los pipes
-void	closepipes(t_data*data)
-{
-	int	j;
-
-	j = 0;
-	while (j < data->n_actions - 1)
-	{
-		close(data->pipes[j][0]);
-		close(data->pipes[j][1]);
-		j++;
-	}
-}
-
 //Obtiene una variable de environment
 char	*my_getenv(char *name, char **env)
 {
@@ -195,18 +181,6 @@ void	executep(t_action act, t_data*minishell)
 	}
 }
 
-//Convierte sus pipes en STD y cierra las demas
-void	preparepipes(t_action act, t_data *data)
-{
-	int	i;
-
-	i = act.index;
-	if (i > 0)
-		dup2(data->pipes[i - 1][0], STDIN_FILENO);
-	if (i < data->n_actions -1)
-		dup2(data->pipes[i][1], STDOUT_FILENO);
-	closepipes(data);
-}
 
 //Ejecuta pipe(ultimo)
 void	exactionp(t_action act, t_data*data)
@@ -242,7 +216,7 @@ void	espera(t_data *data, int *pids)
 }
 
 //Itera las acciones para ejecutarlas
-void	exactions(t_data*data)
+void	exactions(t_data *data)
 {
 	int	i;
 	int	*pid;

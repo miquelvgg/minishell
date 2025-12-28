@@ -1,68 +1,4 @@
 #include "minishell.h"
-// Blocks the specified signal
-void block_signal(int signal)
-{
-	// Set of signals to block
-	sigset_t sigset;
-
-	// Initialize set to 0
-	sigemptyset(&sigset);
-	// Add the signal to the set
-	sigaddset(&sigset, signal);
-	// Add the signals in the set to the process' blocked signals
-	sigprocmask(SIG_BLOCK, &sigset, NULL);
-	if (signal == SIGQUIT)
-	printf("\e[36mSIGQUIT (ctrl-\\) blocked.\e[0m\n");
-}
-
-// Unblocks the given signal
-void unblock_signal(int signal)
-{
-	// Set of signals to unblock
-	sigset_t sigset;
-
-	// Initialize the set to 0
-	sigemptyset(&sigset);
-	// Add the signal to the set
-	sigaddset(&sigset, signal);
-	// Remove set signals from the process' blocked signals
-	sigprocmask(SIG_UNBLOCK, &sigset, NULL);
-	if (signal == SIGQUIT)
-		printf("\e[36mSIGQUIT mvs(ctrl-\\) unblocked.\e[0m\n");
-}
-void sigint_handler(int signal)
-{
- if (signal != SIGINT)
-  return ;
-// Blocks other SIGINT signals to protect the global
-// variable during access
-	block_signal(SIGINT);
-//	g_unblock_sigquit = 1;  	//mvs variable global 
-	unblock_signal(SIGINT);
-}
-
-	
-
-void set_signal_action(void)
-{
-	// Declare sigaction structure
-	struct sigaction act;
-
-	// Initialize structure to 0.
-	bzero(&act, sizeof(act));
-	// Add new signal handler
-	act.sa_handler = &sigint_handler;
-	// Apply new signal handler to SIGINT (ctrl-c)
-	sigaction(SIGINT, &act, NULL);
-}
-
-void manejador_sigint(int signum) 
-{
-    printf("\nSeñal SIGINT (%d) recibida. Ignorando...\n", signum);
-    // Se puede realizar alguna limpieza o guardar datos aquí
-}
-
-
 void  print_env(t_data*data)
 {
 
@@ -76,8 +12,8 @@ void  print_env(t_data*data)
 
 int init() 
 {
-   	unblock_signal(SIGINT);
-	unblock_signal(SIGQUIT);
+   	//unblock_signal(SIGINT);
+	//unblock_signal(SIGQUIT);
 	return(0);
 }
 

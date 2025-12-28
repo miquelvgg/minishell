@@ -129,15 +129,24 @@ int mshell(t_data	*data)
 	atoken = NULL;
 	data->signal_status = 0;
 	salir = 0;
-	block_signal(SIGQUIT);
-	block_signal(SIGINT);
 	using_history();//initialize history 
+	setup_signals();
 	while (!salir)
 	{
+		g_signal = 0; 
 		line = readline(READLINE_MSG);
-		if (line[0]=='x')
+		if (g_signal == (int)SIGQUIT)
+		{	
+			write(1, "1exit\n", 6);
+			if (line != NULL)
+				free(line);
+			
+			break;
+		}
+		else if (!line )
 		{
-			salir = 1;
+			write(1, "2exit\n", 6);
+			break;
 		}
 		else 
 		{
@@ -185,10 +194,9 @@ int mshell(t_data	*data)
 			if (*line) 
 				add_history(line);
 			}
-		free(line);
+		if (line)
+			free(line);
 	}
-   	unblock_signal(SIGINT);
-	unblock_signal(SIGQUIT);
 	return(0);
 }
 

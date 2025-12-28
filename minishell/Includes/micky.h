@@ -1,6 +1,8 @@
 #ifndef MICKY_H
 # define MICKY_H
 
+extern int	g_signal;
+
 #include "Structs.h"
 
 #ifndef PATH_MAX
@@ -23,7 +25,7 @@ typedef struct s_expan
 	char		q;
 }	t_expan;
 
-
+void	setup_signals(void);
 void free_actions(t_data *d);
 int ft_actions(t_data *dt);
 

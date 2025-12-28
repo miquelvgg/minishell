@@ -1,4 +1,0 @@
-void	free_data()
-{
-
-}

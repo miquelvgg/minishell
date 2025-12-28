@@ -8,8 +8,8 @@
 // Definiciones de funciones del proyecto
 
 // signal
-void unblock_signal(int signal);
-void block_signal(int signal);
+//void unblock_signal(int signal);
+//void block_signal(int signal);
 void sigint_handler(int signal);
 void set_signal_action(void);
 

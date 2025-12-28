@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
+/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//Imprime acciones
+/*
 void	print_actions(t_data *d)
 {
 	int		i;
@@ -23,7 +35,7 @@ void	print_actions(t_data *d)
 		act = &d->actions[i];
 		printf("---- Acción %d ----\n", i);
 		printf("index   : %d\n", act->index);
-		/* argv */
+
 		printf("argv    : ");
 		if (!act->argv)
 			printf("(null)\n");
@@ -39,12 +51,12 @@ void	print_actions(t_data *d)
 			printf("(vacío)");
 		printf("\n");
 	}
-    /* redirecciones */
+
 	printf("infile  : %s\n", act->infile ? act->infile : "(null)");
 	printf("outfile : %s\n", act->outfile ? act->outfile : "(null)");
 	printf("append  : %d\n", act->append);
 
-	/* fds (si los usas) */
+
 	printf("fd_in   : %d\n", act->fd_in);
 	printf("fd_out  : %d\n", act->fd_out);
 
@@ -55,31 +67,6 @@ void	print_actions(t_data *d)
 }
 
 //Libera el data struct
-void free_data_struc(t_data *dt)
-{
-	int i;
-
-	if (!dt->token)
-		return;
-
-	i = 0;
-	while (dt->token[i] != NULL)
-	{
-		if (dt->token[i]->data) 
-		{
-			free(dt->token[i]->data);
-			dt->token[i]->data = NULL;
-		}
-		if (dt->token[i]) 
-		{
-			free(dt->token[i]);
-			dt->token[i] = NULL;
-		}
-		i++;
-	}
-	if (dt->token != NULL)
-		free(dt->token);
-}
 
 //Imprime los tokens
 void paint_token(t_data	*data)
@@ -98,168 +85,84 @@ void paint_token(t_data	*data)
 		i++;
 	}
 }
-
-/*
-void mpaint_token(char ***tokens)
-{
-	int i= 0 ;
-	char **p;
-
-	p = *tokens;
-	while (p[i])
-	{
-		printf("%s \n",p[i]);
-		i++;
-	}
-}
 */
 
-
-//Nucleo del proyecto
-int mshell(t_data	*data)
+//Imprime acciones
+void	free_data_struc(t_data *dt)
 {
-	int		salir;
-	char	*line;
-	char	**atoken;
-	int		ntoken;
-	int		rt;
-	
-	rt = 0;
-	ntoken = 0;
-	atoken = NULL;
-	data->signal_status = 0;
-	salir = 0;
-	using_history();//initialize history 
-	setup_signals();
-	while (!salir)
+	int	i;
+
+	if (!dt->token)
+		return ;
+	i = 0;
+	while (dt->token[i] != NULL)
 	{
-		g_signal = 0; 
-		line = readline(READLINE_MSG);
-		if (g_signal == (int)SIGQUIT)
-		{	
-			write(1, "1exit\n", 6);
-			if (line != NULL)
-				free(line);
-			
-			break;
-		}
-		else if (!line )
+		if (dt->token[i]->data)
 		{
-			write(1, "2exit\n", 6);
-			break;
+			free(dt->token[i]->data);
+			dt->token[i]->data = NULL;
 		}
-		else 
+		if (dt->token[i])
 		{
-			ntoken =shell_tokenize(line, &atoken);
-			if (ntoken > 0)
-			{
-					//mpaint_token(&atoken);
-					rt = ft_syntax(data, &atoken, ntoken);
-					if (rt)
-					{
-						free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
-						free_data_struc(data); // free space malloc
-						free(line);
-						return(1);
-					}
-					//paint_token(data);
-					rt = ft_actions(data);
-//					paint_token(data);
-//					print_actions(data );//DEBUGEAO
-					if (rt)
-					{
-						free_actions(data);
-						free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
-						free_data_struc(data); // free space malloc
-						free(line);
-						return(1);
-					}
-
-					rt = ((atoken)&&(ntoken)&&(atoken[ntoken-1][0] == '|'));
-					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
-					if (!rt)
-					{
-						exactions(data);
-					}
-					else 
-					{
-						//perror("Error : pipe");
-						printf("Error : pipe\n");
-
-					}
-					free_actions(data);
-					free_data_struc(data); // free space malloc
-					
-				}
-			if (*line) 
-				add_history(line);
-			}
-		if (line)
-			free(line);
+			free(dt->token[i]);
+			dt->token[i] = NULL;
+		}
+		i++;
 	}
-	return(0);
+	if (dt->token != NULL)
+		free(dt->token);
 }
 
-//Comprueba los estandares
-int ft_control(int argc, char **argv)
+int	ft_control(int argc, char **argv)
 {
-
-  (void)argv;
-  if (argc != 1)
-    return (1);
-  if (!isatty(STDIN_FILENO)) {
-    fprintf(stderr,
-            "Error: No se permite redireccionar la entrada estándar.\n");
-    return (2);
-  }
-
-  if (!isatty(STDOUT_FILENO)) {
-    fprintf(stderr, "Error: No se permite redireccionar la salida estándar.\n");
-    return (3);
-  }
-  return (0);
+	(void)argv;
+	if (argc != 1)
+		return (1);
+	if (!isatty(STDIN_FILENO))
+	{
+		fprintf(stderr,
+			"Error: No se permite redireccionar la entrada estándar.\n");
+		return (2);
+	}
+	if (!isatty(STDOUT_FILENO))
+	{
+		fprintf(stderr,
+			"Error: No se permite redireccionar la salida estándar.\n");
+		return (3);
+	}
+	return (0);
 }
 
 //Inicia data
-int  init_var(t_data	*data)
+int	init_var(t_data	*data)
 {
-/*	tn_token *new_token = malloc(sizeof(tn_token));
-	if (!new_token)
-		return(1);*/
-	data->signal_status= 0;
-	data->token	= NULL;	//&new_token;
-	data->user_input =NULL;
-	data->env=NULL;			
-	data->working_dir=NULL;	
-	data->old_working_dir=NULL; 
-	return(0);
+	data->signal_status = 0;
+	data->token = NULL;
+	data->user_input = NULL;
+	data->env = NULL;
+	data->working_dir = NULL;
+	data->old_working_dir = NULL;
+	return (0);
 }
 
-/* definir errores de salida */
 //Main, inicia env
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_data	data;
 	int		res;
-	
-	if (ft_control(argc,argv))
+
+	if (ft_control(argc, argv))
 		return (1);
-    if (!isatty(STDOUT_FILENO)) {
-        fprintf(stderr, "Error: No se permite redireccionar la salida estándar.\n");
-        return 1;
-    }
-
-  // guardar valores de 	extern char **environ;
-
-  res = init_var(&data);
-
+	if (!isatty(STDOUT_FILENO))
+	{
+		fprintf(stderr,
+			"Error: No se permite redireccionar la salida estándar.\n");
+		return (1);
+	}
+	res = init_var(&data);
 	data.env = create_first_env(env, &data);
-	//print_env(&data);//DEBUGEAO
-	//ft_memset(&data, 0, sizeof(t_data));
 	if (!res)
-		res	= mshell(&data);
+		res = mshell(&data);
 	exit_var(&data);
-	
-  //	exit_shelly(&data);
-  return (0);
+	return (0);
 }

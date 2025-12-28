@@ -18,7 +18,7 @@ int	extract_var_name_len(const char *str)
 
 	i = 0;
 	if (str[i] == '?')
-    	return (1);
+		return (1);
 	if (ft_isdigit(str[i]))
 		return (1);
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
@@ -41,16 +41,16 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	new_ptr = malloc(new_size);
 	if (!new_ptr)
 		return (NULL);
-  if (old_size < new_size)
-    copy_size = old_size;
-  else
-    copy_size = new_size;
-  ft_memcpy(new_ptr, ptr, copy_size);
-  free(ptr);
-  return (new_ptr);
+	if (old_size < new_size)
+		copy_size = old_size;
+	else
+		copy_size = new_size;
+	ft_memcpy(new_ptr, ptr, copy_size);
+	free(ptr);
+	return (new_ptr);
 }
 
-char	*get_var_value(t_data *dt, const char *var_name) 
+char	*get_var_value(t_data *dt, const char *var_name)
 {
 	if (!var_name || *var_name == '\0')
 		return (NULL);
@@ -59,7 +59,7 @@ char	*get_var_value(t_data *dt, const char *var_name)
 	return (search_env(dt, var_name));
 }
 
-int	append_to_buffer(char **dst, int *curr_len, const char *src, int src_len) 
+int	append_to_buffer(char **dst, int *curr_len, const char *src, int src_len)
 {
 	int		new_len;
 	char	*new_dst;

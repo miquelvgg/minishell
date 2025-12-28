@@ -25,9 +25,22 @@ typedef struct s_expan
 	char		q;
 }	t_expan;
 
+int	mshell(t_data *data);
+// actions_utils
+void	free_actions(t_data *d);
+int		count_pipes(t_token **tokens);
+void	init_action(t_action *act, int index);
+
+// token _utils
+void	free_token(char ***token, int nt);
+const char	*skip_and_move(const char *p, int count);
+int	is_meta(char c, char in_q);
+const char	*scan_word(const char *p, size_t *raw, int *err);
+
 void	setup_signals(void);
-void free_actions(t_data *d);
-int ft_actions(t_data *dt);
+void	free_actions(t_data *d);
+int		ft_actions(t_data *dt);
+
 
 void free_token(char ***token, int nt);
 int is_ext_comm_sim(char *command);

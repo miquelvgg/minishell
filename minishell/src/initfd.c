@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   initfd.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/28 12:18:24 by epascual          #+#    #+#             */
+/*   Updated: 2025/12/28 12:18:51 by epascual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 //Inicia fd output
@@ -16,7 +28,7 @@ int	initfdo(int*fdout, char *doc)
 //Inicia fdinput
 int	initfdi(int*fdin, char *doc)
 {
-	int fdi;
+	int	fdi;
 
 	fdi = 0;
 	if (doc && *doc)
@@ -29,7 +41,7 @@ int	initfdi(int*fdin, char *doc)
 //Inicia fd outputappend
 int	initfdoa(int*fdout, char *doc)
 {
-	int fdo;
+	int	fdo;
 
 	fdo = 1;
 	if (doc && *doc)

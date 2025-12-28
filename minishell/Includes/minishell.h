@@ -12,8 +12,7 @@ void unblock_signal(int signal);
 void block_signal(int signal);
 void sigint_handler(int signal);
 void set_signal_action(void);
-//
-void ft_exit(void);
+
 
 // Comprovadores de definiciones
 int ft_isblank(int c);

@@ -99,6 +99,22 @@ void paint_token(t_data	*data)
 	}
 }
 
+/*
+void mpaint_token(char ***tokens)
+{
+	int i= 0 ;
+	char **p;
+
+	p = *tokens;
+	while (p[i])
+	{
+		printf("%s \n",p[i]);
+		i++;
+	}
+}
+*/
+
+
 //Nucleo del proyecto
 int mshell(t_data	*data)
 {
@@ -107,27 +123,37 @@ int mshell(t_data	*data)
 	char	**atoken;
 	int		ntoken;
 	int		rt;
-
+	
 	rt = 0;
 	ntoken = 0;
 	atoken = NULL;
 	data->signal_status = 0;
 	salir = 0;
-	block_signal(SIGQUIT);
-	block_signal(SIGINT);
 	using_history();//initialize history 
+	setup_signals();
 	while (!salir)
 	{
+		g_signal = 0; 
 		line = readline(READLINE_MSG);
-		if (line[0]=='x')
+		if (g_signal == (int)SIGQUIT)
+		{	
+			write(1, "1exit\n", 6);
+			if (line != NULL)
+				free(line);
+			
+			break;
+		}
+		else if (!line )
 		{
-			salir = 1;
+			write(1, "2exit\n", 6);
+			break;
 		}
 		else 
 		{
 			ntoken =shell_tokenize(line, &atoken);
 			if (ntoken > 0)
 			{
+					//mpaint_token(&atoken);
 					rt = ft_syntax(data, &atoken, ntoken);
 					if (rt)
 					{
@@ -138,19 +164,29 @@ int mshell(t_data	*data)
 					}
 					//paint_token(data);
 					rt = ft_actions(data);
-					//print_actions(data );//DEBUGEAO
+//					paint_token(data);
+//					print_actions(data );//DEBUGEAO
 					if (rt)
 					{
 						free_actions(data);
 						free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
 						free_data_struc(data); // free space malloc
 						free(line);
-						printf("salida 2 (rt:%d) \n",rt );
 						return(1);
 					}
-					//data->token->data = line;
+
+					rt = ((atoken)&&(ntoken)&&(atoken[ntoken-1][0] == '|'));
 					free_token(&atoken, ntoken); // ell texto de la estructura es un apuntador a array inicial de tokens
-					exactions(data);
+					if (!rt)
+					{
+						exactions(data);
+					}
+					else 
+					{
+						//perror("Error : pipe");
+						printf("Error : pipe\n");
+
+					}
 					free_actions(data);
 					free_data_struc(data); // free space malloc
 					
@@ -158,10 +194,9 @@ int mshell(t_data	*data)
 			if (*line) 
 				add_history(line);
 			}
-		free(line);
+		if (line)
+			free(line);
 	}
-   	unblock_signal(SIGINT);
-	unblock_signal(SIGQUIT);
 	return(0);
 }
 

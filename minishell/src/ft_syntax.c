@@ -1,50 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_syntax.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
+/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "minishell.h"
 
-/*
-int is_external_command(char *command) {
-    char *path = getenv("PATH");
-    char *dir = strtok(path, ":");
-
-    while (dir != NULL) {
-        char full_path[1024];
-        snprintf(full_path, sizeof(full_path), "%s/%s", dir, command);
-
-        struct stat st;
-        if (stat(full_path, &st) == 0 && st.st_mode & S_IXUSR) {
-            return 1; // Existe y es ejecutable
-        }
-        dir = strtok(NULL, ":");
-    }
-    return 0;
-}
-*/
-
-
-int get_com_built(char  *s)
+int	get_com_built(char *s)
 {
-	if (!ft_strcmp(s,"echo"))
-		return(1);
-	else if (!ft_strcmp(s,"cd"))
-		return(1);
-	else if (!ft_strcmp(s,"pwd"))
-		return(1);
-	else if (!ft_strcmp(s,"export"))
-		return(1);
-	else if (!ft_strcmp(s,"unset"))
-		return(1);
-	else if (!ft_strcmp(s,"evn"))
-		return(1);
-	else if (!ft_strcmp(s,"exit"))
-		return(1);
-#ifdef  M_EXTER_FUNC
-	if (is_ext_comm_sim(s))
-		return(1);
-#endif
-	return(0);
+	if (!ft_strcmp(s, "echo"))
+		return (1);
+	else if (!ft_strcmp(s, "cd"))
+		return (1);
+	else if (!ft_strcmp(s, "pwd"))
+		return (1);
+	else if (!ft_strcmp(s, "export"))
+		return (1);
+	else if (!ft_strcmp(s, "unset"))
+		return (1);
+	else if (!ft_strcmp(s, "evn"))
+		return (1);
+	else if (!ft_strcmp(s, "exit"))
+		return (1);
+	return (0);
 }
 
-
-int	get_type(char *str, int *i)
+int	get_type(char *str,	int *i)
 {
 	if (str[*i] == '|')
 		return (T_PIPE);
@@ -52,7 +38,7 @@ int	get_type(char *str, int *i)
 	{
 		if (str[*i + 1] == '>')
 		{
-			*i=*i+1;
+			*i = *i + 1;
 			return (T_APPEND);
 		}
 		return (T_RDIR_OUT);
@@ -61,7 +47,7 @@ int	get_type(char *str, int *i)
 	{
 		if (str[*i + 1] == '<')
 		{
-			*i=*i+1;
+			*i = *i + 1;
 			return (T_HERDOC);
 		}
 		return (T_RDIR_IN);
@@ -71,54 +57,37 @@ int	get_type(char *str, int *i)
 	return (T_GENERAL);
 }
 
-
-
-void ft_analysis(char *token, t_token *mtk, int ix)
+void	ft_analysis(t_data *dt, char *token, t_token *mtk, int ix)
 {
-	int tp;
-	int i;
-	char *tmp;
+	int		tp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-
 	while (token[i])
 	{
-		tp = get_type(token,&i);
-		//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, mtk->data);
+		tp = get_type(token, &i);
 		i++;
 	}
 	mtk->index = ix;
 	mtk->data = token;
 	mtk->type = tp;
-	//printf("X(%d) type:(%d) data %s \n", mtk->index, mtk->type, token[i]);	
-	//printf("1test :%s\n ",mtk->data);
-	tmp = eval_expan(mtk->data); // expande realloc
-	mtk->data = tmp;	
-	//printf("2test :%s\n ",mtk->data);
-	//printf("%s\n",tmp);
-		/*
-		if (tmp)
-		{
-			free(mtk->data);
-			mtk->data = tmp;
-		}
-			*/
-		
+	tmp = eval_expan(dt, mtk->data);
+	mtk->data = tmp;
 }
-
 
 /* tokens --> dt->token  */
 /* Guardo los apuntadores del array in icial de todo*/
-int ft_syntax(t_data *dt, char ***tokens, int ntoken)
+int	ft_syntax(t_data *dt, char ***tokens, int ntoken)
 {
-	int i;
-	char **mtoken;
-	
+	int		i;
+	char	**mtoken;
+
 	i = 0;
 	if (!tokens)
-		return(-1) ;
+		return (-1);
 	mtoken = *tokens;
-	dt->token = (t_token **) malloc(sizeof(t_token **) * (ntoken+1));
+	dt->token = (t_token **) malloc(sizeof(t_token **) * (ntoken + 1));
 	if (!dt->token)
 		return (-1);
 	while ((mtoken[i] != NULL ))
@@ -131,9 +100,9 @@ int ft_syntax(t_data *dt, char ***tokens, int ntoken)
 			free(dt->token);
 			return (-1);
 		}
-		ft_analysis(mtoken[i], dt->token[i],i);// copia valor i/o expande
-		i++;	
+		ft_analysis(dt, mtoken[i], dt->token[i], i);
+		i++;
 	}
-	dt->token[i] =NULL;
-	return(0) ;
+	dt->token[i] = NULL;
+	return (0);
 }

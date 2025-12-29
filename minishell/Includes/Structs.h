@@ -1,62 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
+/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef STRUCT_H
 # define STRUCT_H
+
 // Macros
-# define	TRUE 1
-# define	FALSE 0
-# define 	READLINE_MSG "\033[1;36mshell\033[34m$> \033[0m"
+# define TRUE 1
+# define FALSE 0
+# define READLINE_MSG "\033[1;36mshell\033[34m$> \033[0m"
+# define METACHARED "|<>"
+# define FORBDDEN "&\\"
 
 typedef enum e_redir
-{	
+{
 	R_NULL,
-	R_INPUT,  
-	R_OUTPUT,  
+	R_INPUT,
+	R_OUTPUT,
 	R_APPEND,
-	R_HEREDOC 
+	R_HEREDOC
 } typ_redir;
 
 // Tipos de token 
 typedef enum e_token
 {
 	T_GENERAL,
-	T_CMD,      
-	T_PIPE,     
-	T_RDIR_IN, 
+	T_CMD,
+	T_PIPE,
+	T_RDIR_IN,
 	T_RDIR_OUT,
 	T_APPEND ,
-	T_HERDOC  
+	T_HERDOC
 }	typ_token;
-
 // estructura de datos 
 typedef struct s_token
 {
-	int index;      
-	char *data;           
-	int type;             
-	//struct s_token *next; 
-} t_token;
-
-#define METACHARED "|<>"
-#define FORBDDEN "&\\"
-
-
+	int		index;
+	char	*data;
+	int		type;
+}	t_token;
 // deberia ponerlo volatile sigatomic??
 extern int	g_status;
-
-
 typedef struct s_action
 {
 	int		index;
 	char	**argv;
 	char	*infile;
 	char	*outfile;
-	int		append; // 0 = reescribir  (>), 1 = abrir (>>)
+	int		append;
 	int		fd_in;
 	int		fd_out;
-} t_action;
-
+}	t_action;
 
 // Data structures
-typedef struct	s_data
+typedef struct s_data
 {
 	int				signal_status;
 	t_token			**token;
@@ -72,6 +76,6 @@ typedef struct	s_data
 	char			*old_working_dir;
 	int				**pipes;
 	unsigned char	xstatus;
-
 }	t_data;
+
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/29 17:54:06 by epascual          #+#    #+#             */
+/*   Updated: 2025/12/29 17:54:09 by epascual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 //Comprueba que se pueda abrir el input y devuelve el fd
@@ -8,18 +20,17 @@ int	checkinput(char *path)
 	fd = 0;
 	if (path && *path)
 	{
-	if (access(path, R_OK) == 0)
-	{
-		fd = open(path, 0, O_RDONLY);
-		if (fd < 0)
+		if (access(path, R_OK) == 0)
 		{
-			close(fd);
-			exit(errno);
+			fd = open(path, 0, O_RDONLY);
+			if (fd < 0)
+			{
+				close(fd);
+				exit(errno);
+			}
 		}
-	else{
-		printf("opened");}
-	}
-	else{printf("Not readable");}
+		else
+			printf("Not readable");
 	}
 	return (fd);
 }
@@ -37,34 +48,15 @@ int main(int ac, char**av)
 //Prueba que se pueda abrir el output
 int	checkoutput(char *path)
 {
-	int fd;
+	int	fd;
 
-	fd = 1;/*
-	if (access(path, W_OK) == 0)
-	{
-		printf("writable");
-		fd = open(path, O_WRONLY);
-		if (fd < 0)
-		{
-			printf("Not opened");
-			close(fd);
-			exit(errno);
-			fd = 0;
-		}
-		else
-		{
-			printf("opened");
-		}
-	}
-	else{printf("Not writable");*/
+	fd = 1;
 	if (path && *path)
 	{
-	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
 			printf("Could not create file");
-			//close(fd);
-			//exit(errno);
 			fd = 1;
 		}
 	}
@@ -74,35 +66,22 @@ int	checkoutput(char *path)
 //Prueba que se pueda abrir el output en modo append
 int	checkoutappend(char *path)
 {
-	int fd;
+	int	fd;
 
 	fd = 0;
 	if (path && *path)
 	{
-	if (access(path, W_OK) == 0)
-	{
-		fd = open(path, 0, O_APPEND);
-		if (fd < 0)
+		if (access(path, W_OK) == 0)
 		{
-			printf("Not opened");
-			close(fd);
-			exit(errno);
-			fd = 0;
+			fd = open(path, 0, O_CREAT | O_APPEND);
+			if (fd < 0)
+			{
+				printf("Not opened");
+				close(fd);
+				exit(errno);
+				fd = 0;
+			}
 		}
-		else
-		{
-		}
-	}
-	else{
-		fd = open(path, 0, O_CREAT);
-		if (fd < 0)
-		{
-			printf("Could not create file");
-			close(fd);
-			exit(errno);
-			fd = 0;
-		}
-	}
 	}
 	return (fd);
 }

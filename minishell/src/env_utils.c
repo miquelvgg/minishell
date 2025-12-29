@@ -1,19 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/29 18:49:05 by epascual          #+#    #+#             */
+/*   Updated: 2025/12/29 18:49:12 by epascual         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-// Encuentra una variable en env por el nombre
-int	find_env_var(char **env, const char *name, int name_len)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], name, name_len) == 0 && env[i][name_len] == '=')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
 
 // Actualiza una env var
 static void	update_env_var(t_data *shell, char *var_ass, int idx)
@@ -93,30 +90,6 @@ char	**create_new_env(t_data *shell, int skip_idx, int count)
 	}
 	new_env[j] = NULL;
 	return (new_env);
-}
-
-// Elimina una env var
-void	unset_env_var(t_data *shell, char *var_name)
-{
-	int		idx;
-	int		count;
-	char	**new_env;
-	size_t	name_len;
-
-	if (!shell->env)
-		return ;
-	name_len = ft_strlen(var_name);
-	idx = find_env_var(shell->env, var_name, name_len);
-	if (idx < 0)
-		return ;
-	count = 0;
-	while (shell->env[count])
-		count++;
-	new_env = create_new_env(shell, idx, count);
-	if (!new_env)
-		return ;
-	free(shell->env);
-	shell->env = new_env;
 }
 
 // Sale de data

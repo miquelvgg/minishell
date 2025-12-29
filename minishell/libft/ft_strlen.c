@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 12:10:21 by mvives-s          #+#    #+#             */
-/*   Updated: 2025/12/09 14:51:56 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:52:46 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ size_t	ft_strlen(const char *s)
 	i = 0;
 	if (s)
 	{
-	while (s[i])
-		i++;
+		while (s[i])
+			i++;
 	}
 	return (i);
 }

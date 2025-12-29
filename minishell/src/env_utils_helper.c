@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 12:17:00 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/28 12:17:01 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:48:47 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,43 @@ void	add_env_var(t_data *shell, char *var_assignment)
 	new_envp[count + 1] = NULL;
 	free(shell->env);
 	shell->env = new_envp;
+}
+
+// Elimina una env var
+void	unset_env_var(t_data *shell, char *var_name)
+{
+	int		idx;
+	int		count;
+	char	**new_env;
+	size_t	name_len;
+
+	if (!shell->env)
+		return ;
+	name_len = ft_strlen(var_name);
+	idx = find_env_var(shell->env, var_name, name_len);
+	if (idx < 0)
+		return ;
+	count = 0;
+	while (shell->env[count])
+		count++;
+	new_env = create_new_env(shell, idx, count);
+	if (!new_env)
+		return ;
+	free(shell->env);
+	shell->env = new_env;
+}
+
+// Encuentra una variable en env por el nombre
+int	find_env_var(char **env, const char *name, int name_len)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], name, name_len) == 0 && env[i][name_len] == '=')
+			return (i);
+		i++;
+	}
+	return (-1);
 }

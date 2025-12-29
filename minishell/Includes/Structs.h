@@ -9,8 +9,9 @@
 /*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef STRUCT_H
-# define STRUCT_H
+
+#ifndef STRUCTS_H
+# define STRUCTS_H
 
 // Macros
 # define TRUE 1
@@ -26,10 +27,10 @@ typedef enum e_redir
 	R_OUTPUT,
 	R_APPEND,
 	R_HEREDOC
-} typ_redir;
+}	t_redir;
 
 // Tipos de token 
-typedef enum e_token
+typedef enum e_tiptoken
 {
 	T_GENERAL,
 	T_CMD,
@@ -38,7 +39,7 @@ typedef enum e_token
 	T_RDIR_OUT,
 	T_APPEND ,
 	T_HERDOC
-}	typ_token;
+}	t_tiptoken;
 // estructura de datos 
 typedef struct s_token
 {
@@ -46,8 +47,7 @@ typedef struct s_token
 	char	*data;
 	int		type;
 }	t_token;
-// deberia ponerlo volatile sigatomic??
-extern int	g_status;
+
 typedef struct s_action
 {
 	int		index;
@@ -77,5 +77,4 @@ typedef struct s_data
 	int				**pipes;
 	unsigned char	xstatus;
 }	t_data;
-
 #endif

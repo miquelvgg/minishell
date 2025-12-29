@@ -17,7 +17,7 @@
 # ifndef PATH_MAX
 #  define PATH_MAX 512
 # endif
-
+// deberia ponerlo volatile sigatomic??
 extern int	g_signal;
 
 typedef struct s_buf

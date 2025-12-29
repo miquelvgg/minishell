@@ -29,7 +29,9 @@ static int	process_tokens(t_data *data, char ***atoken, int ntoken)
 	if ((*atoken) && ntoken && (*atoken)[ntoken - 1][0] == '|')
 		printf("Error : pipe\n");
 	else
+	{
 		exactions(data);
+	}
 	free_token(atoken, ntoken);
 	free_actions(data);
 	free_data_struc(data);

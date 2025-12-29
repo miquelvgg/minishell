@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
-/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*   Updated: 2025/12/29 13:34:54 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	}
 	res = init_var(&data);
-	data.env = create_first_env(env, &data);
+	data.env = create_first_env(env);
 	if (!res)
 		res = mshell(&data);
 	exit_var(&data);

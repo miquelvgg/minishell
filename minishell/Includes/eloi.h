@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 12:20:38 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/28 12:21:15 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/29 13:34:23 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_path(char *cmd, char**env);
 int		is_builtin(char*cmd);
 int		ft_stringlen(char**str);
 void	exec(char *cmd, char **env);
-char	**create_first_env(char**environ, t_data*shell);
+char	**create_first_env(char**environ);
 int		initfdi(int*shell, char*str);
 int		initfdo(int*shell, char*str);
 int		initfdoa(int*fdoa, char*str);

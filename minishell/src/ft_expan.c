@@ -13,15 +13,15 @@
 #include "minishell.h"
 
 // variable x_status
-static int	handle_status(t_buf *b)
+static int	handle_status(t_data *dt, t_buf *b)
 {
 	char	*status_str;
 	int		ret;
 
-	status_str = ft_itoa(0);
+	status_str = ft_itoa((int)dt->xstatus);
 	if (!status_str)
 		return (0);
-	ret = append_to_buffer(&b->buff, &b->len, \
+	ret = append_to_buff(&b->buff, &b->len, \
 		status_str, ft_strlen(status_str));
 	free(status_str);
 	return (ret);
@@ -32,11 +32,11 @@ static int	handle_var(t_data *dt, t_buf *b, char *var_name)
 	char	*val;
 
 	if (var_name[0] == '?' && var_name[1] == '\0')
-		return (handle_status(b));
+		return (handle_status(dt, b));
 	val = get_var_value(dt, var_name);
 	if (val)
 	{
-		if (!append_to_buffer(&b->buff, &b->len, val, ft_strlen(val)))
+		if (!append_to_buff(&b->buff, &b->len, val, ft_strlen(val)))
 			return (0);
 	}
 	return (1);
@@ -60,7 +60,7 @@ static int	expand_var(t_expan *e)
 		e->i += vlen;
 		return (1);
 	}
-	return (append_to_buffer(&e->buf.buff, &e->buf.len, "$", 1));
+	return (append_to_buff(&e->buf.buff, &e->buf.len, "$", 1));
 }
 
 static void	update_q(char c, char *q)
@@ -93,7 +93,7 @@ char	*eval_expan(t_data *dt, const char *str)
 			if (!expand_var(&e))
 				return (free(e.buf.buff), NULL);
 		}
-		else if (!append_to_buffer(&e.buf.buff, &e.buf.len, &str[e.i++], 1))
+		else if (!append_to_buff(&e.buf.buff, &e.buf.len, &str[e.i++], 1))
 			return (free(e.buf.buff), NULL);
 	}
 	return (e.buf.buff);

@@ -59,20 +59,20 @@ char	*get_var_value(t_data *dt, const char *var_name)
 	return (search_env(dt, var_name));
 }
 
-int	append_to_buffer(char **dst, int *curr_len, const char *src, int src_len)
+int	append_to_buff(char **dst, int *curlen, const char *src, int slen)
 {
 	int		new_len;
 	char	*new_dst;
 
-	if (src_len <= 0)
+	if (slen <= 0)
 		return (1);
-	new_len = *curr_len + src_len;
-	new_dst = (char *)ft_realloc(*dst, *curr_len, (new_len + 1));
+	new_len = *curlen + slen;
+	new_dst = (char *)ft_realloc(*dst, *curlen, (new_len + 1));
 	if (!new_dst)
 		return (0);
 	*dst = new_dst;
-	ft_memcpy(*dst + *curr_len, src, src_len);
+	ft_memcpy(*dst + *curlen, src, slen);
 	(*dst)[new_len] = '\0';
-	*curr_len = new_len;
+	*curlen = new_len;
 	return (1);
 }

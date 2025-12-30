@@ -12,37 +12,51 @@
 
 #include "minishell.h"
 
+static void	free_argv(char **argv)
+{
+	int	j;
+
+	if (!argv)
+		return ;
+	j = 0;
+	while (argv[j])
+	{
+		free(argv[j]);
+		j++;
+	}
+	free(argv);
+}
+
+static void	free_one_action(t_action *act)
+{
+	if (act->heredoc_fd != -1)
+	{
+		close(act->heredoc_fd);
+		act->heredoc_fd = -1;
+	}
+	free_argv(act->argv);
+	act->argv = NULL;
+	free(act->infile);
+	act->infile = NULL;
+	free(act->outfile);
+	act->outfile = NULL;
+}
+
 void	free_actions(t_data *d)
 {
-	int			i;
-	int			j;
-	t_action	*act;
+	int	i;
 
 	if (!d || !d->actions)
 		return ;
-	i = -1;
-	while (++i < d->n_actions)
+	i = 0;
+	while (i < d->n_actions)
 	{
-		act = &d->actions[i];
-		if (act->heredoc_fd != -1)
-		{
-			close(act->heredoc_fd);
-			act->heredoc_fd = -1;
-		}
-		if (act->argv)
-		{
-			j = -1;
-			while (act->argv[++j])
-				free(act->argv[j]);
-			free(act->argv);
-		}
-		if (act->infile)
-			free(act->infile);
-		if (act->outfile)
-			free(act->outfile);
+		free_one_action(&d->actions[i]);
+		i++;
 	}
 	free(d->actions);
 	d->actions = NULL;
+	d->n_actions = 0;
 }
 
 int	count_pipes(t_token **tokens)
@@ -73,5 +87,6 @@ void	init_action(t_action *act, int index)
 	act->fd_in = -1;
 	act->fd_out = -1;
 	act->heredoc = 0;
-	act->heredoc_fd = -1;	
+	act->heredoc_fd = -1;
+	act->heredoc_expand = 1;
 }

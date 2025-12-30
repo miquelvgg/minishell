@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 void	print_actions(t_data *d)
 {
 	int		i;
@@ -86,45 +86,38 @@ void paint_token(t_data	*data)
 		i++;
 	}
 }
+		//print_actions(data);
+		//paint_token(data);
 
+*/
+static int	cleanup_and_ret(t_data *data, char ***atoken, int ntoken, int code)
+{
+	free_token(atoken, ntoken);
+	free_actions(data);
+	free_data_struc(data);
+	return (code);
+}
 
 static int	process_tokens(t_data *data, char ***atoken, int ntoken)
 {
 	int	rt;
-	int ret;
+	int	ret;
 
 	rt = ft_syntax(data, atoken, ntoken);
 	if (!rt)
 		rt = ft_actions(data);
 	if (rt)
+		return (cleanup_and_ret(data, atoken, ntoken, 1));
+	ret = ft_prepare_heredocs(data);
+	if (ret < 0)
 	{
-		free_actions(data);
-		free_token(atoken, ntoken);
-		free_data_struc(data);
-		return (1);
+		if (ret == -2)
+			data->xstatus = 130;
+		return (cleanup_and_ret(data, atoken, ntoken, 1));
 	}
-	if ((*atoken) && ntoken && (*atoken)[ntoken - 1][0] == '|')
-		printf("Error : pipe\n");
-	else
-	{
-		ret = ft_prepare_heredocs(data);
-		if (ret < 0)
-		{
-			if (ret == -2)
-				data->xstatus = 130;
-			free_token(atoken, ntoken);
-			free_actions(data);
-			free_data_struc(data);
-			return (1);
-		}
-		//print_actions(data);
-		//paint_token(data);
-		exactions(data);
-	}
-	free_token(atoken, ntoken);
-	free_actions(data);
-	free_data_struc(data);
-	return (0);
+	exactions(data);
+	ft_close_heredocs(data);
+	return (cleanup_and_ret(data, atoken, ntoken, 0));
 }
 
 static int	exec_line(t_data *data, char *line)

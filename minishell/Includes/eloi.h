@@ -45,3 +45,26 @@ void	preparepipes(t_action act, t_data *data);
 void	ft_sortpstr(char***envp);
 //error
 void	print_export_error(char *arg);
+//exacti_util.c 
+void	existcmd(char *cmd);
+void	is_exec(char *cmd);
+void	is_dir(char *cmd);
+void	ft_nopath(void);
+char	*my_getenv(char *name, char **env);
+//exacti_ext.c
+void	ft_free_pointstring(char **tab);
+char	*ft_nfstrjoin(char const *s1, char const *s2);
+char	*get_path(char *cmd, char **env);
+int		redir_in_parent(t_action *act);
+int		redir_out_parent(t_action *act);
+//exacti_exec.c
+void	directexec(t_action act, t_data*minishell);
+void	executep(t_action act, t_data*minishell);
+void	exactionp(t_action act, t_data *data);
+// heredoc
+
+int		ft_prepare_heredocs(t_data *data);
+void	ft_close_heredocs(t_data *data);
+pid_t	hd_fork_reader(int fd, t_data *data, t_action *act);
+char	*hd_expand_line(t_data *data, const char *line);
+char	*hd_env_value(char **env, const char *name, int nlen);

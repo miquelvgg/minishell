@@ -57,8 +57,9 @@ typedef struct s_action
 	int		append;
 	int		fd_in;
 	int		fd_out;
-	int		heredoc;      /* 0 = no, 1 = sí */	
-	int		heredoc_fd;   /* fd de lectura del heredoc, -1 si no hay */	
+	int		heredoc;
+	int		heredoc_fd;
+	int		heredoc_expand;
 }	t_action;
 
 // Data structures

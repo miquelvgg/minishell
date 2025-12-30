@@ -39,7 +39,17 @@ static	int	add_arg(t_action *act, const char *arg)
 	return (0);
 }
 
-static	int	handle_redir(t_data *dt, int *i, int idx)
+static int	set_str(char **dst, const char *src)
+{
+	if (*dst)
+		free(*dst);
+	*dst = ft_strdup(src);
+	if (!*dst)
+		return (1);
+	return (0);
+}
+
+static int	handle_redir(t_data *dt, int *i, int idx)
 {
 	t_token		*tok;
 	t_token		*next;
@@ -52,32 +62,19 @@ static	int	handle_redir(t_data *dt, int *i, int idx)
 		return (1);
 	if (tok->type == T_RDIR_IN || tok->type == T_HERDOC)
 	{
-		if (act->infile)
-			free(act->infile);
-		act->infile = ft_strdup(next->data);
-		if (!act->infile)
+		if (set_str(&act->infile, next->data))
 			return (1);
-		if (tok->type == T_HERDOC)
-			act->heredoc = 1;
-		else
-			act->heredoc = 0;
+		act->heredoc = (tok->type == T_HERDOC);
 	}
 	else
 	{
-		if (act->outfile)
-			free(act->outfile);
-		act->outfile = ft_strdup(next->data);
-		if (!act->outfile)
+		if (set_str(&act->outfile, next->data))
 			return (1);
-		if (tok->type == T_APPEND)
-			act->append = 1;
-		else
-			act->append = 0;
+		act->append = (tok->type == T_APPEND);
 	}
 	(*i)++;
 	return (0);
 }
-
 
 static	int	process_token(t_data *dt, int *i, int *act_idx)
 {
@@ -95,22 +92,13 @@ static	int	process_token(t_data *dt, int *i, int *act_idx)
 		if (add_arg(&dt->actions[*act_idx], dt->token[*i]->data))
 			return (1);
 	}
-	else if (type == T_RDIR_IN || type == T_RDIR_OUT || type == T_APPEND)
+	else if (type == T_RDIR_IN || type == T_RDIR_OUT || type == T_APPEND || \
+			type == T_RDIR_IN || type == T_RDIR_OUT || type == T_APPEND || \
+			(type == T_HERDOC))
 	{
 		if (handle_redir(dt, i, *act_idx))
 			return (1);
 	}
-	else if (type == T_RDIR_IN || type == T_RDIR_OUT || type == T_APPEND)
-	{
-		if (handle_redir(dt, i, *act_idx))
-			return (1);
-	}
-	else if (type == T_HERDOC)
-	{
-		if (handle_redir(dt, i, *act_idx))
-			return (1);
-	}
-
 	return (0);
 }
 

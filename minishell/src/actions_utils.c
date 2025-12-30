@@ -24,6 +24,11 @@ void	free_actions(t_data *d)
 	while (++i < d->n_actions)
 	{
 		act = &d->actions[i];
+		if (act->heredoc_fd != -1)
+		{
+			close(act->heredoc_fd);
+			act->heredoc_fd = -1;
+		}
 		if (act->argv)
 		{
 			j = -1;
@@ -67,4 +72,6 @@ void	init_action(t_action *act, int index)
 	act->append = 0;
 	act->fd_in = -1;
 	act->fd_out = -1;
+	act->heredoc = 0;
+	act->heredoc_fd = -1;	
 }

@@ -45,28 +45,39 @@ static	int	handle_redir(t_data *dt, int *i, int idx)
 	t_token		*next;
 	t_action	*act;
 
-	printf("Entras handle_redir\n");
 	tok = dt->token[*i];
 	next = dt->token[*i + 1];
 	act = &dt->actions[idx];
-	if (!next)
-		return (0);
-	if (tok->type == T_RDIR_IN)
+	if (!next || !next->data)
+		return (1);
+	if (tok->type == T_RDIR_IN || tok->type == T_HERDOC)
+	{
+		if (act->infile)
+			free(act->infile);
 		act->infile = ft_strdup(next->data);
+		if (!act->infile)
+			return (1);
+		if (tok->type == T_HERDOC)
+			act->heredoc = 1;
+		else
+			act->heredoc = 0;
+	}
 	else
 	{
+		if (act->outfile)
+			free(act->outfile);
 		act->outfile = ft_strdup(next->data);
+		if (!act->outfile)
+			return (1);
 		if (tok->type == T_APPEND)
 			act->append = 1;
 		else
 			act->append = 0;
 	}
-	if ((tok->type == T_RDIR_IN && (!act->infile)) || \
-		(tok->type != T_RDIR_IN && (!act->outfile)))
-		return (1);
 	(*i)++;
 	return (0);
 }
+
 
 static	int	process_token(t_data *dt, int *i, int *act_idx)
 {
@@ -89,6 +100,17 @@ static	int	process_token(t_data *dt, int *i, int *act_idx)
 		if (handle_redir(dt, i, *act_idx))
 			return (1);
 	}
+	else if (type == T_RDIR_IN || type == T_RDIR_OUT || type == T_APPEND)
+	{
+		if (handle_redir(dt, i, *act_idx))
+			return (1);
+	}
+	else if (type == T_HERDOC)
+	{
+		if (handle_redir(dt, i, *act_idx))
+			return (1);
+	}
+
 	return (0);
 }
 

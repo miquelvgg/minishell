@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
-/*   Updated: 2025/12/29 13:34:54 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/30 11:50:57 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	ft_control(int argc, char **argv)
 int	init_var(t_data	*data)
 {
 	data->signal_status = 0;
+	data->xstatus = 0;
 	data->token = NULL;
 	data->user_input = NULL;
 	data->env = NULL;

@@ -90,6 +90,36 @@ void paint_token(t_data	*data)
 		//paint_token(data);
 
 */
+#include "minishell.h"
+
+static int	ms_syntax_err_pipe(t_data *dt)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+	dt->xstatus = 2;
+	return (1);
+}
+
+int	ms_check_pipe_syntax(t_data *dt)
+{
+	int	i;
+
+	i = 0;
+	if (!dt->token || !dt->token[0])
+		return (0);
+	if (dt->token[0]->type == T_PIPE)
+		return (ms_syntax_err_pipe(dt));
+	while (dt->token[i])
+	{
+		if (dt->token[i]->type == T_PIPE)
+		{
+			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_PIPE)
+				return (ms_syntax_err_pipe(dt));
+		}
+		i++;
+	}
+	return (0);
+}
+
 static int	cleanup_and_ret(t_data *data, char ***atoken, int ntoken, int code)
 {
 	free_token(atoken, ntoken);
@@ -105,18 +135,23 @@ static int	process_tokens(t_data *data, char ***atoken, int ntoken)
 
 	rt = ft_syntax(data, atoken, ntoken);
 	if (!rt)
-		rt = ft_actions(data);
-	if (rt)
-		return (cleanup_and_ret(data, atoken, ntoken, 1));
-	ret = ft_prepare_heredocs(data);
-	if (ret < 0)
+		rt = ms_check_pipe_syntax(data);
+	if (!rt)
 	{
-		if (ret == -2)
-			data->xstatus = 130;
-		return (cleanup_and_ret(data, atoken, ntoken, 1));
+		rt = ft_actions(data);
+		if (!rt)
+		{
+			ret = ft_prepare_heredocs(data);
+			if (ret < 0)
+			{
+				if (ret == -2)
+					data->xstatus = 130;
+				return (cleanup_and_ret(data, atoken, ntoken, 1));
+			}
+			exactions(data);
+			ft_close_heredocs(data);
+		}
 	}
-	exactions(data);
-	ft_close_heredocs(data);
 	return (cleanup_and_ret(data, atoken, ntoken, 0));
 }
 
@@ -124,7 +159,7 @@ static int	exec_line(t_data *data, char *line)
 {
 	char	**atoken;
 	int		ntoken;
-
+	
 	atoken = NULL;
 	if (g_signal == (int)SIGQUIT || !line)
 	{

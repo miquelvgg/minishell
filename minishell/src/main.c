@@ -137,12 +137,17 @@ int	ft_control(int argc, char **argv)
 int	init_var(t_data	*data)
 {
 	data->signal_status = 0;
-	data->xstatus = 0;
 	data->token = NULL;
+	data->actions = NULL;
+	data->fdin = 0;
+	data->fint = 0;
+	data->fdout = 0;
 	data->user_input = NULL;
 	data->env = NULL;
+	data->argv = NULL;
 	data->working_dir = NULL;
 	data->old_working_dir = NULL;
+	data->xstatus = 0;
 	return (0);
 }
 

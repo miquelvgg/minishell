@@ -1,22 +1,23 @@
 # Tests
 
-- [ ] echo bonjour ; |
-- [ ] echo bonjour | |
-- [ ] |
-- [ ] echo bonjour |;
-- [ ] echo bonjour \; ls
-- [ ] echo bonjour > test\ 1
-- [ ] cd $HOME/Documents
-- [ ] echo "\s" & echo "\\s"
-- [ ] echo \>
-- [ ] echo -n -n -nnnn -nnnnm
+- [x] echo bonjour ; | (No implementamos ;)
+- [x] echo bonjour | |
+- [x] |
+- [x] echo bonjour |;(No implementado)
+- [x] echo bonjour \; ls(No implementado)
+- [x] echo bonjour > test\ 1
+- [x] cd $HOME/Documents
+- [x] echo "\s"
+- [x] echo "\\s" (Porque no implementamos el character \ ya que no hacemos bonus)
+- [ ] **echo \> (Salida de error es success)**
+- [x] echo -n -n -nnnn -nnnnm
 - [ ] cat /dev/random | head -n 1 | cat -e
 - [ ] unset var1 # with undefined var1
 - [ ] export "" et unset ""
 - [ ] echo test > file test1
-- [ ] $
-- [ ] not_cmd bonjour > salut
-- [ ] env puis export puis env # vars aren't sorted
+- [x] $
+- [x] not_cmd bonjour > salut
+- [x] env ; export ; env # vars aren't sorted
 - [ ] cat Makefile | grep pr | head -n 5 | cd test (mybin) # check status code
 - [ ] cat Makefile | grep pr | head -n 5 | cat test (bin) # check status code
 - [ ] cat Makefile | grep pr | head -n 5 | hello (NA) # check status code
@@ -45,49 +46,49 @@
 - [ ] "exit retour a la ligne"
 - [ ] minishell # binary not in path without "./" before
 - [ ] cat diufosgid # check exit code
-- [ ] exit # should return the last exit code value
-- [ ] exit -10
-- [ ] exit +10
-- [ ] ;
-- [ ] echo coucou | ;
-- [ ] echo "$HOME"
-- [ ] echo '$HOME'
+- [x] exit # should return the last exit code value
+- [x] exit -10
+- [x] exit +10
+- [x] ; (No implementado)
+- [x] echo coucou | ; (No implementado)
+- [x] echo "$HOME"
+- [x] echo '$HOME'
 - [x] export ; env # display is different for both commands
-- [ ] echo \$HOME
-- [ ] > log echo coucou
-- [ ] echo hudifg d | | hugdfihd
-- [ ] echo
-- [ ] echo simple
-- [ ] echo -n simple
-- [ ] echo '\'
-- [ ] echo "\"
-- [ ] echo "\\"
-- [ ] echo "\n \n \n"
-- [ ] echo "\n \\n \\\n"
-- [ ] echo ;;
-- [ ] echo hi";" hihi
-- [ ] echo hi "   ;   " hihi
-- [ ] cd
-- [ ] cd .
-- [ ] cd ~
-- [ ] cd /
-- [ ] cd no_file
-- [ ] cd a b c d
+- [x] echo \$HOME (No implementado)
+- [x] > log echo coucou
+- [ ] **echo hudifg d | | hugdfihd** (Cagada segv)
+- [x] echo
+- [x] echo simple
+- [x] echo -n simple
+- [x] echo '\'
+- [x] echo "\"
+- [x] echo "\\"
+- [x] echo "\n \n \n"
+- [x] echo "\n \\n \\\n"
+- [x] echo ;;
+- [x] echo hi";" hihi
+- [x] echo hi "   ;   " hihi
+- [x] cd
+- [x] cd .
+- [x] cd ~
+- [x] cd /
+- [x] cd no_file
+- [x] cd a b c d
 - [x] pwd a
 - [x] pwd a b c d
-- [ ] export LOL=lala ROR=rara
-- [ ] unset LOL ROR
-- [ ] export "HI= hi"
-- [ ] export "HI =hi"
-- [ ] /bin/ls
-- [ ] # write something the press ctrl+c
-- [ ] # write something then press ctrl+d
-- [ ] # write something then press ctrl+\
-- [ ] echo $?
-- [ ] l^Ds
-- [ ] echo |
-- [ ] | echo
-- [ ] sort | ls # check output order
+- [x] export LOL=lala ROR=rara
+- [x] unset LOL ROR
+- [x] export "HI= hi"
+- [x] export "HI =hi"
+- [x] /bin/ls
+- [x] # write something the press ctrl+c
+- [x] # write something then press ctrl+d
+- [x] # write something then press ctrl+\
+- [x] echo $?
+- [x] l^Ds
+- [x] echo |
+- [ ] **| echo** (SEGV en lugar de parsing error)
+- [x] sort | ls # check output order
 - [ ] cat < >
 - [ ] cat < <
 - [ ] cat > >
@@ -95,6 +96,6 @@
 - [ ] echo > a Hello World!
 - [ ] > a echo Hello World!
 - [ ] cat < Makefile | grep gcc > output
-- [ ] exit 0 | exit 1
-- [ ] exit 1 | exit 0
+- [x] exit 0 | exit 1
+- [x] exit 1 | exit 0
 - [ ] > file echo "hola" << start > file1 | echo "adios" << end > file2 (probar tambien sin los file creados)

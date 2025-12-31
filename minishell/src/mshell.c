@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
+
 void	print_actions(t_data *d)
 {
 	int		i;
@@ -89,9 +89,9 @@ void paint_token(t_data	*data)
 		//print_actions(data);
 		//paint_token(data);
 
-*/
-#include "minishell.h"
 
+#include "minishell.h"
+// control pipe 
 int	ms_check_pipe_syntax(t_data *dt)
 {
 	int	i;
@@ -101,12 +101,27 @@ int	ms_check_pipe_syntax(t_data *dt)
 		return (0);
 	if (dt->token[0]->type == T_PIPE)
 		return (ms_syntax_err_pipe(dt));
+	if ((dt->token[0]->type == T_APPEND) && ((dt->token[1]) &&(dt->token[1]->type > T_CMD )))
+	{
+		return (print_export_error("syntax error near unexpected token"),1);
+	}
+		
 	while (dt->token[i])
 	{
 		if (dt->token[i]->type == T_PIPE)
 		{
 			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_PIPE)
 				return (ms_syntax_err_pipe(dt));
+		}
+		if (dt->token[i]->type == T_RDIR_IN)
+		{
+			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_RDIR_IN)
+				return (print_export_error("syntax error near unexpected token"),1);
+		}
+		if (dt->token[i]->type == T_RDIR_OUT)
+		{
+			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_RDIR_OUT)
+				return (print_export_error("syntax error near unexpected token"),1);
 		}
 		i++;
 	}
@@ -125,7 +140,7 @@ static int	process_tokens(t_data *data, char ***atoken, int ntoken)
 {
 	int	rt;
 	int	ret;
-
+	
 	rt = ft_syntax(data, atoken, ntoken);
 	if (!rt)
 		rt = ms_check_pipe_syntax(data);

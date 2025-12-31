@@ -113,9 +113,8 @@ int	ft_actions(t_data *dt)
 	dt->actions = malloc(sizeof(t_action) * dt->n_actions);
 	if (!dt->actions)
 	{
-		perror("dt->actions NULL");
-		dt->xstatus =1;
-		return (1);
+		dt->xstatus = 1;
+		return (perror("dt->actions NULL"), 1);
 	}
 	i = 0;
 	act_idx = 0;
@@ -124,9 +123,8 @@ int	ft_actions(t_data *dt)
 	{
 		if (process_token(dt, &i, &act_idx))
 		{
-			perror("process_token Error");
-			dt->xstatus =1;
-			return (1);
+			dt->xstatus = 1;
+			return (perror("process_token Error"), 1);
 		}
 		i++;
 	}

@@ -19,3 +19,10 @@ void	print_export_error(char *arg)
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
+
+int	ms_syntax_err_pipe(t_data *dt)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+	dt->xstatus = 2;
+	return (1);
+}

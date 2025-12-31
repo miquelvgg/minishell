@@ -75,5 +75,6 @@ int			append_to_buff(char **dst, int *curlen, const char *src, int slen);
 char		*get_var_value(t_data *dt, const char *var_name);
 void		*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 int			extract_var_name_len(const char *str);
-
+// errors.c
+int			ms_syntax_err_pipe(t_data *dt);
 #endif

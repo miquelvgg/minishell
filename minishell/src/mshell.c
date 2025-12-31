@@ -92,13 +92,6 @@ void paint_token(t_data	*data)
 */
 #include "minishell.h"
 
-static int	ms_syntax_err_pipe(t_data *dt)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-	dt->xstatus = 2;
-	return (1);
-}
-
 int	ms_check_pipe_syntax(t_data *dt)
 {
 	int	i;

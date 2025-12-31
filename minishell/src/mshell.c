@@ -165,7 +165,7 @@ static int	exec_line(t_data *data, char *line)
 	{
 		write(1, "exit\n", 5);
 		free(line);
-		return (-1);
+		return (clear_history(),-1);
 	}
 	if (*line)
 	{
@@ -176,12 +176,12 @@ static int	exec_line(t_data *data, char *line)
 			if (process_tokens(data, &atoken, ntoken))
 			{
 				free(line);
-				return (1);
+				return (clear_history(),1);
 			}
 		}
 	}
 	free(line);
-	return (0);
+	return (clear_history(),0);
 }
 
 int	mshell(t_data *data)

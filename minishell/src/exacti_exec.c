@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 13:35:24 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/31 12:21:07 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	executep(t_action act, t_data*minishell)
 		excode = execve(path, act.argv, minishell->env);
 		if (excode == -1)
 		{
-			printf("Fallo execve\n");
+			printf("Command not found\n");
 			free(path);
 			exit(127);
 		}

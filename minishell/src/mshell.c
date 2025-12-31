@@ -159,13 +159,13 @@ static int	exec_line(t_data *data, char *line)
 {
 	char	**atoken;
 	int		ntoken;
-	
+
 	atoken = NULL;
 	if (g_signal == (int)SIGQUIT || !line)
 	{
 		write(1, "exit\n", 5);
 		free(line);
-		return (clear_history(),-1);
+		return (-1);
 	}
 	if (*line)
 	{
@@ -176,12 +176,12 @@ static int	exec_line(t_data *data, char *line)
 			if (process_tokens(data, &atoken, ntoken))
 			{
 				free(line);
-				return (clear_history(),1);
+				return (1);
 			}
 		}
 	}
 	free(line);
-	return (clear_history(),0);
+	return (0);
 }
 
 int	mshell(t_data *data)
@@ -200,7 +200,7 @@ int	mshell(t_data *data)
 		if (status == -1)
 			break ;
 		if (status == 1)
-			return (1);
+			return (clear_history(), 1);
 	}
-	return (0);
+	return (clear_history(), 0);
 }

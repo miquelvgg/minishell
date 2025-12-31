@@ -30,7 +30,7 @@ int	checkinput(char *path)
 			}
 		}
 		else
-			printf("Not readable");
+			print_findfile_error(path);
 	}
 	return (fd);
 }

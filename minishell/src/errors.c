@@ -26,3 +26,12 @@ int	ms_syntax_err_pipe(t_data *dt)
 	dt->xstatus = 2;
 	return (1);
 }
+
+//Imprime el error de invalid identifier
+void	print_findfile_error(char *arg)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	exit(1);
+}

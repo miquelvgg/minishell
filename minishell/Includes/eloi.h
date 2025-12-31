@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 12:20:38 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 13:34:23 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:56:26 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	preparepipes(t_action act, t_data *data);
 void	ft_sortpstr(char***envp);
 //error
 void	print_export_error(char *arg);
+void	print_findfile_error(char *arg);
 //exacti_util.c 
 void	existcmd(char *cmd);
 void	is_exec(char *cmd);

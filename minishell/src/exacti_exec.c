@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/31 12:21:07 by epascual         ###   ########.fr       */
+/*   Updated: 2025/12/31 14:17:28 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	directexec(t_action act, t_data*minishell)
 	exit(excode);
 }
 
-//executa un pipecomand
+//Ejecuta un pipecomand
 void	executep(t_action act, t_data*minishell)
 {
 	char	*path;
@@ -54,7 +54,7 @@ void	executep(t_action act, t_data*minishell)
 	}
 }
 
-//Ejecuta pipe(ultimo)
+//Ejecuta pipe
 void	exactionp(t_action act, t_data *data)
 {
 	preparepipes(act, data);
@@ -69,5 +69,9 @@ void	exactionp(t_action act, t_data *data)
 		initfdoa(&act.fd_out, act.outfile);
 	else
 		initfdo(&act.fd_out, act.outfile);
-	executep(act, data);
+	if (act.argv && act.argv[0])
+		executep(act, data);
+	else
+		exit(0);
+	
 }

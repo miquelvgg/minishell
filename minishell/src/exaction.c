@@ -76,6 +76,12 @@ static int	exec_builtin_parent(t_action *act, t_data *data)
 	return (0);
 }
 
+static int checkxcute(t_data*data)
+{
+	return (data->n_actions == 1 && data->actions[0].argv && \
+data->actions[0].argv[0] && is_builtin((data->actions[0]).argv[0]));
+}
+
 //Itera las acciones para ejecutarlas
 void	exactions(t_data *data)
 {
@@ -83,7 +89,7 @@ void	exactions(t_data *data)
 	int	*pid;
 
 	i = 0;
-	if (data->n_actions == 1 && is_builtin((data->actions[0]).argv[0]))
+	if (checkxcute(data))
 	{
 		exec_builtin_parent(&data->actions[0], data);
 		return ;

@@ -25,10 +25,10 @@
 - [x] echo bonjour > > out
 - [ ] **echo 2 >> out1 > out2**
 - [ ] **echo 2 > out1 >> out2**
-- [ ] **cat < test # with non-existent test**
+- [x] cat < test # with non-existent test
 - [x] export var; export var=test(No implementado)
 - [ ] **echo bonjour > $test # with test not defined**
-- [ ] **file_name_in_current_dir**
+- [x] file_name_in_current_dir
 - [x] cd ../../../../../.. ; pwd
 - [x]ctrl-C . 130 sur bin(ex : sleep 10)&line vide
 - [x] ctrl-\ .131 sur bin
@@ -89,9 +89,9 @@
 - [x] echo |
 - [x] | echo
 - [x] sort | ls # check output order
-- [ ] **cat < >**
-- [ ] **cat < <**
-- [ ] **cat > >**
+- [x] cat < >
+- [x] cat < <
+- [x] cat > >
 - [ ] **> a ls > b < Makefile**(No es igual pero no considero que sigui del tot incorrecte)
 - [x] echo > a Hello World!
 - [x] > a echo Hello World!

@@ -9,43 +9,43 @@
 - [x] cd $HOME/Documents
 - [x] echo "\s"
 - [x] echo "\\s" (Porque no implementamos el character \ ya que no hacemos bonus)
-- [ ] **echo \> (Salida de error es success)**
+- [x] echo \>
 - [x] echo -n -n -nnnn -nnnnm
-- [ ] cat /dev/random | head -n 1 | cat -e
-- [ ] unset var1 # with undefined var1
-- [ ] export "" et unset ""
-- [ ] echo test > file test1
+- [x] cat /dev/random | head -n 1 | cat -e
+- [x] unset var1 # with undefined var1
+- [x] export "" et unset ""
+- [x] echo test > file test1
 - [x] $
 - [x] not_cmd bonjour > salut
 - [x] env ; export ; env # vars aren't sorted
-- [ ] cat Makefile | grep pr | head -n 5 | cd test (mybin) # check status code
-- [ ] cat Makefile | grep pr | head -n 5 | cat test (bin) # check status code
-- [ ] cat Makefile | grep pr | head -n 5 | hello (NA) # check status code
-- [ ] echo bonjour >>> test
-- [ ] echo bonjour > > out
-- [ ] echo 2 >> out1 > out2
-- [ ] echo 2 > out1 >> out2
-- [ ] cat < test # with non-existent test
-- [ ] export var; export var=test
-- [ ] echo bonjour > $test # with test not defined
-- [ ] file_name_in_current_dir
-- [ ] cd ../../../../../.. ; pwd
-- [ ] ctrl-C . 130 sur bin(ex : sleep 10)&line vide
-- [ ] ctrl-\ .131 sur bin
-- [ ] echo "bip | bip ; coyotte > < \" "
-- [ ] cat | cat | cat | ls # check outputs order
-- [ ] $bla # with bla not defined
-- [ ] export var ="cat Makefile | grep >"
-- [ ] export "test=ici"=coucou
-- [ ] c$var Makefile # with var=at
-- [ ] $LESS$VAR
-- [ ] /bin/echo bonjour
-- [ ] not_cmd
-- [ ] sleep 5 | exit
-- [ ] echo bonjour > $test w/ t
-- [ ] "exit retour a la ligne"
-- [ ] minishell # binary not in path without "./" before
-- [ ] cat diufosgid # check exit code
+- [x] cat Makefile | grep pr | head -n 5 | cd test (mybin) # check status code
+- [x] cat Makefile | grep pr | head -n 5 | cat test (bin) # check status code
+- [x] cat Makefile | grep pr | head -n 5 | hello (NA) # check status code
+- [x] echo bonjour >>> test (no implementado)
+- [x] echo bonjour > > out
+- [ ] **echo 2 >> out1 > out2**
+- [ ] **echo 2 > out1 >> out2**
+- [ ] **cat < test # with non-existent test**
+- [x] export var; export var=test(No implementado)
+- [ ] **echo bonjour > $test # with test not defined**
+- [ ] **file_name_in_current_dir**
+- [x] cd ../../../../../.. ; pwd
+- [x]ctrl-C . 130 sur bin(ex : sleep 10)&line vide
+- [x] ctrl-\ .131 sur bin
+- [x] echo "bip | bip ; coyotte > < \" "(No implementado)
+- [x] cat | cat | cat | ls # check outputs order
+- [ ] **$bla # with bla not defined**
+- [x] export var ="cat Makefile | grep >"
+- [x] export "test=ici"=coucou
+- [x] c$var Makefile # with var=at
+- [x] $LESS$VAR
+- [x] /bin/echo bonjour
+- [x] not_cmd
+- [x] sleep 5 | exit
+- [x] echo bonjour > $test w/ t
+- [x] "exit retour a la ligne"
+- [x] minishell # binary not in path without "./" before
+- [x] cat diufosgid # check exit code
 - [x] exit # should return the last exit code value
 - [x] exit -10
 - [x] exit +10
@@ -56,7 +56,7 @@
 - [x] export ; env # display is different for both commands
 - [x] echo \$HOME (No implementado)
 - [x] > log echo coucou
-- [ ] **echo hudifg d | | hugdfihd** (Cagada segv)
+- [x] echo hudifg d | | hugdfihd
 - [x] echo
 - [x] echo simple
 - [x] echo -n simple
@@ -87,15 +87,15 @@
 - [x] echo $?
 - [x] l^Ds
 - [x] echo |
-- [ ] **| echo** (SEGV en lugar de parsing error)
+- [x] | echo
 - [x] sort | ls # check output order
-- [ ] cat < >
-- [ ] cat < <
-- [ ] cat > >
-- [ ] > a ls > b < Makefile
-- [ ] echo > a Hello World!
-- [ ] > a echo Hello World!
-- [ ] cat < Makefile | grep gcc > output
+- [ ] **cat < >**
+- [ ] **cat < <**
+- [ ] **cat > >**
+- [ ] **> a ls > b < Makefile**(No es igual pero no considero que sigui del tot incorrecte)
+- [x] echo > a Hello World!
+- [x] > a echo Hello World!
+- [x] cat < Makefile | grep gcc > output
 - [x] exit 0 | exit 1
 - [x] exit 1 | exit 0
 - [ ] > file echo "hola" << start > file1 | echo "adios" << end > file2 (probar tambien sin los file creados)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exacti_ext.c                                      :+:      :+:    :+:    */
+/*   exacti_ext.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 13:35:24 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:36:50 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_path(char *cmd, char **env)
 	char	*exec;
 
 	paths = ft_split(my_getenv("PATH", env), ':');
-	if (!paths)
+	if (!paths || !cmd || !*cmd)
 		return (NULL);
 	i = -1;
 	while (paths[i++])

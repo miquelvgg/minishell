@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/31 14:17:28 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/01 17:39:18 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	executep(t_action act, t_data*minishell)
 	int		excode;
 
 	excode = 0;
+	if (!act.argv[0])
+		exit (0);
 	if (is_builtin(act.argv[0]))
 	{
 		execute_builtin(act.argv, minishell);
@@ -69,7 +71,7 @@ void	exactionp(t_action act, t_data *data)
 		initfdoa(&act.fd_out, act.outfile);
 	else
 		initfdo(&act.fd_out, act.outfile);
-	if (act.argv && act.argv[0])
+	if (act.argv && act.argv[0] && act.argv[0][0])
 		executep(act, data);
 	else
 		exit(0);

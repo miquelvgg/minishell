@@ -44,7 +44,7 @@ void	preparepipes(t_action act, t_data *data);
 //envsorter
 void	ft_sortpstr(char***envp);
 //error
-void	print_export_error(char *arg);
+void	prt_error(char *arg);
 void	print_findfile_error(char *arg);
 //exacti_util.c 
 void	existcmd(char *cmd);

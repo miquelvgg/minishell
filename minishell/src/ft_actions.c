@@ -114,7 +114,7 @@ int	ft_actions(t_data *dt)
 	if (!dt->actions)
 	{
 		dt->xstatus = 1;
-		return (print_export_error("dt->actions NULL"), 1);
+		return (prt_error("dt->actions NULL"), 1);
 	}
 	i = 0;
 	act_idx = 0;
@@ -124,7 +124,7 @@ int	ft_actions(t_data *dt)
 		if (process_token(dt, &i, &act_idx))
 		{
 			dt->xstatus = 1;
-			return (print_export_error("process_token Error"), 1);
+			return (prt_error("process_token Error"), 1);
 		}
 		i++;
 	}

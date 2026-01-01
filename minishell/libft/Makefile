@@ -6,7 +6,7 @@
 #    By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/18 09:24:22 by mvives-s          #+#    #+#              #
-#    Updated: 2024/09/18 09:24:33 by mvives-s         ###   ########.fr        #
+#    Updated: 2026/01/01 17:57:37 by epascual         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # Nombre de la biblioteca
@@ -44,15 +44,15 @@ all: dirs $(OBJ_DIR)/$(NAME)
 
 # 2) Asegura que exista el directorio
 dirs:
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 # 3) Empaqueta todos los .o en OBJ_DIR/libft.a
 $(OBJ_DIR)/$(NAME): $(OBJS)
-	$(AR) $@ $^
+	@$(AR) $@ $^
 
 # 4) Compila cada .c desde libs/libft/ a OBJ_DIR/*.o
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 
 # Borra sólo los .o

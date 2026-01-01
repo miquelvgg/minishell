@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
-/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*   Updated: 2026/01/01 18:13:34 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,9 @@ typedef struct s_action
 // Data structures
 typedef struct s_data
 {
-	int				signal_status;
 	t_token			**token;
 	t_action		*actions;
 	int				n_actions;
-	int				fdin;
-	int				fint;
-	int				fdout;
 	char			*user_input;
 	char			**env;
 	char			**argv;

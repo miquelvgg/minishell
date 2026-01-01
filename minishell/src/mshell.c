@@ -6,7 +6,7 @@
 /*   By: mvives-s <mvives-s@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:11:41 by mvives-s          #+#    #+#             */
-/*   Updated: 2024/09/18 10:12:20 by mvives-s         ###   ########.fr       */
+/*   Updated: 2026/01/01 18:14:39 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,6 @@ int	mshell(t_data *data)
 	char	*line;
 	int		status;
 
-	data->signal_status = 0;
 	using_history();
 	setup_signals();
 	while (1)

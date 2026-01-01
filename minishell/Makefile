@@ -78,7 +78,7 @@ $(INC_DIR):
 	@cp -a $(LIBFT_DIR)/$(INC_DIR)/*.h $(INC_DIR) # Copy the header files to Includes
 
 # Compile source file to object file and generate .d file
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c makefile
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c Makefile
 	@mkdir -p $(OBJ_DIR)  # Create object directory if it doesn't exist
 	@mkdir -p $(DEPS_DIR)  # Create dependencies directory if it doesn't exist
 	@$(CC) $(CFLAGS) -c $< -o $@ -MD -MF $(DEPS_DIR)/$*.d -I $(INC_DIR) 

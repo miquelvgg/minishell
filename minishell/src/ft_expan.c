@@ -54,12 +54,11 @@ static int	expand_var(t_expan *e)
 		vname = strndup_safe(&e->str[e->i], vlen);
 		if (!vname)
 			return (0);
-		
 		if (!handle_var(e->dt, &e->buf, vname))
 			return (free(vname), 0);
-		else 
+		else
 			if (e->buf.buff)
-		free(vname);
+				free(vname);
 		e->i += vlen;
 		return (1);
 	}
@@ -77,7 +76,7 @@ static void	update_q(char c, char *q)
 char	*eval_expan(t_data *dt, const char *str)
 {
 	t_expan	e;
-	
+
 	e.buf.buff = malloc(1);
 	if (!e.buf.buff)
 		return (NULL);

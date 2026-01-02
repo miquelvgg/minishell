@@ -41,13 +41,14 @@ void	handle_signals(int sig)
 // Evita que algunas system calls fallen
 // Capturamos Ctrl+C
 // Ignoramos Ctrl+\ (SIGQUIT no debe hacer nada en el prompt)
+//sigemptyset(&sa.sa_mask);
 void	setup_signals(void)
 	{
 	struct sigaction	sa;
 
 	sa.sa_handler = &handle_signals;
 	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
+	sa.sa_mask = (sigset_t){0};
 	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }

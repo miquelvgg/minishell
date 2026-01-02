@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 13:35:24 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/02 19:53:06 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	execute_exit(char **argv, t_data *shell)
 {
 	ft_printf("exit\n");
 	if (!argv[1])
-		exit(0);
+		exit(shell->xstatus);
 	if (!is_valid_number(argv[1]))
 		exiterror(argv[1], shell);
 	if (argv[2])

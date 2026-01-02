@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/28 12:17:00 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 18:48:47 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/02 19:47:59 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	add_env_var(t_data *shell, char *var_assignment)
 	char	**new_envp;
 
 	count = ft_stringlen(shell->env);
-	new_envp = (char **)ft_calloc(sizeof(char *), (count + 1));
+	new_envp = (char **)ft_calloc(sizeof(char *), (count + 2));
 	if (!new_envp)
 		return ;
 	copy_existing_vars(new_envp, shell->env, count);

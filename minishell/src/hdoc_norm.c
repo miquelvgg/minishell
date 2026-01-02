@@ -12,28 +12,6 @@
 
 #include "minishell.h"
 
-static int	hd_open_tmpfile(void)
-{
-	char	tpl[64];
-	int		fd;
-	int		i;
-	char	*src;
-
-	src = "/tmp/mshell_hdXXXXXX";
-	i = 0;
-	while (src[i] && i < 63)
-	{
-		tpl[i] = src[i];
-		i++;
-	}
-	tpl[i] = '\0';
-	fd = mkstemp(tpl);
-	if (fd < 0)
-		return (-1);
-	unlink(tpl);
-	return (fd);
-}
-
 static void	hd_set_delim(t_action *act)
 {
 	size_t	len;
@@ -58,20 +36,20 @@ static int	hd_prepare_one(t_data *data, t_action *act)
 {
 	pid_t	pid;
 	int		status;
-	int		fd;
+	int		fd_r;
+	int		fd_w;
 
 	hd_set_delim(act);
-	fd = hd_open_tmpfile();
-	if (fd < 0)
+	if (hd_open_tmpfile_2fds(&fd_r, &fd_w) < 0)
 		return (-1);
-	pid = hd_fork_reader(fd, data, act);
+	pid = hd_fork_reader(fd_w, data, act);
 	if (pid < 0)
-		return (close(fd), -1);
+		return (close(fd_r), close(fd_w), -1);
+	close(fd_w);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-		return (close(fd), -2);
-	lseek(fd, 0, SEEK_SET);
-	act->heredoc_fd = fd;
+		return (close(fd_r), -2);
+	act->heredoc_fd = fd_r;
 	return (0);
 }
 

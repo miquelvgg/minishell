@@ -44,7 +44,7 @@ void	preparepipes(t_action act, t_data *data);
 //envsorter
 void	ft_sortpstr(char***envp);
 //error
-void	prt_error(char *arg);
+void	prt_err(t_data *dt, char *arg);
 void	print_findfile_error(char *arg);
 //exacti_util.c 
 void	existcmd(char *cmd);
@@ -69,3 +69,6 @@ void	ft_close_heredocs(t_data *data);
 pid_t	hd_fork_reader(int fd, t_data *data, t_action *act);
 char	*hd_expand_line(t_data *data, const char *line);
 char	*hd_env_value(char **env, const char *name, int nlen);
+int		hd_open_tmpfile(void);
+int		hd_open_2fds_at_path(const char *path, int *fd_r, int *fd_w);
+int		hd_open_tmpfile_2fds(int *fd_r, int *fd_w);

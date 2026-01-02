@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 17:54:06 by epascual          #+#    #+#             */
-/*   Updated: 2025/12/29 17:54:09 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/02 19:32:43 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ int	checkoutappend(char *path)
 	{
 		if (access(path, W_OK) == 0)
 		{
-			fd = open(path, 0, O_CREAT | O_APPEND);
+			//fd = open(path, 0, O_CREAT | O_APPEND);
+			fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0777);
 			if (fd < 0)
 			{
 				printf("Not opened");

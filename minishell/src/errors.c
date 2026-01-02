@@ -13,11 +13,12 @@
 #include "minishell.h"
 
 //Imprime el error de invalid identifier
-void	prt_error(char *arg)
+void	prt_err(t_data *dt, char *arg)
 {
 	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
+	dt->xstatus = 2;
 }
 
 int	ms_syntax_err_pipe(t_data *dt)

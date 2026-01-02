@@ -42,10 +42,10 @@ $(SRC_DIR)/ft_signal.c \
 $(SRC_DIR)/ft_syntax.c \
 $(SRC_DIR)/ft_token.c \
 $(SRC_DIR)/ft_tools.c \
+$(SRC_DIR)/hdoc_nam_rand.c \
 $(SRC_DIR)/hdoc_exp_norm.c \
 $(SRC_DIR)/hdoc_norm.c \
 $(SRC_DIR)/hdoc_read_norm.c \
-$(SRC_DIR)/heredoc.c \
 $(SRC_DIR)/initfd.c \
 $(SRC_DIR)/input.c \
 $(SRC_DIR)/main.c \

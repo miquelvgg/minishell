@@ -59,7 +59,7 @@ int	process_export_arg(char *arg, t_data *shell)
 {
 	if (!is_valid_identifier(arg))
 	{
-		prt_error(arg);
+		prt_err(shell, arg);
 		return (1);
 	}
 	if (ft_strchr(arg, '='))

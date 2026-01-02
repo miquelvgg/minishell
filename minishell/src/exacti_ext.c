@@ -6,7 +6,7 @@
 /*   By: epascual <epascual@student.42barcelon      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 13:35:23 by epascual          #+#    #+#             */
-/*   Updated: 2026/01/01 17:36:50 by epascual         ###   ########.fr       */
+/*   Updated: 2026/01/02 19:51:02 by epascual         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*get_path(char *cmd, char **env)
 	if (!paths || !cmd || !*cmd)
 		return (NULL);
 	i = -1;
-	while (paths[i++])
+	while (paths[++i])
 	{
 		path_part = ft_nfstrjoin(paths[i], "/");
 		exec = ft_nfstrjoin(path_part, cmd);

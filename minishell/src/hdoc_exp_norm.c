@@ -83,3 +83,29 @@ char	*hd_expand_line(t_data *data, const char *line)
 	}
 	return (e.out);
 }
+
+int	hd_open_2fds_at_path(const char *path, int *fd_r, int *fd_w)
+{
+	int	w;
+	int	r;
+
+	w = open(path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, 0600);
+	if (w < 0)
+		return (-1);
+	r = open(path, O_RDONLY);
+	if (r < 0)
+	{
+		close(w);
+		unlink(path);
+		return (-1);
+	}
+	if (unlink(path) < 0)
+	{
+		close(w);
+		close(r);
+		return (-1);
+	}
+	*fd_w = w;
+	*fd_r = r;
+	return (0);
+}

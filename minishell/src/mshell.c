@@ -24,7 +24,7 @@ int	ms_check_pipe_syntax(t_data *dt)
 		return (ms_syntax_err_pipe(dt));
 	if ((dt->token[0]->type == T_APPEND) && ((dt->token[1]) && \
 	(dt->token[1]->type > T_CMD)))
-		return (prt_error("syntax error near unexpected token"), 1);
+		return (prt_err(dt, "syntax error near unexpected token"), 1);
 	while (dt->token[i])
 	{
 		if (dt->token[i]->type == T_PIPE)
@@ -32,10 +32,10 @@ int	ms_check_pipe_syntax(t_data *dt)
 				return (ms_syntax_err_pipe(dt));
 		if (dt->token[i]->type == T_RDIR_IN)
 			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_RDIR_IN)
-				return (prt_error("syntax error near unexpected token"), 1);
+				return (prt_err(dt, "syntax error near unexpected token"), 1);
 		if (dt->token[i]->type == T_RDIR_OUT)
 			if (!dt->token[i + 1] || dt->token[i + 1]->type == T_RDIR_OUT)
-				return (prt_error("syntax error near unexpected token"), 1);
+				return (prt_err(dt, "syntax error near unexpected token"), 1);
 		i++;
 	}
 	return (0);
@@ -91,7 +91,7 @@ static int	exec_line(t_data *data, char *line)
 	if (*line)
 	{
 		add_history(line);
-		ntoken = shell_tokenize(line, &atoken);
+		ntoken = shell_tokenize(data, line, &atoken);
 		if (ntoken > 0)
 		{
 			if (process_tokens(data, &atoken, ntoken))

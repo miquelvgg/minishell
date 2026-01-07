@@ -14,9 +14,14 @@
 
 static void	hd_sigint(int sig)
 {
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	_exit(130);
+	if (sig == SIGINT)
+	{
+		g_signal = SIGINT;
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 static int	hd_is_delim(const char *line, const char *delim)
@@ -54,9 +59,13 @@ static void	hd_child_loop(int fd, t_data *data, t_action *act)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		g_signal = 0;
 		line = readline("> ");
-		if (!line)
+		if (g_signal == (int)SIGQUIT || !line)
+		{
+			free(line);
 			break ;
+		}
 		if (hd_is_delim(line, act->infile))
 		{
 			free(line);

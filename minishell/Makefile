@@ -64,7 +64,7 @@ CLIB = .a #Determina tipo de libreria para si windows o linux
 all: $(NAME)
 
 $(NAME): $(OBJ_FILES) $(LIB_DIR)/$(LIBFT_DIR)$(CLIB)
-	@$(CC) $(CFLAGS) -o $@ $^ -I $(INC_DIR) $(RDFLAG)
+	$(CC) $(CFLAGS) $(BFLAGS) -o $@ $^ -I $(INC_DIR) $(RDFLAG)
 	@echo Minishell compilado.
 #	$(CC) $(CFLAGS) -o $@ $^ -I $(INC_DIR) -l:$(LIBFT_DIR)/$(LIBFT_DIR)$(CLIB)
 
@@ -87,7 +87,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c Makefile
 -include $(DEP_FILES)
 
 norm:
-	norminette $(Includes) $(SRC_DIR)# $(LIBFT_DIR)
+#	norminette $(Includes) $(SRC_DIR)# $(LIBFT_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)  # Remove object files
@@ -106,5 +106,5 @@ fclean: clean
 
 re: fclean all  # Rebuild the project
 
-.SILENT: all clean
+#.SILENT: all clean
 .PHONY: all clean fclean re
